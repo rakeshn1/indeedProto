@@ -1,0 +1,12 @@
+{
+    "mongoDB": "",
+    "sqlDB": {
+        "host": "ubereats-db-1.co8sej36u7tf.us-east-2.rds.amazonaws.com",
+        "port": "3306",
+        "username": "admin",
+        "password": "dbPa$$#123",
+        "database": "uberEats"
+    },
+    "jwtPrivateKey": "privateKey",
+    "port": 3900
+}
