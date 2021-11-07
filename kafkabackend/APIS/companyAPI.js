@@ -3,15 +3,13 @@ const Company = require('../models/company')
 
 
 const handleGetCompanyDetails = async (msg, callback) => {
-    res = {}
+    const res = {}
     try {
-        debugger
-        Company.findbyId(msg.companyId).then((err, res) => {
-            console.log("Kafka side", res)
+       const result = await Company.findById(msg.companyId)
+            console.log("Kafka side", result)
             res.status = 200
+            res.data = result
             callback(null, res)
-        }
-        )
     }
     catch (err) {
         console.log(err)
@@ -21,7 +19,7 @@ const handleGetCompanyDetails = async (msg, callback) => {
 }
 
 const addCompanyDetails = async (msg, callback) => {
-    res = {}
+    const res = {}
     const workScore = msg.workScore;
     const happinessScore = msg.happinessScore;
     const learningScore = msg.learningScore;
@@ -66,9 +64,10 @@ const addCompanyDetails = async (msg, callback) => {
         photos,
     })
     try {
-        const res = await CompanyDetails.save()
-        debugger
+        const data = await CompanyDetails.save()
+        console.log("response in add ",res)
         res.status = 200
+        res.data = data
         callback(null, res)
     }
     catch (err) {
@@ -79,7 +78,7 @@ const addCompanyDetails = async (msg, callback) => {
 }
 
 const updateCompanyDetails = async (msg, callback) => {
-    res = {}
+    const res = {}
 
     const { ceo,
         founded,
@@ -91,24 +90,21 @@ const updateCompanyDetails = async (msg, callback) => {
         companyType,
         websiteURL } = msg
 
-    // if (!email || !password || !name) {
-    //     res.status = 500
-    //     callback(null, res)
-    // }
-    const Company = new Company({
-        ceo,
-        founded,
-        companySize,
-        revenue,
-        industry,
-        mission,
-        vision,
-        companyType,
-        websiteURL,
-    })
     try {
-        const res = await Company.findOneAndUpdate(msg.companyId)
+        const result = await Company.findOneAndUpdate({_id:msg.companyId}, {ceo,
+            founded,
+            companySize,
+            revenue,
+            industry,
+            mission,
+            vision,
+            companyType,
+            websiteURL},{
+            new: true
+        })
         res.status = 200
+        console.log("in update ",result)
+        res.data = result
         callback(null, res)
     }
     catch (err) {

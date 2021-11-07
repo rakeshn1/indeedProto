@@ -6,17 +6,17 @@ const kafka = require('../kafka/client')
 router.get(`/api/getCompanyDetails/:id`, (req, res) => {
     req.body.companyId = req.params.id;
     req.body.path = "getCompanyDetails"
-    kafka.make_request('companytopic', req.body, (err, res) => {
+    kafka.make_request('companytopic', req.body, (err, result) => {
         console.log(err)
-        console.log("LOLOLOL", res)
-        if (res.status == 200) {
-            const companyDetails = JSON.parse(res.data)
+        console.log("LOLOLOL", result)
+        if (result?.status == 200) {
+            const companyDetails = result.data
             return res.status(200).send(companyDetails)
         }
-        else if (res.status == 404) {
+        else if (result?.status == 404) {
             return res.status(404).send("User Not Found")
         }
-        else if (res.status == 401) {
+        else if (result?.status == 401) {
             return res.status(401).send("Invalid username or password")
         }
     })
@@ -24,17 +24,16 @@ router.get(`/api/getCompanyDetails/:id`, (req, res) => {
 
 router.post(`/api/addCompanyDetails`, (req, res) => {
     req.body.path = "addCompanyDetails"
-    kafka.make_request('companytopic', req.body, (err, res) => {
+    kafka.make_request('companytopic', req.body, (err, result) => {
         console.log(err)
-        console.log("LOLOLOL", res)
-        if (res.status == 200) {
-            //const companyDetails = JSON.parse(res.data)
-            return res.status(200).send({msg:"success"})
+        console.log("LOLOLOL", result)
+        if (result.status == 200) {
+            return res.status(200).send(result.data)
         }
-        else if (res.status == 404) {
+        else if (result.status == 404) {
             return res.status(404).send("User Not Found")
         }
-        else if (res.status == 401) {
+        else if (result.status == 401) {
             return res.status(401).send("Invalid username or password")
         }
     })
@@ -43,17 +42,17 @@ router.post(`/api/addCompanyDetails`, (req, res) => {
 router.put(`/api/updateCompanyDetails/:id`, (req, res) => {
     req.body.companyId = req.params.id;
     req.body.path = "updateCompanyDetails"
-    kafka.make_request('companytopic', req.body, (err, res) => {
+    kafka.make_request('companytopic', req.body, (err, result) => {
         console.log(err)
-        console.log("LOLOLOL", res)
-        if (res.status == 200) {
+        console.log("LOLOLOL", result)
+        if (result.status == 200) {
             //const companyDetails = JSON.parse(res.data)
-            return res.status(200).send({msg:"success"})
+            return res.status(200).send(result.data)
         }
-        else if (res.status == 404) {
+        else if (result.status == 404) {
             return res.status(404).send("User Not Found")
         }
-        else if (res.status == 401) {
+        else if (result.status == 401) {
             return res.status(401).send("Invalid username or password")
         }
     })
