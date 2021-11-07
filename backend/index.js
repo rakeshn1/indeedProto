@@ -4,7 +4,7 @@ const cors = require("cors")
 const express = require("express")
 const app = express()
 
-if (!confog.get("jwtPrivateKey")) {
+if (!config.get("jwtPrivateKey")) {
     console.log("JWTPrivateKey not set");
     process.exit(1)
 }
