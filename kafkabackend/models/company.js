@@ -86,24 +86,8 @@ const companySchema = new mongoose.Schema({
         maxlength: 255
     },
     headQuarters: {
-        type: new mongoose.Schema({
-            city: {
-                type: String,
-                required: true
-            },
-            state: {
-                type: String,
-                required: true
-            },
-            country: {
-                type: String,
-                required: true
-            },
-            zipCode: {
-                type: String,
-                required: true
-            }
-        })
+        type:Object,
+        required:true
     },
 
     websiteURL: {
@@ -112,7 +96,8 @@ const companySchema = new mongoose.Schema({
     },
     photos: {
         type: [String]
-    }
+    },
+
 })
 
 module.exports = mongoose.model('Company', companySchema);

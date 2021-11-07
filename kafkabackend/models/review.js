@@ -63,10 +63,10 @@ const reviewSchema = new mongoose.Schema({
         required: true,
         minlength: 1,
         maxlength: 1
+    },
+    isFeatured:{
+        type:Boolean
     }
-
 })
 
-const Review = mongoose.model("Review", reviewSchema);
-module.exports.reviewSchema = reviewSchema
-module.exports.Review = Review
+module.exports = mongoose.model('Review', reviewSchema);

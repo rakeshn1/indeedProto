@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs')
 const Company = require('../models/company')
-
+const Review = require('../models/review')
 
 const handleGetCompanyDetails = async (msg, callback) => {
     const res = {}
@@ -17,6 +17,8 @@ const handleGetCompanyDetails = async (msg, callback) => {
         callback(null, res)
     }
 }
+
+
 
 const addCompanyDetails = async (msg, callback) => {
     const res = {}
@@ -38,6 +40,9 @@ const addCompanyDetails = async (msg, callback) => {
     const companyType = msg.companyType;
     const websiteURL = msg.websiteURL;
     const photos = msg.photos;
+    const headQuarters = msg.headQuarters;
+
+
 
     // if (!email || !password || !name) {
     //     res.status = 500
@@ -62,9 +67,12 @@ const addCompanyDetails = async (msg, callback) => {
         companyType,
         websiteURL,
         photos,
+        headQuarters
     })
     try {
         const data = await CompanyDetails.save()
+        console.log("id99999",data._id)
+
         console.log("response in add ",res)
         res.status = 200
         res.data = data
@@ -113,6 +121,38 @@ const updateCompanyDetails = async (msg, callback) => {
     }
 }
 
+const handleReviews = async (msg, callback) => {
+    const res = {}
+    try {
+        const result = await Review.findAll({companyId:msg.companyId})
+        console.log("Kafka side", result)
+        res.status = 200
+        res.data = result
+        callback(null, res)
+    }
+    catch (err) {
+        console.log(err)
+        res.status = 400
+        callback(null, res)
+    }
+}
+
+const handleToggleIsFeatured = async (msg, callback) => {
+    const res = {}
+    try {
+        const result = await Review.findOneAndUpdate({companyId:msg.companyId},{isFeautured:msg.isFeatured})
+        console.log("Kafka side", result)
+        res.status = 200
+        res.data = result
+        callback(null, res)
+    }
+    catch (err) {
+        console.log(err)
+        res.status = 400
+        callback(null, res)
+    }
+}
+
 
 handle_request = (msg, callback) => {
     if (msg.path === "getCompanyDetails") {
@@ -131,6 +171,17 @@ handle_request = (msg, callback) => {
         delete msg.path
         console.log("Kafka side1")
         updateCompanyDetails(msg, callback)
+    }
+
+    if (msg.path === "getCompanyReviews") {
+        delete msg.path
+        console.log("Kafka side1")
+        handleReviews(msg, callback)
+    }
+    if (msg.path === "toggleIsFeatured") {
+        delete msg.path
+        console.log("Kafka side1")
+        handleToggleIsFeatured(msg, callback)
     }
 }
 
