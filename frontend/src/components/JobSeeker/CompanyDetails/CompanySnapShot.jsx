@@ -1,7 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import CompanyDetailsCard from "./common/CompanyDetailsCard";
-import ReviewCard from "./ReviewCard";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import CompanyDetailsCard from './common/CompanyDetailsCard';
+import ReviewCard from './ReviewCard';
 
 class CompanySnapShot extends React.Component {
   render() {
@@ -16,28 +16,18 @@ class CompanySnapShot extends React.Component {
 
             <CompanyDetailsCard title=" Founded" content="1994" />
 
-            <CompanyDetailsCard
-              title="CompanySize"
-              content="more than 10,000"
-            />
-            <CompanyDetailsCard
-              title="Revenue"
-              content="more than $ 10B (USD) "
-            />
-            <CompanyDetailsCard
-              title="Industry"
-              content="Information Technology"
-            />
+            <CompanyDetailsCard title="CompanySize" content="more than 10,000" />
+            <CompanyDetailsCard title="Revenue" content="more than $ 10B (USD) " />
+            <CompanyDetailsCard title="Industry" content="Information Technology" />
           </div>
           <p className="mt-3">
-            At Amazon, you'll discover challenges that excite you as you develop
-            professionally and explore many career paths based on your interests
-            and abilities. We reward ambitious, talented individuals with a work
-            environment that fosters teamwork and collaboration while
-            encouraging innovative ideas and fresh thinking.
+            At Amazon, you‘ll discover challenges that excite you as you develop professionally and
+            explore many career paths based on your interests and abilities. We reward ambitious,
+            talented individuals with a work environment that fosters teamwork and collaboration
+            while encouraging innovative ideas and fresh thinking.
           </p>
           <Link to="/about" className="link">
-            <span style={{ color: "#2557A7" }}>
+            <span style={{ color: '#2557A7' }}>
               <b>Learn more </b>
             </span>
           </Link>
@@ -47,15 +37,13 @@ class CompanySnapShot extends React.Component {
             <b> Our Mission</b>
           </h4>
           <p>
-            What unites Amazonians across teams and geographies is that we are
-            all striving to delight our customers and make their lives easier.
-            The scope and scale of our mission drives us to seek diverse
-            perspectives, be resourceful, and navigate through ambiguity.
-            Inventing and delivering things that were never thought possible
-            isn't easy, but we embrace this challenge every day. By working
-            together on behalf of our customers, we are building the future one
-            innovative product, service, and idea at a time. Are you ready to
-            embrace the challenge? Come build the future with us.
+            What unites Amazonians across teams and geographies is that we are all striving to
+            delight our customers and make their lives easier. The scope and scale of our mission
+            drives us to seek diverse perspectives, be resourceful, and navigate through ambiguity.
+            Inventing and delivering things that were never thought possible isn‘t easy, but we
+            embrace this challenge every day. By working together on behalf of our customers, we are
+            building the future one innovative product, service, and idea at a time. Are you ready
+            to embrace the challenge? Come build the future with us.
           </p>
         </div>
         <div className="mt-5 ">
@@ -63,15 +51,13 @@ class CompanySnapShot extends React.Component {
             <b>Reviews</b>
           </h4>
           <ReviewCard
-            rating={"5.0"}
+            rating={'5.0'}
             role="Software Engineer"
             city="San Francisco"
             state="CA"
             reviewedOn={new Date()}
-            pros={"Work environment"}
-            cons={
-              "Advancement is tough, moving beyond customer care is nearly impossible"
-            }
+            pros={'Work environment'}
+            cons={'Advancement is tough, moving beyond customer care is nearly impossible'}
             markedAsHelpful={23}
             markedAsNotHelpful={10}
             showHelpfulness={false}

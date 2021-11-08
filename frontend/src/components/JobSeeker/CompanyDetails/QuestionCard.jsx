@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
 class QuestionCard extends React.Component {
   render() {
     return (
       <div>
-        <h5 className="mt-3" style={{ textAlign: "left" }}>
+        <h5 className="mt-3" style={{ textAlign: 'left' }}>
           {this.props.question}
         </h5>
         <div>{this.props.content}</div>

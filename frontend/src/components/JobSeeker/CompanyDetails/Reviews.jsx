@@ -1,9 +1,9 @@
-import React from "react";
-import "../../../styles/companyStyles.css";
-import Select from "../../common/Select";
-import Input from "../../common/Input";
-import ReviewCard from "./ReviewCard";
-import { Link } from "react-router-dom";
+import React from 'react';
+import '../../../styles/companyStyles.css';
+import { Link } from 'react-router-dom';
+import Select from '../../common/Select';
+import Input from '../../common/Input';
+import ReviewCard from './ReviewCard';
 class Reviews extends React.Component {
   render() {
     return (
@@ -18,7 +18,7 @@ class Reviews extends React.Component {
             </Link>
           </button>
         </div>
-        <div className="p-3 rounded-corners" style={{ background: "#f3f2f1" }}>
+        <div className="p-3 rounded-corners" style={{ background: '#f3f2f1' }}>
           <div className="d-flex flex-row justify-content-between flex-wrap">
             <Select
               label="Job Title"
@@ -48,35 +48,35 @@ class Reviews extends React.Component {
               <div className="rounded-pill me-1">
                 <span className="me-1">3.3</span>
                 <span className="me-1">
-                  <i class="fa fa-star"></i>
+                  <i className="fa fa-star"></i>
                 </span>
                 <span>Work-Life Balance</span>
               </div>
               <div className="rounded-pill me-1">
                 <span className="me-1">3.3</span>
                 <span className="me-1">
-                  <i class="fa fa-star"></i>
+                  <i className="fa fa-star"></i>
                 </span>
                 <span>Pay & Benefits</span>
               </div>
               <div className="rounded-pill me-1">
                 <span className="me-1">3.3</span>
                 <span className="me-1">
-                  <i class="fa fa-star"></i>
+                  <i className="fa fa-star"></i>
                 </span>
                 <span>Job Security & Advancement</span>
               </div>
               <div className="rounded-pill me-1">
                 <span className="me-1">3.3</span>
                 <span className="me-1">
-                  <i class="fa fa-star"></i>
+                  <i className="fa fa-star"></i>
                 </span>
                 <span>Management</span>
               </div>
               <div className="rounded-pill me-1">
                 <span className="me-1">3.3</span>
                 <span className="me-1">
-                  <i class="fa fa-star"></i>
+                  <i className="fa fa-star"></i>
                 </span>
                 <span>Culture</span>
               </div>
@@ -85,7 +85,7 @@ class Reviews extends React.Component {
         </div>
         <div
           className="p-3 rounded-corners mt-1 d-flex flex-row justify-content-between flex-wrap"
-          style={{ background: "#f3f2f1" }}
+          style={{ background: '#f3f2f1' }}
         >
           <div>
             <span className="label">Search reviews</span>
@@ -95,7 +95,7 @@ class Reviews extends React.Component {
                 class="medium rounded-corners me-2"
                 id="searchReviews"
                 labelclass="label"
-                style={{ width: "300px" }}
+                style={{ width: '300px' }}
               />
               <button className="button-secondary mt-3 ">Search</button>
             </div>
@@ -117,21 +117,19 @@ class Reviews extends React.Component {
               placeholder="Any"
               className="rounded-corners"
               labelclass="label"
-              style={{ width: "100px" }}
+              style={{ width: '100px' }}
               required
             />
           </div>
         </div>
         <ReviewCard
-          rating={"5.0"}
+          rating={'5.0'}
           role="Software Engineer"
           city="San Francisco"
           state="CA"
           reviewedOn={new Date()}
-          pros={"Work environment"}
-          cons={
-            "Advancement is tough, moving beyond customer care is nearly impossible"
-          }
+          pros={'Work environment'}
+          cons={'Advancement is tough, moving beyond customer care is nearly impossible'}
           markedAsHelpful={23}
           markedAsNotHelpful={10}
           showHelpfulness={true}

@@ -1,14 +1,10 @@
-import React from "react";
+import React from 'react';
 
 class Select extends React.Component {
   render() {
     return (
       <div>
-        <p
-          className={
-            this.props.labelclass ? this.props.labelclass : "question-label"
-          }
-        >
+        <p className={this.props.labelclass ? this.props.labelclass : 'question-label'}>
           {this.props.label}
         </p>
         <select {...this.props}>
