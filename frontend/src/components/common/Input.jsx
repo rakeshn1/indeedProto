@@ -10,6 +10,7 @@ class Input extends React.Component {
           }
         >
           {this.props.label}
+          {this.props.required && <span className="required">*</span>}
         </p>
         <input type="text" {...this.props}></input>
       </div>

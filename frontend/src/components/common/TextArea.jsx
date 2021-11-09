@@ -4,8 +4,13 @@ class TextArea extends React.Component {
   render() {
     return (
       <div>
-        <p className="question-label">
-          <b>{this.props.label}</b>
+        <p
+          className={
+            this.props.labelclass ? this.props.labelclass : "question-label"
+          }
+        >
+          {this.props.label}
+          {this.props.required && <span className="required">*</span>}
         </p>
         <textarea {...this.props} />
       </div>

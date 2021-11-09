@@ -10,6 +10,7 @@ class Select extends React.Component {
           }
         >
           {this.props.label}
+          {this.props.required && <span className="required">*</span>}
         </p>
         <select {...this.props}>
           <option value="">{this.props.placeholder}</option>
