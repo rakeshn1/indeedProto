@@ -1,5 +1,5 @@
 {
-    "mongoDB": "",
+    "mongoDB": "mongodb+srv://admin:root@cluster0.uvvol.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
     "sqlDB": {
         "host": "ubereats-db-1.co8sej36u7tf.us-east-2.rds.amazonaws.com",
         "port": "3306",

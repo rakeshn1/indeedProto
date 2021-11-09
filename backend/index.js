@@ -12,6 +12,9 @@ if (!config.get("jwtPrivateKey")) {
 app.use(cors())
 app.use(express.json())
 
+
+
+app.use(require('./routes/company'))
 const port = config.get("port");
 app.listen(port, () => console.log(`Listening to port ${port}...`));
 

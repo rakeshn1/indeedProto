@@ -1,0 +1,103 @@
+const mongoose = require('mongoose');
+
+
+const companySchema = new mongoose.Schema({
+    workScore: {
+        type: Number,
+        min: 0,
+        max: 10
+    },
+    happinessScore: {
+        type: Number,
+        min: 0,
+        max: 10
+    },
+    learningScore: {
+        type: Number,
+        min: 0,
+        max: 10
+    },
+    appreciationScore: {
+        type: Number,
+        min: 0,
+        max: 10
+    },
+    about: {
+        type: String,
+        required: true,
+        maxlength: 1024
+    },
+    ceo: {
+        type: String,
+        required: true,
+        maxlength: 255
+    },
+    founded: {
+        type: String,
+        required: true,
+        maxlength: 255
+    },
+    companySize: {
+        type: Number,
+    },
+    revenue: {
+        type: Number,
+        minLength: 0,
+        maxlength: 5
+    },
+    industry: {
+        type: String,
+        required: true,
+        maxlength: 255
+    },
+    description: {
+        type: String,
+        required: true,
+        maxlength: 255
+    },
+    mission: {
+        type: String,
+        required: true,
+        maxlength: 255
+    },
+
+
+    values: {
+        type: String,
+        required: true,
+        maxlength: 255
+    },
+
+    workCulture: {
+        type: String,
+        required: true,
+        maxlength: 255
+    },
+
+    vision: {
+        type: String,
+        required: true,
+        maxlength: 255
+    },
+
+    companyType: {
+        type: String,
+        required: true,
+        maxlength: 255
+    },
+    headQuarters: {
+        type:Object,
+        required:true
+    },
+
+    websiteURL: {
+        type: String,
+        maxlength: 1024
+    },
+    photos: {
+        type: [String]
+    },
+
+})
+
+module.exports = mongoose.model('Company', companySchema);
