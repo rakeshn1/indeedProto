@@ -33,3 +33,4 @@ function handleTopicRequest(topic_name, fname) {
 }
 
 handleTopicRequest("companytopic", companyAPI);
+handleTopicRequest("jobSeeker-topic", jobSeeker);
