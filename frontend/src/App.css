@@ -41,3 +41,114 @@
 body {
   background-color: #f9f9f9;
 }
+
+.indeed-logo img {
+  height: 30px;
+  width: 90px;
+  object-fit: contain;
+  margin-right: 20px;
+}
+
+.navbar {
+  /* background-color: #61dafb; */
+  display: flex;
+  justify-content: space-evenly;
+  padding: 20px;
+  border-bottom: 1px solid rgb(201, 199, 199);
+}
+
+.navbar-buttons {
+  background-color: white;
+  text-decoration: none;
+  border: none;
+  outline: none;
+  margin-right: 20px;
+  padding-top: 10px;
+  font-size: 14px;
+  font-weight: 450;
+}
+
+.navbar-buttons:hover {
+  background-color: white;
+  text-decoration: none;
+  border: none;
+  border-bottom: #2557a7 2px solid;
+  outline: none;
+  margin-right: 20px;
+  padding-top: 10px;
+  font-size: 14px;
+  font-weight: 450;
+}
+
+.nav-left {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-right {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-right-1 * {
+  padding-top: 10px;
+  margin-right: 20px;
+  margin-left: 10px;
+}
+
+.nav-right-2 * {
+  padding-top: 10px;
+  margin-right: 20px;
+  font-size: 14px;
+}
+
+.nav-right-2 {
+  display: flex;
+  justify-content: space-between;
+}
+
+.search-wrapper {
+  display: flex;
+  /* justify-content: space-between; */
+  margin-top: 5%;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+.search-box {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid grey;
+  margin: 10px;
+  border-radius: 10px;
+  padding-top: 5px;
+  height: 45px;
+}
+
+.search-box * {
+  padding: 2px;
+  justify-content: space-between;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.find-jobs-button {
+  padding-top: 10px;
+}
+
+.find-jobs-button button {
+  background-color: #2557a7;
+  color: white;
+  font-weight: 700;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  width: 90px;
+  height: 45px;
+  font-size: 14px;
+}
+
+.input-search * {
+  outline: none;
+  border: 0px;
+}
