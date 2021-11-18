@@ -4,7 +4,12 @@ import Select from "../../common/Select";
 import Input from "../../common/Input";
 import ReviewCard from "./ReviewCard";
 import { Link } from "react-router-dom";
+import { getCompanyReviews } from "../../../services/jobSeeker";
 class Reviews extends React.Component {
+  componentDidMount = async () => {
+    const res = await getCompanyReviews("6174aeb47623fc4a4f1a6bb1");
+    console.log(res.data);
+  };
   render() {
     return (
       <div className="p-3">

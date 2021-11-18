@@ -1,6 +1,7 @@
 var connection = new require('./kafka/connection');
 require('./db/Mongo')
 const companyAPI = require('./APIS/companyAPI')
+const jobSeeker = require("./APIS/jobSeeker")
 
 function handleTopicRequest(topic_name, fname) {
     console.log("Inside Kfka2")
