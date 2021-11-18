@@ -7,10 +7,9 @@ import { apiURL } from "../config";
 const apiEndpoint = apiURL + "/jobSeeker";
 
 export async function addReview(review) {
-  debugger;
-  return await http.post(apiEndpoint + "/addReview", {
-    jobSeekerId: 1,
-    companyId: 1,
+  const result = {
+    jobSeekerId: "6174aeb47623fc4a4f1a6bb0",
+    companyId: "6174aeb47623fc4a4f1a6bb1",
     rating: review.overallRating,
     workLifeBal: review.workLifeBal,
     jobSecurity: review.jobSecurity,
@@ -26,5 +25,10 @@ export async function addReview(review) {
     CEOApproval: review.ceoApproval,
     howShouldIPrepare: review.tips,
     status: 0,
-  });
+  };
+  return await http.post(apiEndpoint + "/addReview", result);
+}
+
+export async function getCompanyReviews(id) {
+  return await http.get(apiURL + `/api/getCompanyReviews/${id}`);
 }

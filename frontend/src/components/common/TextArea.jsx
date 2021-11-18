@@ -1,6 +1,6 @@
 import React from "react";
 
-class Input extends React.Component {
+class TextArea extends React.Component {
   render() {
     return (
       <div>
@@ -12,10 +12,10 @@ class Input extends React.Component {
           {this.props.label}
           {this.props.required && <span className="required">*</span>}
         </p>
-        <input type="text" {...this.props}></input>
+        <textarea {...this.props} />
       </div>
     );
   }
 }
 
-export default Input;
+export default TextArea;

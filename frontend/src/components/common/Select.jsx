@@ -1,6 +1,6 @@
 import React from "react";
 
-class Input extends React.Component {
+class Select extends React.Component {
   render() {
     return (
       <div>
@@ -12,10 +12,17 @@ class Input extends React.Component {
           {this.props.label}
           {this.props.required && <span className="required">*</span>}
         </p>
-        <input type="text" {...this.props}></input>
+        <select {...this.props}>
+          <option value="">{this.props.placeholder}</option>
+          {this.props.options?.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          ))}
+        </select>
       </div>
     );
   }
 }
 
-export default Input;
+export default Select;
