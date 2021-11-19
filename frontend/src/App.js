@@ -5,6 +5,9 @@ import Dashboard from "./components/Admin/Dashboard";
 import JobSeekerLandingPage from "./components/JobSeeker/JobSeekerLandingPage";
 import "./App.css";
 import TopNavbar from "./components/common/TopNavbar";
+import JobSearchResults from "./components/JobSeeker/JobSearchResults";
+import JobCard from "./components/JobSeeker/JobCard";
+import JobDescriptionCard from "./components/JobSeeker/JobDescriptionCard";
 
 function App() {
   return (
@@ -23,6 +26,18 @@ function App() {
         <Route path="/admin">
           <Dashboard />
         </Route>
+        <Route path="/jobSearchResults">
+          <JobSearchResults />
+        </Route>
+
+        <Route path="/jobCard">
+          <JobCard />
+        </Route>
+
+        <Route path="/jobDescriptionCard">
+          <JobDescriptionCard />
+        </Route>
+
       </Switch>
     </div>
   );

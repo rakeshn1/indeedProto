@@ -55,7 +55,7 @@ const TopNavbar = () => {
 
                     <NavLink exact={true} activeClassName='active' to="/jobSeekerLandingPage" className="navbar-buttons">Find jobs</NavLink>
                     <NavLink activeClassName='active' to="/jobSeeker" className="navbar-buttons">Company reviews</NavLink>
-                    <NavLink activeClassName='active' to="/admin" className="navbar-buttons">Find Salaries</NavLink>
+                    <NavLink activeClassName='active' to="/admin" className="navbar-buttons">Find salaries</NavLink>
                 </div>
             </div>
             <div className="nav-right">

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Button from '../common/Button'
 import SearchBox from '../common/SearchBox'
+import JobSearchResults from './JobSearchResults'
 
 const JobSeekerLandingPage = () => {
 
@@ -57,7 +58,9 @@ const JobSeekerLandingPage = () => {
                     onClick={onButtonClickHandler}
                 // style={{}}
                 />
+
             </div>
+            <JobSearchResults />
         </div>
     )
 }

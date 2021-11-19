@@ -41,10 +41,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         maxlength: 1024
     },
-    resume: {
-        type: String,
-        maxlength: 1024
-    },
     coverLetter: {
         type: String,
         maxlength: 1024
