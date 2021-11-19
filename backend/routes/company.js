@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
 const kafka = require('../kafka/client')
+const Review = require("../models/review");
 
 router.get(`/api/getCompanyDetails/:id`, (req, res) => {
     req.body.companyId = req.params.id;
@@ -58,23 +59,31 @@ router.put(`/api/updateCompanyDetails/:id`, (req, res) => {
     })
 })
 
-router.get(`/api/getCompanyReviews/:id`, (req, res) => {
+router.get(`/api/getCompanyReviews/:id`, async (req, res) => {
     req.body.companyId = req.params.id;
     req.body.path = "getCompanyReviews"
-    kafka.make_request('companytopic', req.body, (err, result) => {
-        console.log(err)
-        console.log("LOLOLOL", result)
-        if (result?.status == 200) {
-            const companyReviews = result.data
-            return res.status(200).send(companyReviews)
-        }
-        else if (result?.status == 404) {
-            return res.status(404).send("User Not Found")
-        }
-        else if (result?.status == 400) {
-            return res.status(400).send("Server Error")
-        }
-    })
+    try{
+        const result = await Review.find({companyId:req.params.id})
+        console.log("Kafka side", result)
+        return res.status(200).send(result)
+    }catch (e) {
+        console.log("error",e)
+        return res.status(400).send("server error")
+    }
+    // kafka.make_request('companytopic', req.body, (err, result) => {
+    //     console.log(err)
+    //     console.log("LOLOLOL", result)
+    //     if (result?.status == 200) {
+    //         const companyReviews = result.data
+    //         return res.status(200).send(companyReviews)
+    //     }
+    //     else if (result?.status == 404) {
+    //         return res.status(404).send("User Not Found")
+    //     }
+    //     else if (result?.status == 400) {
+    //         return res.status(400).send("Server Error")
+    //     }
+    // })
 })
 
 router.put(`/api/updateCompanyReviews/:id`, (req, res) => {

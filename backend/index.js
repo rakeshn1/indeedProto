@@ -1,4 +1,5 @@
 const config = require("config")
+require('./db/Mongo')
 const mongoose = require("mongoose")
 const cors = require("cors")
 const express = require("express")
