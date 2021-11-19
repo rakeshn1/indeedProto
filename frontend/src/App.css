@@ -143,6 +143,10 @@ body {
   font-size: 14px;
 }
 
+.button button:hover {
+  background-color: #1e4688;
+}
+
 .input-search {
   width: 60%;
   padding: none;
@@ -170,14 +174,22 @@ body {
 
 }
 
+.cards-wrapper {
+  display: flex;
+  flex-direction: column;
+  /* background-color: #2557a7; */
+  width: 42%;
+}
+
 .job-card-wrapper {
   /* background-color: lightgreen; */
-  width: 42%;
   border: 1px solid #d4d2d0;
   text-align: left;
   padding: 20px;
   border-radius: 10px;
   height: fit-content;
+  margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .job-description-card-wrapper {
@@ -188,6 +200,8 @@ body {
   /* padding: 20px; */
   height: fit-content;
   border-radius: 10px;
+  position: sticky;
+  top: 0;
 }
 
 .job-title {
