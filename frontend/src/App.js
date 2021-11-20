@@ -3,6 +3,8 @@ import JobSeekerHome from "./components/JobSeeker/JobSeekerHome";
 import EmployerHome from "./components/Employer/EmployerHome";
 import Dashboard from "./components/Admin/Dashboard";
 import JobSeekerLandingPage from "./components/JobSeeker/JobSeekerLandingPage";
+import CompanyHome from "./components/JobSeeker/CompanyDetails/CompanyHome";
+import AddReview from "./components/JobSeeker/CompanyDetails/AddReview";
 import "./App.css";
 import TopNavbar from "./components/common/TopNavbar";
 import JobSearchResults from "./components/JobSeeker/JobSearchResults";
@@ -16,6 +18,12 @@ function App() {
       <Switch>
         <Route path="/jobSeeker">
           <JobSeekerHome />
+        </Route>
+        <Route path="/companydetails">
+          <CompanyHome />
+        </Route>
+        <Route path="/company/addReview">
+          <AddReview />
         </Route>
         <Route path="/employer">
           <EmployerHome />
