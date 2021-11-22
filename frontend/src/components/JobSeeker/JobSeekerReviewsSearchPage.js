@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import JobSeekerCompanyRow from "./JobSeekerCompanyRow";
+import SearchBox from "../common/SearchBox";
+import Button from "../common/Button";
 
 class JobSeekerReviewsSearchPage extends React.Component {
   state = {
@@ -23,7 +25,13 @@ class JobSeekerReviewsSearchPage extends React.Component {
   //   };
 
   apiCall = async () => {
-    // const { companyName, location } = this.props.match.params;
+    const { companyName, location } = this.props.match.params;
+    this.setState({
+      companyName,
+      location,
+      newCompanyName: companyName,
+      newLocation: location,
+    });
     // console.log(this.props.match);
     // await this.setState({
     //   companyName,
@@ -52,9 +60,9 @@ class JobSeekerReviewsSearchPage extends React.Component {
       prevProps.match.params.newLocation
     );
     if (
-      (this.props.match.params.companyName !==
-        prevProps.match.params.companyName,
-      this.props.match.params.location !== prevProps.match.params.location)
+      this.props.match.params.companyName !==
+        prevProps.match.params.companyName ||
+      this.props.match.params.location !== prevProps.match.params.location
     ) {
       this.apiCall();
     }
@@ -85,9 +93,7 @@ class JobSeekerReviewsSearchPage extends React.Component {
         style={{
           fontFamily:
             "Noto Sans,Helvetica Neue,Helvetica,Arial,Liberation Sans,Roboto,Noto,sans-serif",
-          paddingLeft: "150px",
-          paddingRight: "100px",
-          paddingTop: "70px",
+          width: "70%",
         }}
       >
         {/* <pre>{JSON.stringify(this.props.match, "", 2)}</pre>
@@ -107,14 +113,31 @@ class JobSeekerReviewsSearchPage extends React.Component {
             >
               Company name or job title
             </label>
-            {/* <input
-              type="text"
-              onChange={(e) => {
-                this.setState({
-                  newCompanyName: e.target.value,
-                });
+            <SearchBox
+              onChange={(companyName) => {
+                this.setState({ newCompanyName: companyName });
               }}
-            ></input> */}
+              placeholder="Job title, keywords, or company"
+              // innerLabel="What"
+              icon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-search"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                </svg>
+              }
+              style={{
+                marginLeft: "0px",
+                height: "40px",
+                width: "90%",
+              }}
+              value={this.state.newCompanyName}
+            />
           </div>
           <div style={{ width: "350px" }}>
             <label
@@ -129,8 +152,33 @@ class JobSeekerReviewsSearchPage extends React.Component {
             >
               City, state, or zip (optional)
             </label>
+            <SearchBox
+              onChange={(location) => {
+                this.setState({ newLocation: location });
+              }}
+              placeholder="Job title, keywords, or company"
+              // innerLabel="What"
+              icon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-geo-alt-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+                </svg>
+              }
+              style={{
+                marginLeft: "0px",
+                height: "40px",
+                width: "90%",
+              }}
+              value={this.state.newLocation}
+            />
           </div>
-          <button
+          {/* <button
             className="btn btn-primary"
             onClick={() => {
               this.onFindCompaniesClick();
@@ -138,7 +186,12 @@ class JobSeekerReviewsSearchPage extends React.Component {
           >
             {" "}
             Find Companies
-          </button>
+          </button> */}
+          <Button
+            text="Find Companies"
+            onClick={this.onFindCompaniesClick}
+            style={{ marginTop: "21px", width: "150px" }}
+          />
           {/* <Link
             className="btn btn-primary"
             to={`/jobSeeker/reviews/search/${this.state.newCompanyName}/${this.state.newLocation}`}
@@ -156,14 +209,12 @@ class JobSeekerReviewsSearchPage extends React.Component {
               marginTop: "20px",
             }}
           >
-            Popular companies
-            {this.props.match.params.companyName && (
-              <span>
-                for {this.props.match.params.companyName}
-                {this.props.match.params.location && (
-                  <span> in {this.props.match.params.location}</span>
-                )}
-              </span>
+            Popular companies{" "}
+            {this.state.companyName !== " " && (
+              <span>for {this.state.companyName}</span>
+            )}
+            {this.state.location !== " " && (
+              <span> in {this.state.location}</span>
             )}
           </h2>
           <p

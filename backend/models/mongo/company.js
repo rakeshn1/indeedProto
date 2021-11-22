@@ -109,6 +109,10 @@ const companySchema = new mongoose.Schema({
   photos: {
     type: [String],
   },
+  companyLogo: {
+    type: String,
+    maxlength: 1024,
+  },
 });
 
 const Company = mongoose.model("Company", companySchema);

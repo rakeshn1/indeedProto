@@ -16,24 +16,26 @@ const jobSchema = new mongoose.Schema({
         maxlength: 5
     },
     location: {
-        type: new mongoose.Schema({
-            city: {
-                type: String,
-                required: true
-            },
-            state: {
-                type: String,
-                required: true
-            },
-            country: {
-                type: String,
-                required: true
-            },
-            zipCode: {
-                type: String,
-                required: true
-            }
-        })
+        type:Object,
+        required:true
+        // type: new mongoose.Schema({
+        //     city: {
+        //         type: String,
+        //         required: true
+        //     },
+        //     state: {
+        //         type: String,
+        //         required: true
+        //     },
+        //     country: {
+        //         type: String,
+        //         required: true
+        //     },
+        //     zipCode: {
+        //         type: String,
+        //         required: true
+        //     }
+        // })
     },
     jobType: {
         // FullTime: 0, PartTime: 1, Remote: 2
