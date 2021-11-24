@@ -17,15 +17,27 @@ const jobSchema = new mongoose.Schema({
     responsibilities: {
         type: String
     },
+    companyName: {
+        type: String,
+        maxlength: 255
+    },
+    salary: {
+        type: Number
+    },
+    description: {
+        type: String,
+    },
     rating: {
         type: Number,
         minLength: 0,
         maxlength: 5
     },
+
     location: {
-        type:Object,
-        required:true
+        type: Object,
+        required: true
     },
+
     jobType: {
         // FullTime: 0, PartTime: 1, Remote: 2
         type: Number,

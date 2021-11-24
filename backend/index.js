@@ -19,6 +19,7 @@ app.use(express.json())
 app.use("/jobSeeker", jobSeeker);
 
 app.use("/employer", employer)
+
 const port = config.get("port");
 app.listen(port, () => console.log(`Listening to port ${port}...`));
 

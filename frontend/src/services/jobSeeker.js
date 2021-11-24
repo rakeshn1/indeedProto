@@ -32,3 +32,9 @@ export async function addReview(review) {
 export async function getCompanyReviews(id) {
   return await http.get(apiURL + `/api/getCompanyReviews/${id}`);
 }
+
+export async function getJobSearchResults(payload) {
+  console.log(apiURL + "/api/getJobSearchResults/")
+  console.log("payload", payload)
+  return await http.get(apiURL + `/getJobSearchResults/`, { params: payload });
+}
