@@ -1,5 +1,5 @@
 const { Company } = require('../models/company')
-const { Review } = require('../models/review')
+const { Reviews } = require('../models/review')
 const { Jobs } = require('../models/jobs')
 const { JobApplications } = require('../models/jobApplications')
 
@@ -119,7 +119,7 @@ const updateCompanyDetails = async (msg, callback) => {
 const handleReviews = async (msg, callback) => {
     const res = {}
     try {
-        const result = await Review.find({ companyId: msg.companyId })
+        const result = await Reviews.find({ companyId: msg.companyId })
         console.log("Results of handle review", result)
         res.status = 200
         res.data = result
@@ -135,7 +135,7 @@ const handleReviews = async (msg, callback) => {
 const handleToggleIsFeatured = async (msg, callback) => {
     const res = {}
     try {
-        const result = await Review.findOneAndUpdate({ _id: msg.companyId }, { isFeautured: msg.isFeatured })
+        const result = await Reviews.findOneAndUpdate({ _id: msg.reviewId }, { isFeatured: msg.isFeatured })
         console.log("Kafka side", result)
         res.status = 200
         res.data = result

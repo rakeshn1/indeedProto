@@ -260,11 +260,11 @@ router.put(`/api/updateJobApplication/:id`, (req, res) => {
 })
 
 router.get(`/api/getApplicationDetails/:id`, async (req, res) => {
-    try{
+    try {
         req.body.jobApplicationID = req.params.id;
         req.body.path = "getApplicationDetails";
         kafka.make_request('companytopic', req.body, (err, result) => {
-            if(err){
+            if (err) {
                 throw new Error(err);
             }
             console.log("Response received for getApplicationDetails", result)
@@ -279,7 +279,7 @@ router.get(`/api/getApplicationDetails/:id`, async (req, res) => {
                 return res.status(400).send("Server Error")
             }
         })
-    }catch (err) {
+    } catch (err) {
         console.log(`Error: ${err}`)
         return res.status(500).send("Server Error")
     }

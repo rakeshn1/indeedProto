@@ -1,4 +1,4 @@
-const {Reviews} = require("../models/review");
+const { Reviews } = require("../models/review");
 const Company = require("../models/company");
 
 async function addReview(body, callback) {
