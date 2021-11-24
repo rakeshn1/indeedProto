@@ -55,16 +55,7 @@ const reviewSchema = new mongoose.Schema({
     maxlength: 1024,
   },
   helpfulnessScore: {
-    type: new mongoose.Schema({
-      yesCount: {
-        type: Number,
-        default: 0,
-      },
-      noCount: {
-        type: Number,
-        default: 0,
-      },
-    }),
+    type: Object
   },
   date: {
     type: Date,

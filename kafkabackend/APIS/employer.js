@@ -1,3 +1,5 @@
+const ObjectId = require('mongoose').Types.ObjectId
+
 const {Company} = require('../models/company')
 const {Review} = require('../models/review')
 const {Jobs} = require('../models/jobs')
@@ -133,8 +135,8 @@ const handleReviews = async (msg, callback) => {
 const handleToggleIsFeatured = async (msg, callback) => {
     const res = {}
     try {
-        const result = await Review.findOneAndUpdate({companyId:msg.companyId},{isFeautured:msg.isFeatured})
-        console.log("Kafka side", result)
+        const result = await Review.findOneAndUpdate({_id:msg.reviewId},{isFeatured:msg.isFeatured})
+        console.log("Results of handle toggle is featured", result)
         res.status = 200
         res.data = result
         callback(null, res)
@@ -280,6 +282,52 @@ const updateJobApplication = async (msg, callback) => {
     }
 }
 
+const handleGetApplicationDetails = async (msg, callback) => {
+    const res = {}
+    try {
+        console.log("*******"+msg.jobApplicationID)
+        const result = await JobApplications.aggregate([
+            {
+                $match: {
+                    $and: [{ _id: ObjectId(msg.jobApplicationID) }],
+                },
+            },
+             //{ $set: { useObjID: { $toObjectId: 'userId' } } },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'userRow',
+                },
+            },
+            { $unwind: '$userRow' },
+            {
+                $project: {
+                    _id: 1,
+                    jobId: 1,
+                    userId: 1,
+                    companyId: 1,
+                    status: 1,
+                    firstName: '$userRow.firstName',
+                    lastName: '$userRow.lastName',
+                    resume: '$userRow.resume',
+                    coverLetter: '$userRow.coverLetter'
+                },
+            },
+        ]);
+        //const result = await JobApplications.find({ _id:msg.jobApplicationID })
+        console.log("Results for get company details", result)
+        res.status = 200
+        res.data = result
+        callback(null, res)
+    }catch (err) {
+        console.log(err)
+        res.status = 400
+        callback(null, res)
+    }
+}
+
 handle_request = (msg, callback) => {
     if (msg.path === "getCompanyDetails") {
         delete msg.path
@@ -339,6 +387,12 @@ handle_request = (msg, callback) => {
         delete msg.path
         console.log("handling updateJob")
         updateJobApplication(msg, callback)
+    }
+
+    if (msg.path === "getApplicationDetails") {
+        delete msg.path
+        console.log("handling GetApplicationDetails")
+        handleGetApplicationDetails(msg, callback)
     }
 }
 

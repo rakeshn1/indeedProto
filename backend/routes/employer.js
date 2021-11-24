@@ -110,7 +110,7 @@ router.get(`/api/getCompanyReviews/:id`, async (req, res) => {
 
 router.put(`/api/updateCompanyReviews/:id`, (req, res) => {
     try {
-        req.body.companyId = req.params.id;
+        req.body.reviewId = req.params.id;
         req.body.path = "toggleIsFeatured";
         kafka.make_request('companytopic', req.body, (err, result) => {
             if(err){
@@ -251,6 +251,32 @@ router.put(`/api/updateJobApplication/:id`, (req, res) => {
                 return res.status(400).send("Server Error")
             }else{
                 return res.status(500).send("Server Error")
+            }
+        })
+    }catch (err) {
+        console.log(`Error: ${err}`)
+        return res.status(500).send("Server Error")
+    }
+})
+
+router.get(`/api/getApplicationDetails/:id`, async (req, res) => {
+    try{
+        req.body.jobApplicationID = req.params.id;
+        req.body.path = "getApplicationDetails";
+        kafka.make_request('companytopic', req.body, (err, result) => {
+            if(err){
+                throw new Error(err);
+            }
+            console.log("Response received for getApplicationDetails", result)
+            if (result?.status == 200) {
+                const getCompanyJobs = result.data
+                return res.status(200).send(getCompanyJobs)
+            }
+            else if (result?.status == 404) {
+                return res.status(404).send("Application Not Found")
+            }
+            else if (result?.status == 400) {
+                return res.status(400).send("Server Error")
             }
         })
     }catch (err) {
