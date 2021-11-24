@@ -10,6 +10,13 @@ const jobSchema = new mongoose.Schema({
     companyId: {
         type: mongoose.Schema.Types.ObjectId
     },
+    industry: {
+        type: String,
+        maxlength: 255
+    },
+    responsibilities: {
+        type: String
+    },
     rating: {
         type: Number,
         minLength: 0,
@@ -18,24 +25,6 @@ const jobSchema = new mongoose.Schema({
     location: {
         type:Object,
         required:true
-        // type: new mongoose.Schema({
-        //     city: {
-        //         type: String,
-        //         required: true
-        //     },
-        //     state: {
-        //         type: String,
-        //         required: true
-        //     },
-        //     country: {
-        //         type: String,
-        //         required: true
-        //     },
-        //     zipCode: {
-        //         type: String,
-        //         required: true
-        //     }
-        // })
     },
     jobType: {
         // FullTime: 0, PartTime: 1, Remote: 2
@@ -54,7 +43,6 @@ const jobSchema = new mongoose.Schema({
     numberOfSelectedApplicants: {
         type: Number
     },
-
     numberOfRejectedApplicants: {
         type: Number
     }

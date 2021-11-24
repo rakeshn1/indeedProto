@@ -48,6 +48,13 @@ const userSchema = new mongoose.Schema({
     coverLetter: {
         type: String,
         maxlength: 1024
+    },
+    address: {
+        type:Object
+    },
+    companyRole: {
+        type: String,
+        maxlength: 255
     }
 
 })
