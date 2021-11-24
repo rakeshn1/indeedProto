@@ -2,11 +2,11 @@ import React from 'react'
 import JobCard from './JobCard'
 import JobDescriptionCard from './JobDescriptionCard'
 
-const JobSearchResults = () => {
+const JobSearchResults = (props) => {
     return (
 
         <div className="container job-search-wrapper">
-            <JobCard />
+            <JobCard results={props.searchResults} />
             <JobDescriptionCard />
         </div>
     )

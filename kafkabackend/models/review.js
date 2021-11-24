@@ -55,16 +55,7 @@ const reviewSchema = new mongoose.Schema({
     maxlength: 1024,
   },
   helpfulnessScore: {
-    type: new mongoose.Schema({
-      yesCount: {
-        type: Number,
-        default: 0,
-      },
-      noCount: {
-        type: Number,
-        default: 0,
-      },
-    }),
+    type: Object
   },
   date: {
     type: Date,
@@ -83,4 +74,8 @@ const reviewSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Review", reviewSchema);
+
+const Reviews = mongoose.model("Review", reviewSchema);
+module.exports.reviewSchema = reviewSchema
+module.exports.Reviews = Reviews
+

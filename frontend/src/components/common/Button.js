@@ -11,3 +11,4 @@ const Button = ({ text, onClick, style }) => {
 }
 
 export default Button
+// (e) => onChange(e.currentTarget.value)

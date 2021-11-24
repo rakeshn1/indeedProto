@@ -78,6 +78,80 @@ const JobDescriptionCard = () => {
                     <h6><b>Requirements</b></h6>
                     <h6><b>Perks</b></h6>
                     <h6><b>Pay</b></h6>
+
+                    <h4><b>Full Job Description</b></h4>
+                    <p>Moxtra provides a client engagement platform designed for the mobile era. Moxtra solutions deliver high-touch and personalized digital experiences to enhance client engagement and accelerate transactions. Founded by former WebEx co-founder and CEO Subrah Iyar and WebEx veteran Stanley Huang, Moxtra comes from a rich heritage in the collaboration space.</p>
+
+                    <h6><b>Role</b></h6>
+                    <h6><b>Responsibilities</b></h6>
+                    <h6><b>Requirements</b></h6>
+                    <h6><b>Perks</b></h6>
+                    <h6><b>Pay</b></h6> <h4><b>Full Job Description</b></h4>
+                    <p>Moxtra provides a client engagement platform designed for the mobile era. Moxtra solutions deliver high-touch and personalized digital experiences to enhance client engagement and accelerate transactions. Founded by former WebEx co-founder and CEO Subrah Iyar and WebEx veteran Stanley Huang, Moxtra comes from a rich heritage in the collaboration space.</p>
+
+                    <h6><b>Role</b></h6>
+                    <h6><b>Responsibilities</b></h6>
+                    <h6><b>Requirements</b></h6>
+                    <h6><b>Perks</b></h6>
+                    <h6><b>Pay</b></h6>
+
+                    <h4><b>Full Job Description</b></h4>
+                    <p>Moxtra provides a client engagement platform designed for the mobile era. Moxtra solutions deliver high-touch and personalized digital experiences to enhance client engagement and accelerate transactions. Founded by former WebEx co-founder and CEO Subrah Iyar and WebEx veteran Stanley Huang, Moxtra comes from a rich heritage in the collaboration space.</p>
+
+                    <h6><b>Role</b></h6>
+                    <h6><b>Responsibilities</b></h6>
+                    <h6><b>Requirements</b></h6>
+                    <h6><b>Perks</b></h6>
+                    <h6><b>Pay</b></h6>
+
+                    <h4><b>Full Job Description</b></h4>
+                    <p>Moxtra provides a client engagement platform designed for the mobile era. Moxtra solutions deliver high-touch and personalized digital experiences to enhance client engagement and accelerate transactions. Founded by former WebEx co-founder and CEO Subrah Iyar and WebEx veteran Stanley Huang, Moxtra comes from a rich heritage in the collaboration space.</p>
+
+                    <h6><b>Role</b></h6>
+                    <h6><b>Responsibilities</b></h6>
+                    <h6><b>Requirements</b></h6>
+                    <h6><b>Perks</b></h6>
+                    <h6><b>Pay</b></h6>
+
+                    <h4><b>Full Job Description</b></h4>
+                    <p>Moxtra provides a client engagement platform designed for the mobile era. Moxtra solutions deliver high-touch and personalized digital experiences to enhance client engagement and accelerate transactions. Founded by former WebEx co-founder and CEO Subrah Iyar and WebEx veteran Stanley Huang, Moxtra comes from a rich heritage in the collaboration space.</p>
+
+                    <h6><b>Role</b></h6>
+                    <h6><b>Responsibilities</b></h6>
+                    <h6><b>Requirements</b></h6>
+                    <h6><b>Perks</b></h6>
+                    <h6><b>Pay</b></h6>
+
+                    <h4><b>Full Job Description</b></h4>
+                    <p>Moxtra provides a client engagement platform designed for the mobile era. Moxtra solutions deliver high-touch and personalized digital experiences to enhance client engagement and accelerate transactions. Founded by former WebEx co-founder and CEO Subrah Iyar and WebEx veteran Stanley Huang, Moxtra comes from a rich heritage in the collaboration space.</p>
+
+                    <h6><b>Role</b></h6>
+                    <h6><b>Responsibilities</b></h6>
+                    <h6><b>Requirements</b></h6>
+                    <h6><b>Perks</b></h6>
+                    <h6><b>Pay</b></h6>
+
+                    <h4><b>Full Job Description</b></h4>
+                    <p>Moxtra provides a client engagement platform designed for the mobile era. Moxtra solutions deliver high-touch and personalized digital experiences to enhance client engagement and accelerate transactions. Founded by former WebEx co-founder and CEO Subrah Iyar and WebEx veteran Stanley Huang, Moxtra comes from a rich heritage in the collaboration space.</p>
+
+                    <h6><b>Role</b></h6>
+                    <h6><b>Responsibilities</b></h6>
+                    <h6><b>Requirements</b></h6>
+                    <h6><b>Perks</b></h6>
+                    <h6><b>Pay</b></h6>
+
+                    <h4><b>Full Job Description</b></h4>
+                    <p>Moxtra provides a client engagement platform designed for the mobile era. Moxtra solutions deliver high-touch and personalized digital experiences to enhance client engagement and accelerate transactions. Founded by former WebEx co-founder and CEO Subrah Iyar and WebEx veteran Stanley Huang, Moxtra comes from a rich heritage in the collaboration space.</p>
+
+                    <h6><b>Role</b></h6>
+                    <h6><b>Responsibilities</b></h6>
+                    <h6><b>Requirements</b></h6>
+                    <h6><b>Perks</b></h6>
+                    <h6><b>Pay</b></h6>
+
+
+
+
                 </div>
 
             </div>

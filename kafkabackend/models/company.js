@@ -27,6 +27,11 @@ const companySchema = new mongoose.Schema({
         required: true,
         maxlength: 1024
     },
+    name: {
+        type: String,
+        required: true,
+        maxlength: 255
+    },
     ceo: {
         type: String,
         required: true,
@@ -100,4 +105,6 @@ const companySchema = new mongoose.Schema({
 
 })
 
-module.exports = mongoose.model('Company', companySchema);
+const Company = mongoose.model("Company", companySchema);
+module.exports.companySchema = companySchema;
+module.exports.Company = Company;
