@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const companySchema = new mongoose.Schema({
+  companyName: {
+    type: String,
+    required: true,
+  },
   workScore: {
     type: Number,
     min: 0,
