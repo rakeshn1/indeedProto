@@ -1,12 +1,19 @@
-import React, { useState } from 'react'
-import Button from '../common/Button'
-import SearchBox from '../common/SearchBox'
-import JobSearchResults from './JobSearchResults'
+import React, { useState } from 'react';
+import Button from '../common/Button';
+import axios from 'axios';
+import SearchBox from '../common/SearchBox';
+import JobSearchResults from './JobSearchResults';
+import { apiURL } from '../../config';
+import http from '../../services/httpService';
+import { getJobSearchResults } from '../../services/jobSeeker'
+import { NavLink } from 'react-router-dom';
+
 
 const JobSeekerLandingPage = () => {
 
     const [whatText, setWhatText] = useState()
     const [whereText, setWhereText] = useState()
+    const [searchResults, setSearchResults] = useState()
     const onWhatChangeHandler = (value) => {
         console.log(value);
         setWhatText(value)
@@ -18,9 +25,28 @@ const JobSeekerLandingPage = () => {
 
     }
 
-    const onButtonClickHandler = () => {
+    const [showResults, setShowResults] = useState(false);
+    const onButtonClickHandler = async () => {
         //call to get jobs
         //api call with parameters what text value and where text value
+        const payload = {
+            what: whatText,
+            where: whereText
+        }
+
+        try {
+            const result = await getJobSearchResults(payload);
+            console.log("RR", result);
+            setSearchResults(result.data);
+            console.log("done")
+        }
+        catch {
+            console.log("error")
+        }
+
+        setShowResults(true);
+        console.log("what", whatText);
+        console.log("where", whereText);
     }
 
 
@@ -56,11 +82,23 @@ const JobSeekerLandingPage = () => {
                 <Button
                     text="Find Jobs"
                     onClick={onButtonClickHandler}
-                // style={{}}
                 />
 
             </div>
-            <JobSearchResults />
+            <div >
+                <p className="link-connector"><NavLink style={{ textDecoration: "none" }} to="/" >Post your resume</NavLink> It only takes a few seconds</p>
+            </div>
+            <div >
+                <p className="link-connector"><NavLink to="/" > Employers: Post a job </NavLink> - yout next hire is here</p>
+            </div>
+            <div style={{ marginTop: "10px", borderBottom: "1px solid silver" }}></div>
+            <div>
+
+                {showResults === true ? <JobSearchResults searchResults={searchResults} /> : ""}
+
+            </div>
+
+
         </div>
     )
 }

@@ -18,6 +18,8 @@ app.use(express.json())
 app.use("/jobSeeker", jobSeeker);
 
 app.use(require('./routes/company'))
+app.use(require('./routes/jobSeeker'))
+
 const port = config.get("port");
 app.listen(port, () => console.log(`Listening to port ${port}...`));
 

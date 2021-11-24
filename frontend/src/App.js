@@ -1,4 +1,4 @@
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import JobSeekerHome from "./components/JobSeeker/JobSeekerHome";
 import EmployerHome from "./components/Employer/EmployerHome";
 import Dashboard from "./components/Admin/Dashboard";
@@ -10,14 +10,27 @@ import TopNavbar from "./components/common/TopNavbar";
 import JobSearchResults from "./components/JobSeeker/JobSearchResults";
 import JobCard from "./components/JobSeeker/JobCard";
 import JobDescriptionCard from "./components/JobSeeker/JobDescriptionCard";
+import JobSeekerSignIn from "./components/JobSeekerSignIn";
+import JobSeekerProfile from "./components/JobSeeker/JobSeekerProfile";
+import SignUpPage from "./components/SignUpPage";
 
 function App() {
+
+  const location = useLocation();
+
   return (
     <div className="App">
-      <TopNavbar />
+      {
+        location.pathname !== '/signIn/email' || location.pathname !== '/signIn/returningUser' || location.pathname !== '/signIn/newUser' && <TopNavbar />
+
+      }
+
       <Switch>
         <Route path="/jobSeeker">
           <JobSeekerHome />
+        </Route>
+        <Route path="/jobSeekerProfile">
+          <JobSeekerProfile />
         </Route>
         <Route path="/companydetails">
           <CompanyHome />
@@ -46,6 +59,16 @@ function App() {
           <JobDescriptionCard />
         </Route>
 
+        <Route path="/signIn/:type">
+          <JobSeekerSignIn />
+        </Route>
+
+        <Route path="/signUp/">
+          <SignUpPage />
+        </Route>
+
+        <Redirect from="/" exact to="/jobSeekerLandingPage" />
+        <Redirect from="/jobSeeker" exact to="/jobSeekerLandingPage" />
       </Switch>
     </div>
   );

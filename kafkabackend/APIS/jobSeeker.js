@@ -12,11 +12,29 @@ async function addReview(body, callback) {
   }
 }
 
+async function getJobSearchResults(body, callback) {
+  try {
+    console.log("body", body)
+
+    callback(null, "Sent Results");
+  } catch (ex) {
+    console.log(ex);
+    callback(ex, "Error");
+  }
+}
+
 handle_request = (msg, callback) => {
   if (msg.path === "addReview") {
     delete msg.path;
     console.log("Kafka side1");
     addReview(msg, callback);
+  }
+
+  if (msg.path === "getJobSearchResults") {
+    delete msg.path;
+    console.log("HERE")
+    console.log("Kafka side1");
+    getJobSearchResults(msg, callback);
   }
 };
 

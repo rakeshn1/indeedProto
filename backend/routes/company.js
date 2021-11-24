@@ -3,6 +3,7 @@ const router = express.Router()
 const mongoose = require('mongoose')
 const kafka = require('../kafka/client')
 const Review = require("../models/review");
+const Jobs = require("../models/mongo/jobs");
 
 router.get(`/api/getCompanyDetails/:id`, (req, res) => {
     req.body.companyId = req.params.id;
@@ -62,12 +63,12 @@ router.put(`/api/updateCompanyDetails/:id`, (req, res) => {
 router.get(`/api/getCompanyReviews/:id`, async (req, res) => {
     req.body.companyId = req.params.id;
     req.body.path = "getCompanyReviews"
-    try{
-        const result = await Review.find({companyId:req.params.id})
+    try {
+        const result = await Review.find({ companyId: req.params.id })
         console.log("Kafka side", result)
         return res.status(200).send(result)
-    }catch (e) {
-        console.log("error",e)
+    } catch (e) {
+        console.log("error", e)
         return res.status(400).send("server error")
     }
     // kafka.make_request('companytopic', req.body, (err, result) => {
@@ -103,5 +104,37 @@ router.put(`/api/updateCompanyReviews/:id`, (req, res) => {
             return res.status(400).send("Invalid Input ")
         }
     })
+})
+
+router.post(`/addJobs`, async (req, res) => {
+    const job = new Jobs({
+        jobTitle: req.body.jobTitle,
+        companyId: req.body.companyId,
+        rating: req.body.rating,
+        location: req.body.location,
+        salary: req.body.salary,
+        jobDescription: req.body.jobDescription,
+        jobType: req.body.jobType,
+        datePosted: req.body.datePosted,
+        totalApplicants: req.body.totalApplicants,
+        numberOfSelectedApplicants: req.body.numberOfSelectedApplicants,
+        numberOfRejectedApplicants: req.body.numberOfRejectedApplicants
+
+    }
+    )
+    console.log("CREATE NEW", job)
+
+    job
+        .save(job)
+        .then(data => {
+            console.log("PAYLOAD:", data)
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while creating the job."
+            });
+        });
 })
 module.exports = router
