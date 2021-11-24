@@ -55,7 +55,6 @@ const jobSchema = new mongoose.Schema({
     numberOfSelectedApplicants: {
         type: Number
     },
-
     numberOfRejectedApplicants: {
         type: Number
     }

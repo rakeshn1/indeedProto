@@ -1,6 +1,6 @@
 var connection = new require('./kafka/connection');
 require('./db/Mongo')
-const companyAPI = require('./APIS/companyAPI')
+const companyAPI = require('./APIS/employer')
 const jobSeeker = require("./APIS/jobSeeker")
 
 function handleTopicRequest(topic_name, fname) {

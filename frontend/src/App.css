@@ -1,12 +1,10 @@
 .App {
-  text-align: center;
   font-size: 0.9 rem;
   min-width: fit-content;
 }
 
 body {
-  font-family: 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
-
+  font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
 .App-logo {
@@ -160,17 +158,16 @@ body {
 
 
 .link-connector {
+  /* background-color: #085ff7; */
   margin-top: 20px;
   text-decoration: none;
-  margin-left: auto;
-  margin-right: auto;
-
+  text-align: center;
+  /* color: #2557a7; */
 }
 
 .link-connector * {
   text-decoration: none;
-
-  color: #2557a7;
+  /* color: #2557a7; */
   outline: none;
   font-family: 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
   font-size: 16px;
@@ -182,6 +179,7 @@ body {
 .link-connector p {
   text-decoration: none;
 
+
 }
 
 .active {
@@ -189,7 +187,7 @@ body {
   text-decoration: none;
   border: none;
   border-bottom: #2557a7 2px solid;
-  color: black,
+  color: black;
 }
 
 .job-search-wrapper {
@@ -197,7 +195,6 @@ body {
   display: flex;
   justify-content: space-evenly;
   margin-top: 20px;
-
 }
 
 .cards-wrapper {
@@ -205,6 +202,15 @@ body {
   flex-direction: column;
   /* background-color: #2557a7; */
   width: 42%;
+}
+
+.reviews-wrapper {
+  display: flex;
+  /* flex-direction: column; */
+  /* background-color: #2557a7; */
+  flex-wrap: wrap;
+  max-width: "100%";
+  justify-content: space-around;
 }
 
 .job-card-wrapper {
@@ -216,6 +222,18 @@ body {
   height: fit-content;
   margin-bottom: 10px;
   cursor: pointer;
+}
+
+.review-card-wrapper {
+  /* background-color: lightgreen; */
+  border: 1px solid #d4d2d0;
+  text-align: left;
+  padding: 20px;
+  border-radius: 10px;
+  height: fit-content;
+  margin-bottom: 10px;
+  cursor: pointer;
+  width: 600px;
 }
 
 .job-description-card-wrapper {
@@ -269,14 +287,13 @@ body {
   color: grey;
   text-align: left;
   font-size: small;
-  letter-spacing: normal
+  letter-spacing: normal;
 }
 
 .job-card-role-summary ul {
   padding-left: 15px;
   list-style: circle;
 }
-
 
 .job-card-posted-ago {
   font-size: 11px;
@@ -329,6 +346,10 @@ body {
   padding-top: 150px;
   background-color: #f9f9f9;
   height: 100vh;
+}
+
+.indeed-logo {
+  text-align: center;
 }
 
 .sign-in-box-wrapper {
@@ -407,6 +428,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  text-align: center;
 
 }
 

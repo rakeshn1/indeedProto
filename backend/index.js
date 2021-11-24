@@ -5,6 +5,7 @@ const cors = require("cors")
 const express = require("express")
 const app = express()
 const jobSeeker = require("./routes/JobSeeker");
+const employer = require('./routes/employer')
 
 if (!config.get("jwtPrivateKey")) {
     console.log("JWTPrivateKey not set");
@@ -17,8 +18,7 @@ app.use(express.json())
 
 app.use("/jobSeeker", jobSeeker);
 
-app.use(require('./routes/company'))
-app.use(require('./routes/jobSeeker'))
+app.use("/employer", employer)
 
 const port = config.get("port");
 app.listen(port, () => console.log(`Listening to port ${port}...`));

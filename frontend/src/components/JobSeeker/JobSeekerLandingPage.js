@@ -86,10 +86,10 @@ const JobSeekerLandingPage = () => {
 
             </div>
             <div >
-                <p className="link-connector"><NavLink style={{ textDecoration: "none" }} to="/" >Post your resume</NavLink> It only takes a few seconds</p>
+                <p className="link-connector"><NavLink style={{ textDecoration: "none", color: "#2557a7" }} to="/" >Post your resume</NavLink> It only takes a few seconds</p>
             </div>
             <div >
-                <p className="link-connector"><NavLink to="/" > Employers: Post a job </NavLink> - yout next hire is here</p>
+                <p className="link-connector"><NavLink style={{ textDecoration: "none", color: "#2557a7" }} to="/" > Employers: Post a job </NavLink> - yout next hire is here</p>
             </div>
             <div style={{ marginTop: "10px", borderBottom: "1px solid silver" }}></div>
             <div>
