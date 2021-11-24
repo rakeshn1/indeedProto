@@ -135,7 +135,7 @@ const handleReviews = async (msg, callback) => {
 const handleToggleIsFeatured = async (msg, callback) => {
     const res = {}
     try {
-        const result = await Review.findOneAndUpdate({ companyId: msg.companyId }, { isFeautured: msg.isFeatured })
+        const result = await Review.findOneAndUpdate({ _id: msg.companyId }, { isFeautured: msg.isFeatured })
         console.log("Kafka side", result)
         res.status = 200
         res.data = result
