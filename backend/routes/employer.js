@@ -195,7 +195,7 @@ router.put(`/api/updateJob/:id`, (req, res) => {
                 return res.status(200).send(result.data)
             }
             else if (result.status == 404) {
-                return res.status(404).send("Company Not Found")
+                return res.status(404).send("Job Not Found")
             }
             else if (result.status == 400) {
                 return res.status(400).send("Server Error")
@@ -219,6 +219,33 @@ router.post(`/api/addJobApplication`, (req, res) => {
             console.log("Response received for addJobApplication", result);
             if (result?.status == 200) {
                 return res.status(200).send(result.data)
+            }
+            else if (result.status == 400) {
+                return res.status(400).send("Server Error")
+            }else{
+                return res.status(500).send("Server Error")
+            }
+        })
+    }catch (err) {
+        console.log(`Error: ${err}`)
+        return res.status(500).send("Server Error")
+    }
+})
+
+router.put(`/api/updateJobApplication/:id`, (req, res) => {
+    try {
+        req.body.jobApplicationID = req.params.id;
+        req.body.path = "updateJobApplication";
+        kafka.make_request('companytopic', req.body, (err, result) => {
+            if(err){
+                throw new Error(err);
+            }
+            console.log("Response received for updateJobApplication", result)
+            if (result?.status == 200) {
+                return res.status(200).send(result.data)
+            }
+            else if (result.status == 404) {
+                return res.status(404).send("Job Application Not Found")
             }
             else if (result.status == 400) {
                 return res.status(400).send("Server Error")
