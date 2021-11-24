@@ -178,6 +178,14 @@ body {
   width: 42%;
 }
 
+.reviews-wrapper {
+  display: flex;
+  /* flex-direction: column; */
+  /* background-color: #2557a7; */
+  flex-wrap: wrap;
+  max-width: "100%";
+  justify-content: space-around;
+}
 .job-card-wrapper {
   /* background-color: lightgreen; */
   border: 1px solid #d4d2d0;
@@ -187,6 +195,17 @@ body {
   height: fit-content;
   margin-bottom: 10px;
   cursor: pointer;
+}
+.review-card-wrapper {
+  /* background-color: lightgreen; */
+  border: 1px solid #d4d2d0;
+  text-align: left;
+  padding: 20px;
+  border-radius: 10px;
+  height: fit-content;
+  margin-bottom: 10px;
+  cursor: pointer;
+  width: 600px;
 }
 
 .job-description-card-wrapper {

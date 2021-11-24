@@ -5,11 +5,11 @@ const kafka = require('../kafka/client')
 const Review = require("../models/review");
 
 router.get(`/api/getCompanyDetails/:id`, (req, res) => {
-    try{
+    try {
         req.body.companyId = req.params.id;
         req.body.path = "getCompanyDetails"
         kafka.make_request('companytopic', req.body, (err, result) => {
-            if(err){
+            if (err) {
                 throw new Error(err);
             }
             console.log("Response received for getCompanyDetails", result)
@@ -22,11 +22,11 @@ router.get(`/api/getCompanyDetails/:id`, (req, res) => {
             }
             else if (result?.status == 400) {
                 return res.status(400).send("Server Error")
-            }else{
+            } else {
                 return res.status(500).send("Server Error")
             }
         })
-    }catch (err) {
+    } catch (err) {
         console.log(`Error: ${err}`)
         return res.status(500).send("Server Error")
     }
@@ -36,7 +36,7 @@ router.post(`/api/addCompanyDetails`, (req, res) => {
     try {
         req.body.path = "addCompanyDetails"
         kafka.make_request('companytopic', req.body, (err, result) => {
-            if(err){
+            if (err) {
                 throw new Error(err);
             }
             console.log("Response received for addCompanyDetails", result);
@@ -45,11 +45,11 @@ router.post(`/api/addCompanyDetails`, (req, res) => {
             }
             else if (result.status == 400) {
                 return res.status(400).send("Server Error")
-            }else{
+            } else {
                 return res.status(500).send("Server Error")
             }
         })
-    }catch (err) {
+    } catch (err) {
         console.log(`Error: ${err}`)
         return res.status(500).send("Server Error")
     }
@@ -60,7 +60,7 @@ router.put(`/api/updateCompanyDetails/:id`, (req, res) => {
         req.body.companyId = req.params.id;
         req.body.path = "updateCompanyDetails";
         kafka.make_request('companytopic', req.body, (err, result) => {
-            if(err){
+            if (err) {
                 throw new Error(err);
             }
             console.log("Response received for updateCompanyDetails", result)
@@ -72,22 +72,22 @@ router.put(`/api/updateCompanyDetails/:id`, (req, res) => {
             }
             else if (result.status == 400) {
                 return res.status(400).send("Server Error")
-            }else{
+            } else {
                 return res.status(500).send("Server Error")
             }
         })
-    }catch (err) {
-    console.log(`Error: ${err}`)
-    return res.status(500).send("Server Error")
+    } catch (err) {
+        console.log(`Error: ${err}`)
+        return res.status(500).send("Server Error")
     }
 })
 
 router.get(`/api/getCompanyReviews/:id`, async (req, res) => {
-    try{
+    try {
         req.body.companyId = req.params.id;
         req.body.path = "getCompanyReviews";
         kafka.make_request('companytopic', req.body, (err, result) => {
-            if(err){
+            if (err) {
                 throw new Error(err);
             }
             console.log("Response received for getCompanyReviews", result)
@@ -102,7 +102,7 @@ router.get(`/api/getCompanyReviews/:id`, async (req, res) => {
                 return res.status(400).send("Server Error")
             }
         })
-    }catch (err) {
+    } catch (err) {
         console.log(`Error: ${err}`)
         return res.status(500).send("Server Error")
     }
@@ -110,10 +110,10 @@ router.get(`/api/getCompanyReviews/:id`, async (req, res) => {
 
 router.put(`/api/updateCompanyReviews/:id`, (req, res) => {
     try {
-        req.body.companyId = req.params.id;
+        req.body.reviewId = req.params.id;
         req.body.path = "toggleIsFeatured";
         kafka.make_request('companytopic', req.body, (err, result) => {
-            if(err){
+            if (err) {
                 throw new Error(err);
             }
             console.log("Response received for updateCompanyReviews", result)
@@ -127,18 +127,18 @@ router.put(`/api/updateCompanyReviews/:id`, (req, res) => {
                 return res.status(400).send("Invalid Input ")
             }
         })
-    }catch (err) {
+    } catch (err) {
         console.log(`Error: ${err}`)
         return res.status(500).send("Server Error")
     }
 })
 
 router.get(`/api/getCompanyJobs/:id`, async (req, res) => {
-    try{
+    try {
         req.body.companyId = req.params.id;
         req.body.path = "getCompanyJobs";
         kafka.make_request('companytopic', req.body, (err, result) => {
-            if(err){
+            if (err) {
                 throw new Error(err);
             }
             console.log("Response received for getCompanyJobs", result)
@@ -153,7 +153,7 @@ router.get(`/api/getCompanyJobs/:id`, async (req, res) => {
                 return res.status(400).send("Server Error")
             }
         })
-    }catch (err) {
+    } catch (err) {
         console.log(`Error: ${err}`)
         return res.status(500).send("Server Error")
     }
@@ -163,7 +163,7 @@ router.post(`/api/addJob`, (req, res) => {
     try {
         req.body.path = "addJob"
         kafka.make_request('companytopic', req.body, (err, result) => {
-            if(err){
+            if (err) {
                 throw new Error(err);
             }
             console.log("Response received for addJob", result);
@@ -172,11 +172,11 @@ router.post(`/api/addJob`, (req, res) => {
             }
             else if (result.status == 400) {
                 return res.status(400).send("Server Error")
-            }else{
+            } else {
                 return res.status(500).send("Server Error")
             }
         })
-    }catch (err) {
+    } catch (err) {
         console.log(`Error: ${err}`)
         return res.status(500).send("Server Error")
     }
@@ -187,7 +187,7 @@ router.put(`/api/updateJob/:id`, (req, res) => {
         req.body.jobID = req.params.id;
         req.body.path = "updateJob";
         kafka.make_request('companytopic', req.body, (err, result) => {
-            if(err){
+            if (err) {
                 throw new Error(err);
             }
             console.log("Response received for updateCompanyDetails", result)
@@ -199,11 +199,11 @@ router.put(`/api/updateJob/:id`, (req, res) => {
             }
             else if (result.status == 400) {
                 return res.status(400).send("Server Error")
-            }else{
+            } else {
                 return res.status(500).send("Server Error")
             }
         })
-    }catch (err) {
+    } catch (err) {
         console.log(`Error: ${err}`)
         return res.status(500).send("Server Error")
     }
@@ -213,7 +213,7 @@ router.post(`/api/addJobApplication`, (req, res) => {
     try {
         req.body.path = "addJobApplication"
         kafka.make_request('companytopic', req.body, (err, result) => {
-            if(err){
+            if (err) {
                 throw new Error(err);
             }
             console.log("Response received for addJobApplication", result);
@@ -222,11 +222,11 @@ router.post(`/api/addJobApplication`, (req, res) => {
             }
             else if (result.status == 400) {
                 return res.status(400).send("Server Error")
-            }else{
+            } else {
                 return res.status(500).send("Server Error")
             }
         })
-    }catch (err) {
+    } catch (err) {
         console.log(`Error: ${err}`)
         return res.status(500).send("Server Error")
     }
@@ -237,7 +237,7 @@ router.put(`/api/updateJobApplication/:id`, (req, res) => {
         req.body.jobApplicationID = req.params.id;
         req.body.path = "updateJobApplication";
         kafka.make_request('companytopic', req.body, (err, result) => {
-            if(err){
+            if (err) {
                 throw new Error(err);
             }
             console.log("Response received for updateJobApplication", result)
@@ -249,11 +249,11 @@ router.put(`/api/updateJobApplication/:id`, (req, res) => {
             }
             else if (result.status == 400) {
                 return res.status(400).send("Server Error")
-            }else{
+            } else {
                 return res.status(500).send("Server Error")
             }
         })
-    }catch (err) {
+    } catch (err) {
         console.log(`Error: ${err}`)
         return res.status(500).send("Server Error")
     }

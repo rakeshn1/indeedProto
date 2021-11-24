@@ -1,17 +1,17 @@
-const {Company} = require('../models/company')
-const {Review} = require('../models/review')
-const {Jobs} = require('../models/jobs')
-const {JobApplications} = require('../models/jobApplications')
+const { Company } = require('../models/company')
+const { Reviews } = require('../models/review')
+const { Jobs } = require('../models/jobs')
+const { JobApplications } = require('../models/jobApplications')
 
 const handleGetCompanyDetails = async (msg, callback) => {
     const res = {}
     try {
-       const result = await Company.findById(msg.companyId)
-            console.log("Results for get company details", result)
-            res.status = 200
-            res.data = result
-            callback(null, res)
-    }catch (err) {
+        const result = await Company.findById(msg.companyId)
+        console.log("Results for get company details", result)
+        res.status = 200
+        res.data = result
+        callback(null, res)
+    } catch (err) {
         console.log(err)
         res.status = 400
         callback(null, res)
@@ -66,7 +66,7 @@ const addCompanyDetails = async (msg, callback) => {
         })
         const data = await CompanyDetails.save();
 
-        console.log("Response after adding company details ",res)
+        console.log("Response after adding company details ", res)
         res.status = 200
         res.data = data
         callback(null, res)
@@ -92,7 +92,8 @@ const updateCompanyDetails = async (msg, callback) => {
             companyType,
             websiteURL } = msg
 
-        const result = await Company.findOneAndUpdate({_id:msg.companyId}, {ceo,
+        const result = await Company.findOneAndUpdate({ _id: msg.companyId }, {
+            ceo,
             founded,
             companySize,
             revenue,
@@ -100,11 +101,12 @@ const updateCompanyDetails = async (msg, callback) => {
             mission,
             vision,
             companyType,
-            websiteURL},{
+            websiteURL
+        }, {
             new: true
         })
         res.status = 200
-        console.log("Response after update company details ",result)
+        console.log("Response after update company details ", result)
         res.data = result
         callback(null, res)
     }
@@ -117,7 +119,7 @@ const updateCompanyDetails = async (msg, callback) => {
 const handleReviews = async (msg, callback) => {
     const res = {}
     try {
-        const result = await Review.find({companyId:msg.companyId})
+        const result = await Reviews.find({ companyId: msg.companyId })
         console.log("Results of handle review", result)
         res.status = 200
         res.data = result
@@ -133,7 +135,7 @@ const handleReviews = async (msg, callback) => {
 const handleToggleIsFeatured = async (msg, callback) => {
     const res = {}
     try {
-        const result = await Review.findOneAndUpdate({companyId:msg.companyId},{isFeautured:msg.isFeatured})
+        const result = await Reviews.findOneAndUpdate({ _id: msg.reviewId }, { isFeatured: msg.isFeatured })
         console.log("Kafka side", result)
         res.status = 200
         res.data = result
@@ -149,12 +151,12 @@ const handleToggleIsFeatured = async (msg, callback) => {
 const handleGetCompanyJobs = async (msg, callback) => {
     const res = {}
     try {
-        const result = await Jobs.find({companyId:msg.companyId})
+        const result = await Jobs.find({ companyId: msg.companyId })
         console.log("Results for get company details", result)
         res.status = 200
         res.data = result
         callback(null, res)
-    }catch (err) {
+    } catch (err) {
         console.log(err)
         res.status = 400
         callback(null, res)
@@ -183,7 +185,7 @@ const addJob = async (msg, callback) => {
         })
         const data = await JobDetails.save();
 
-        console.log("Response after adding job details ",res)
+        console.log("Response after adding job details ", res)
         res.status = 200
         res.data = data
         callback(null, res)
@@ -207,7 +209,7 @@ const updateJob = async (msg, callback) => {
             jobType,
             datePosted } = msg
 
-        const result = await Jobs.findOneAndUpdate({_id:msg.jobID}, {
+        const result = await Jobs.findOneAndUpdate({ _id: msg.jobID }, {
             jobTitle,
             companyId,
             industry,
@@ -215,11 +217,11 @@ const updateJob = async (msg, callback) => {
             location,
             jobType,
             datePosted
-        },{
+        }, {
             new: true
         })
         res.status = 200
-        console.log("Response after update Job ",result)
+        console.log("Response after update Job ", result)
         res.data = result
         callback(null, res)
     }
@@ -246,7 +248,7 @@ const addJobApplication = async (msg, callback) => {
         })
         const data = await JobApplicationDetails.save();
 
-        console.log("Response after adding job application details ",res)
+        console.log("Response after adding job application details ", res)
         res.status = 200
         res.data = data
         callback(null, res)
@@ -264,13 +266,13 @@ const updateJobApplication = async (msg, callback) => {
     try {
         const { status } = msg
 
-        const result = await JobApplications.findOneAndUpdate({_id:msg.jobApplicationID}, {
+        const result = await JobApplications.findOneAndUpdate({ _id: msg.jobApplicationID }, {
             status
-        },{
+        }, {
             new: true
         })
         res.status = 200
-        console.log("Response after update Job Application ",result)
+        console.log("Response after update Job Application ", result)
         res.data = result
         callback(null, res)
     }
