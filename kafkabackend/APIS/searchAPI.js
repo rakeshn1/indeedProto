@@ -1,6 +1,7 @@
 const { Company } = require("../models/company");
 const { Jobs } = require("../models/jobs");
 const { Reviews } = require("../models/review");
+const { SalaryReview } = require("../models/salaryReview");
 const _ = require("lodash");
 
 const getCompanyNamesAndJobTitles = async (msg, callback) => {
@@ -314,6 +315,158 @@ const getReviews = async (msg, callback) => {
   }
 };
 
+const getSalaryReviewsMainData = async (msg, callback) => {
+  res = {};
+  try {
+    // companyRatings = await Reviews.aggregate([
+    //   {
+    //     $group: {
+    //       _id: "$companyId",
+    //       rating: { $avg: "$rating" },
+    //     },
+    //   },
+    // ]);
+
+    console.log(msg.jobTitle, msg.location);
+    msg.jobTitle = msg.jobTitle.toLowerCase();
+    msg.location = msg.location.toLowerCase();
+
+    selectedCompanyIds = [];
+    const companyResults = await Company.find({}).select(["headQuarters"]);
+
+    companyResults.forEach((company) => {
+      if (
+        company.headQuarters.city.toLowerCase().startsWith(msg.location) ||
+        company.headQuarters.state.toLowerCase().startsWith(msg.location) ||
+        company.headQuarters.country.toLowerCase().startsWith(msg.location)
+      ) {
+        selectedCompanyIds.push(company._id);
+      }
+    });
+
+    console.log("selectedCompanyIds: ", selectedCompanyIds);
+
+    const result = await SalaryReview.aggregate([
+      {
+        $match: {
+          jobTitle: { $regex: msg.jobTitle, $options: "i" },
+          companyId: { $in: selectedCompanyIds },
+        },
+      },
+      {
+        $group: {
+          _id: "$jobTitle",
+          // rating: { $avg: "$rating" },
+          numberOfReviews: { $sum: 1 },
+          averageSalary: { $avg: "$salary" },
+        },
+      },
+    ]);
+    console.log("result: ", result);
+    res.status = 200;
+    res.data = result;
+    callback(null, res);
+  } catch (ex) {
+    res.status = 500;
+    res.data = ex;
+    callback(null, res);
+  }
+};
+
+const getSalaryReviewsRankedJobs = async (msg, callback) => {
+  res = {};
+  res.data = [];
+  try {
+    // companyRatings = await Reviews.aggregate([
+    //   {
+    //     $group: {
+    //       _id: "$companyId",
+    //       rating: { $avg: "$rating" },
+    //     },
+    //   },
+    // ]);
+
+    console.log(msg.jobTitle, msg.location);
+    msg.jobTitle = msg.jobTitle.toLowerCase();
+    msg.location = msg.location.toLowerCase();
+
+    selectedCompanyIds = [];
+    const companyResults = await Company.find({}).select(["headQuarters"]);
+
+    companyResults.forEach((company) => {
+      if (
+        company.headQuarters.city.toLowerCase().startsWith(msg.location) ||
+        company.headQuarters.state.toLowerCase().startsWith(msg.location) ||
+        company.headQuarters.country.toLowerCase().startsWith(msg.location)
+      ) {
+        selectedCompanyIds.push(company._id);
+      }
+    });
+
+    console.log("selectedCompanyIds: ", selectedCompanyIds);
+
+    const result = await SalaryReview.aggregate([
+      {
+        $match: {
+          jobTitle: { $regex: msg.jobTitle, $options: "i" },
+          companyId: { $in: selectedCompanyIds },
+        },
+      },
+      {
+        $group: {
+          _id: "$companyId",
+          // rating: { $avg: "$rating" },
+          numberOfSalaryReviews: { $sum: 1 },
+          averageSalary: { $avg: "$salary" },
+        },
+      },
+      { $sort: { averageSalary: 1 } },
+      { $limit: 5 },
+    ]);
+
+    console.log("result: ", result);
+
+    await Promise.all(
+      result.map(async (company) => {
+        console.log("company: ", company);
+        const resu = await Company.findById(company._id).select(["name"]);
+        company.name = resu.name;
+        const ratingData = await Reviews.aggregate([
+          {
+            $match: {
+              companyId: company._id,
+            },
+          },
+          {
+            $group: {
+              _id: "$companyId",
+              numberOfReviews: { $sum: 1 },
+              rating: { $avg: "$rating" },
+            },
+          },
+        ]);
+        // console.log("ratingData: ", ratingData, "======");
+        if (ratingData.length > 0) {
+          company.numberOfReviews = ratingData[0].numberOfReviews;
+          company.rating = ratingData[0].rating;
+        }
+        res.data.push(company);
+        console.log("company: ", company);
+      })
+    );
+
+    res.data = _.orderBy(res.data, ["averageSalary"], ["desc"]);
+
+    res.status = 200;
+
+    callback(null, res);
+  } catch (ex) {
+    res.status = 500;
+    res.data = ex;
+    callback(null, res);
+  }
+};
+
 handle_request = (msg, callback) => {
   if (msg.path === "getCompanyNamesAndJobTitles") {
     // delete msg.path;
@@ -339,6 +492,16 @@ handle_request = (msg, callback) => {
     // delete msg.path;
     console.log("Kafka side1");
     getReviews(msg, callback);
+  }
+  if (msg.path === "getSalaryReviewsMainData") {
+    // delete msg.path;
+    console.log("Kafka side1");
+    getSalaryReviewsMainData(msg, callback);
+  }
+  if (msg.path === "getSalaryReviewsRankedJobs") {
+    // delete msg.path;
+    console.log("Kafka side1");
+    getSalaryReviewsRankedJobs(msg, callback);
   }
 };
 
