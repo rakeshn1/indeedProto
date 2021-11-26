@@ -36,7 +36,7 @@ class CompanySnapShot extends React.Component {
             environment that fosters teamwork and collaboration while
             encouraging innovative ideas and fresh thinking.
           </p>
-          <Link to="/about" className="link">
+          <Link to="/companydetails/about" className="link">
             <span style={{ color: "#2557A7" }}>
               <b>Learn more </b>
             </span>

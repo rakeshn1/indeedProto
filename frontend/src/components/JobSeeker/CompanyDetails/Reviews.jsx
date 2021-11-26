@@ -97,7 +97,7 @@ class Reviews extends React.Component {
             <div className="d-flex flex-row justify-content-start">
               <Input
                 name="searchReviews"
-                class="medium rounded-corners me-2"
+                class="medium rounded-corners me-2 input"
                 id="searchReviews"
                 labelclass="label"
                 style={{ width: "300px" }}

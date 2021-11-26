@@ -59,7 +59,11 @@ class CompanyHeader extends React.Component {
                   </Link>
                 </span>
                 <span>
-                  <Link to="/" className="link" style={{ color: "black" }}>
+                  <Link
+                    to="/companydetails/jobs"
+                    className="link"
+                    style={{ color: "black" }}
+                  >
                     Jobs
                   </Link>
                 </span>

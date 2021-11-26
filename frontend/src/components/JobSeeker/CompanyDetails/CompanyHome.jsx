@@ -4,6 +4,7 @@ import CompanyHeader from "./CompanyHeader";
 import Reviews from "./Reviews";
 import CompanySnapShot from "./CompanySnapShot";
 import AboutCompany from "./AboutCompany";
+import Jobs from "./Jobs";
 import "../../../styles/companyStyles.css";
 
 class CompanyHome extends React.Component {
@@ -18,6 +19,9 @@ class CompanyHome extends React.Component {
             </Route>
             <Route path="/companydetails/about">
               <AboutCompany />
+            </Route>
+            <Route path="/companydetails/jobs">
+              <Jobs />
             </Route>
             <Route path="/">
               <CompanySnapShot />
