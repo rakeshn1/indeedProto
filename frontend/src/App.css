@@ -447,7 +447,7 @@ body {
 
 }
 
-.resume-upload button {
+.resume-upload button, .resume-upload label {
   border: 2px solid #085ff7;
   color: #085ff7;
   font-weight: 700;
@@ -457,5 +457,50 @@ body {
   border-radius: 50px;
   height: 50px;
   margin: 20px 0px;
+}
 
+.resume-upload button:hover, .resume-upload label:hover {
+  color: white;
+  background-color: #085ff7;
+}
+
+.heading-my-jobs {
+  /* background-color: #1e4688; */
+  font-size: 36px;
+  font-weight: 600;
+  /* padding-left: 100px; */
+}
+
+.my-jobs-card {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  /* background-color: greenyellow; */
+  border-bottom: 1px solid silver;
+}
+
+
+.my-jobs-card-left {
+  display: flex;
+  justify-content: space-evenly;
+  /* background-color: yellow; */
+  width: 30%;
+}
+
+.my-jobs-card-right {
+  display: flex;
+  justify-content: space-evenly;
+  /* background-color: yellow; */
+  width: 30%;
+}
+
+.count-holder {
+  background-color: beige;
+  /* color: white; */
+  width: 25px;
+  height: 25px;
+  border-radius: 5px;
+  text-align: center;
+  padding: 2px;
+  margin-left: 10px;
 }

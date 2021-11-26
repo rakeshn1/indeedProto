@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
+
 import { NavLink } from 'react-router-dom'
+import { addAccount } from '../services/auth'
 import Button from './common/Button'
 import IndeedLogo from './common/IndeedLogo'
 import Input from './common/Input'
@@ -8,18 +11,12 @@ const SignupPage = () => {
 
     let [emailId, setEmailId] = useState();
     let [password, setPassword] = useState();
-    let [role, setRole] = useState();
+    // let [role, setRole] = useState();
+
+    const history = useHistory()
     let [isEmployer, setIsEmployer] = useState(false)
     let [isJobSeeker, setIsJobSeeker] = useState(false)
-
-    // const authenticate = () => {
-    //     console.log("Email to check ", emailId)
-    //     console.log("Password to check ", password)
-
-    //     if (emailId === 'user' && password === 'pass')
-    //         history.push('/')
-    // }
-
+    let [message, setMessage] = useState("")
     const handleEmailIdChange = (e) => {
         console.log(e.target.value)
         setEmailId(e.target.value)
@@ -30,10 +27,38 @@ const SignupPage = () => {
         setPassword(e.target.value)
     }
 
-    const createAccountHandler = (e) => {
+    const createAccountHandler = async (e) => {
         console.log("Creating...")
         console.log("E", isEmployer)
         console.log("J", isJobSeeker)
+
+        let role;
+        if (isEmployer === true)
+            role = 1;
+        else
+            role = 2;
+
+        let payload = {
+            email: emailId,
+            password: password,
+            role: role
+        }
+        try {
+            const result = await addAccount(payload);
+            console.log("after call", result.data.status);
+            if (result.data.status === 200)
+                history.push('/signIn/email')
+            else
+                setMessage(" Incorrectly filled. Please recheck fields.")
+
+            console.log("done")
+
+        }
+        catch {
+            console.log("error")
+            setMessage("Error Creating New Account")
+
+        }
 
     }
 
@@ -125,8 +150,8 @@ const SignupPage = () => {
                         width: "100%"
                     }}
                 />
-
-
+                <br />
+                <h5>{message}</h5>
             </div>
             <div style={{ marginTop: "20px", color: "#2557a7" }}>
                 <NavLink to="JobSeekerSignIn">Have an account? Sign in </NavLink>
