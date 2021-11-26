@@ -36,7 +36,7 @@
   border: 1px solid #d4d2d0;
   background-color: #fff;
   padding: 0.5rem 1rem;
-  height: 40px;
+  /* height: 40px; */
   width: 600px;
 }
 .bold-input {
@@ -101,10 +101,12 @@ button {
   color: #085ff7;
   background: #ffffff;
 }
+
 .custom-btn:active {
   background: #085ff7;
   color: #ffffff;
 }
+
 .submit-btn {
   width: 200px;
   height: 50px;
@@ -201,14 +203,17 @@ button {
   padding: 0 15px;
   color: #2557a7;
 }
+
 .sortby-btn:hover {
   border-color: #6792f0;
   background-color: #eef1fe;
 }
+
 .sortby-btn:nth-child(1) {
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
 }
+
 .sortby-btn:nth-child(3) {
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
