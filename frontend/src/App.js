@@ -29,6 +29,7 @@ import EmployerDetails from "./components/Employer/EmployerDetails"
 import JobSeekerMyJobs from "./components/JobSeeker/JobSeekerMyJobs";
 import JobSeekerSavedJobs from "./components/JobSeeker/JobSeekerSavedJobs"
 import JobSeekerAppliedJobs from "./components/JobSeeker/JobSeekerAppliedJobs"
+import JobSeekerMyReviews from "./components/JobSeeker/JobSeekerMyReviews";
 
 function App() {
 
@@ -102,8 +103,8 @@ function App() {
 
 
 
-        <Route path="/jobSeeker/MyJobs">
-          <JobSeekerMyJobs />
+        <Route path="/jobSeeker/myReviews">
+          <JobSeekerMyReviews />
         </Route>
         <Route path="/admin">
           <Dashboard />
