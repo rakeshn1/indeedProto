@@ -55,7 +55,7 @@ const reviewSchema = new mongoose.Schema({
     maxlength: 1024,
   },
   helpfulnessScore: {
-    type: Object
+    type: Object,
   },
   date: {
     type: Date,
@@ -74,8 +74,6 @@ const reviewSchema = new mongoose.Schema({
   },
 });
 
-
 const Reviews = mongoose.model("Review", reviewSchema);
-module.exports.reviewSchema = reviewSchema
-module.exports.Reviews = Reviews
-
+module.exports.reviewSchema = reviewSchema;
+module.exports.Reviews = Reviews;
