@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { logout } from "../../services/auth";
 import IndeedLogo from "./IndeedLogo";
 
 // const indeedLogo = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Indeed_logo.svg/2560px-Indeed_logo.svg.png";
@@ -85,7 +86,7 @@ const TopNavbar = () => {
             <a className="dropdown-item" href="/jobSeekerProfile">Profile</a>
             <a className="dropdown-item" href="/jobSeeker/myJobs">My Jobs</a>
             <a className="dropdown-item" href="/jobSeeker/myReviews">My Reviews</a>
-            <a className="dropdown-item" href="./login">Sign Out</a>
+            <button className="dropdown-item" onClick={() => logout()}>Sign Out</button>
           </div>
 
         </span>

@@ -12,6 +12,10 @@ export async function addAccount(payload) {
   return await http.post(apiEndpoint + `/addAccount/`, payload);
 }
 
+export function logout() {
+  localStorage.removeItem(tokenKey);
+}
+
 export async function login(email, password) {
   try {
     const response = await http.post(apiEndpoint + `/login`, {

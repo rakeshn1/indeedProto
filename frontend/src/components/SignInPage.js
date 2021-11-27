@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory, useParams, Redirect } from 'react-router-dom'
+import { login } from '../services/auth'
 import Button from './common/Button'
 import IndeedLogo from './common/IndeedLogo'
 import Input from './common/Input'
@@ -9,11 +10,30 @@ const JobSeekerSignIn = () => {
     // let { type } = us eParams();
     let [emailId, setEmailId] = useState();
     let [password, setPassword] = useState();
+    // let [redirect, setRedirect] = useState(null)
+    let [message, setMessage] = useState();
 
-
-    const authenticate = () => {
+    const history = useHistory()
+    const authenticate = async () => {
         console.log("Email", emailId);
         console.log("Password", password);
+
+
+        if (emailId && password) {
+            const response = await login(emailId, password);
+            // console.log("response.data", response)
+            if (response) {
+                console.log("Successful", response)
+                history.push('/')
+            }
+            else
+                setMessage("Incorrect Credentials");
+        }
+        else {
+            setMessage("Please fill in all fields");
+        }
+
+
     }
 
     const handleEmailIdChange = (e) => {
@@ -77,7 +97,10 @@ const JobSeekerSignIn = () => {
                         width: "100%"
                     }}
                 />
+                <div style={{ backgroundColor: "yellow" }}>
+                    {message}
 
+                </div>
             </div>
         </div>
     )

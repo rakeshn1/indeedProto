@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Button from '../common/Button';
-// import axios from 'axios';
 import SearchBox from '../common/SearchBox';
 import JobSearchResults from './JobSearchResults';
 // import { apiURL } from '../../config';
