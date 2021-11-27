@@ -3,58 +3,95 @@ import { Link } from "react-router-dom";
 import SearchBox from "../common/SearchBox";
 import JobSeekerSalariesCard from "./jobSeekerSalariesCard";
 import JobsRankedRow from "./JobSeekerSalariesJobRanked";
+import {
+  getJobTitles,
+  getLocations,
+  getSalaryReviewsMainData,
+  getSalaryReviewsRankedJobs,
+} from "../../services/searchService";
 
 class JobSeekerSalariesSearchPage extends React.Component {
   state = {
-    jobTitle: " ",
-    location: " ",
-    newJobTitle: " ",
-    newLocation: " ",
-    rankedJobs: [
-      {
-        logo: "https://www.laurel-group.com/wp-content/uploads/amazon-logo-square-300x300.png",
-        companyName: "Apple",
-        rating: 1.2,
-        reviewsCount: 10567,
-        salaryReviewsCount: 15567,
-        averageSalary: 176388,
-      },
-      {
-        logo: "https://www.laurel-group.com/wp-content/uploads/amazon-logo-square-300x300.png",
-        companyName: "Meta",
-        rating: 2.7,
-        reviewsCount: 10967,
-        salaryReviewsCount: 15867,
-        averageSalary: 175688,
-      },
-      {
-        logo: "https://www.laurel-group.com/wp-content/uploads/amazon-logo-square-300x300.png",
-        companyName: "Capital One",
-        rating: 3.0,
-        reviewsCount: 9567,
-        salaryReviewsCount: 11567,
-        averageSalary: 179388,
-      },
-      {
-        logo: "https://www.laurel-group.com/wp-content/uploads/amazon-logo-square-300x300.png",
-        companyName: "Samsang",
-        rating: 4.9,
-        reviewsCount: 19567,
-        salaryReviewsCount: 25567,
-        averageSalary: 196388,
-      },
-      {
-        logo: "https://www.laurel-group.com/wp-content/uploads/amazon-logo-square-300x300.png",
-        companyName: "Google",
-        rating: 4.2,
-        reviewsCount: 19967,
-        salaryReviewsCount: 19567,
-        averageSalary: 196388,
-      },
-    ],
+    jobTitle: "",
+    location: "",
+    newJobTitle: "",
+    newLocation: "",
+    numberOfReviews: 0,
+    averageSalary: 0,
+    companyJobTitleSearchResults: [],
+    locationSearchResults: [],
+    // rankedJobs: [
+    //   {
+    //     logo: "https://www.laurel-group.com/wp-content/uploads/amazon-logo-square-300x300.png",
+    //     companyName: "Apple",
+    //     rating: 1.2,
+    //     reviewsCount: 10567,
+    //     salaryReviewsCount: 15567,
+    //     averageSalary: 176388,
+    //   },
+    //   {
+    //     logo: "https://www.laurel-group.com/wp-content/uploads/amazon-logo-square-300x300.png",
+    //     companyName: "Meta",
+    //     rating: 2.7,
+    //     reviewsCount: 10967,
+    //     salaryReviewsCount: 15867,
+    //     averageSalary: 175688,
+    //   },
+    //   {
+    //     logo: "https://www.laurel-group.com/wp-content/uploads/amazon-logo-square-300x300.png",
+    //     companyName: "Capital One",
+    //     rating: 3.0,
+    //     reviewsCount: 9567,
+    //     salaryReviewsCount: 11567,
+    //     averageSalary: 179388,
+    //   },
+    //   {
+    //     logo: "https://www.laurel-group.com/wp-content/uploads/amazon-logo-square-300x300.png",
+    //     companyName: "Samsang",
+    //     rating: 4.9,
+    //     reviewsCount: 19567,
+    //     salaryReviewsCount: 25567,
+    //     averageSalary: 196388,
+    //   },
+    //   {
+    //     logo: "https://www.laurel-group.com/wp-content/uploads/amazon-logo-square-300x300.png",
+    //     companyName: "Google",
+    //     rating: 4.2,
+    //     reviewsCount: 19967,
+    //     salaryReviewsCount: 19567,
+    //     averageSalary: 196388,
+    //   },
+    // ],
   };
   componentDidMount = () => {
     this.apiCall();
+  };
+
+  updateJobTitle = async (newJobTitle) => {
+    if (newJobTitle) {
+      console.log("if companyname: ", typeof newJobTitle);
+      const { data: companyJobTitleSearchResults } = await getJobTitles(
+        newJobTitle
+      );
+      console.log(
+        "companyJobTitleSearchResults: ",
+        companyJobTitleSearchResults
+      );
+      await this.setState({ companyJobTitleSearchResults });
+    }
+
+    await this.setState({
+      newJobTitle,
+    });
+  };
+
+  updateLocation = async (newLocation) => {
+    if (newLocation) {
+      const { data: locationSearchResults } = await getLocations(newLocation);
+      this.setState({ locationSearchResults });
+    }
+
+    this.setState({ newLocation });
   };
 
   componentDidUpdate(prevProps) {
@@ -70,8 +107,21 @@ class JobSeekerSalariesSearchPage extends React.Component {
     }
   }
 
-  apiCall = () => {
+  apiCall = async () => {
     const { jobTitle, location } = this.props.match.params;
+    const { data } = await getSalaryReviewsMainData(jobTitle, location);
+    console.log("data: ", data);
+    this.setState({
+      numberOfReviews: data[0].numberOfReviews,
+      averageSalary: data[0].averageSalary.toFixed(),
+    });
+    const { data: rankedJobs } = await getSalaryReviewsRankedJobs(
+      jobTitle,
+      location
+    );
+
+    this.setState({ rankedJobs });
+
     this.setState({
       jobTitle,
       location,
@@ -114,9 +164,7 @@ class JobSeekerSalariesSearchPage extends React.Component {
               What
             </label>
             <SearchBox
-              onChange={(newJobTitle) => {
-                this.setState({ newJobTitle });
-              }}
+              onChange={(jobTitle) => this.updateJobTitle(jobTitle)}
               placeholder="Job title"
               // innerLabel="What"
               icon={
@@ -131,6 +179,7 @@ class JobSeekerSalariesSearchPage extends React.Component {
                   <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                 </svg>
               }
+              list="jobTitleResults1"
               style={{
                 marginLeft: "0px",
                 height: "40px",
@@ -138,6 +187,17 @@ class JobSeekerSalariesSearchPage extends React.Component {
               }}
               value={this.state.newJobTitle}
             />
+            <datalist id="jobTitleResults1">
+              {this.state.companyJobTitleSearchResults.map((data) => (
+                <option
+                  key={data}
+                  value={data}
+                  onClick={(e) => this.updateJobTitle(e.target.textContent)}
+                >
+                  {data}
+                </option>
+              ))}
+            </datalist>
           </div>
           <div style={{ width: "350px" }}>
             <label
@@ -153,9 +213,7 @@ class JobSeekerSalariesSearchPage extends React.Component {
               Where
             </label>
             <SearchBox
-              onChange={(newLocation) => {
-                this.setState({ newLocation });
-              }}
+              onChange={(location) => this.updateLocation(location)}
               placeholder="location"
               // innerLabel="What"
               icon={
@@ -175,8 +233,20 @@ class JobSeekerSalariesSearchPage extends React.Component {
                 height: "40px",
                 width: "90%",
               }}
+              list="locationResults2"
               value={this.state.newLocation}
             />
+            <datalist id="locationResults2">
+              {this.state.locationSearchResults.map((data) => (
+                <option
+                  key={data}
+                  value={data}
+                  onClick={(e) => this.updateLocation(e.target.textContent)}
+                >
+                  {data}
+                </option>
+              ))}
+            </datalist>
           </div>
           {/* <Button
                   text="Search"
@@ -235,6 +305,8 @@ class JobSeekerSalariesSearchPage extends React.Component {
         <JobSeekerSalariesCard
           jobTitle={this.state.jobTitle}
           location={this.state.location}
+          numberOfReviews={this.state.numberOfReviews}
+          averageSalary={this.state.averageSalary}
         ></JobSeekerSalariesCard>
         <h2
           style={{

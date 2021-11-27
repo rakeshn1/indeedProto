@@ -3,15 +3,26 @@ import { Link } from "react-router-dom";
 
 class JobsRankedRow extends React.Component {
   render() {
-    const {
+    let {
+      _id,
       logo,
-      companyName,
+      name,
       rating,
-      reviewsCount,
-      salaryReviewsCount,
+      numberOfReviews,
+      numberOfSalaryReviews,
       averageSalary,
     } = this.props;
+    if (!logo) {
+      logo = "https://www.oiltechconnect.com/front-end/img/default-logo.png";
+    }
 
+    if (!rating) {
+      rating = 0;
+    }
+
+    if (!numberOfReviews) {
+      numberOfReviews = 0;
+    }
     const filledStars = [];
     for (let i = 0; i < rating.toFixed(); i++) {
       filledStars.push(
@@ -67,7 +78,7 @@ class JobsRankedRow extends React.Component {
                     lineHeight: "1.38",
                   }}
                 >
-                  {companyName}
+                  {name}
                 </Link>
               </div>
               <div style={{ display: "flex" }}>
@@ -104,7 +115,7 @@ class JobsRankedRow extends React.Component {
                     marginBottom: "0px",
                   }}
                 >
-                  {reviewsCount} reviews
+                  {numberOfReviews} reviews
                 </Link>
                 <Link
                   to="/companydetails/about"
@@ -120,7 +131,7 @@ class JobsRankedRow extends React.Component {
                     marginBottom: "0px",
                   }}
                 >
-                  {salaryReviewsCount} salaries reported
+                  {numberOfSalaryReviews} salaries reported
                 </Link>
               </div>
             </div>
