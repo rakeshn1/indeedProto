@@ -18,6 +18,18 @@ router.post("/addReview", async (req, res) => {
   });
 });
 
+
+router.post("/addSalaryReview/", async (req, res) => {
+  console.log(req.body);
+  msg = {};
+  msg.body = req.body;
+  msg.path = "addSalaryReview";
+  kafka.make_request("jobSeeker-topic", msg, function (err, results) {
+    console.log("Results: ", results);
+    res.status(results.status).send(results.data);
+  });
+});
+
 router.get("/getSavedJobs/:userId", async (req, res) => {
 
   console.log("here", req.body)
@@ -103,10 +115,8 @@ router.put("/handleJobSaveUnsave/:userId", async (req, res) => {
 });
 
 
-
-
 router.get("/getJobSearchResults/", async (req, res) => {
-  console.log(req.query)
+  console.log(req.query);
   // console.log(req)
 
   req.body.path = "getJobSearchResults";
@@ -120,16 +130,18 @@ router.get("/getJobSearchResults/", async (req, res) => {
   //   return res.status(200).send(results);
   // });
 
-  Jobs.find({ "jobTitle": req.query.what })
-    .then(response => {
-
+  Jobs.find({ jobTitle: req.query.what })
+    .then((response) => {
       console.log("DONE", response);
       res.status(200).send(response);
-    }).catch(err => {
-      console.log("NOT DONE")
     })
 
-})
+    .catch((err) => {
+      console.log("NOT DONE");
+    });
+});
 
+
+})
 
 module.exports = router;

@@ -1,17 +1,50 @@
 import React, { Component } from "react";
 import SearchBox from "../common/SearchBox";
 import { Link } from "react-router-dom";
+import { getJobTitles, getLocations } from "../../services/searchService";
 import Button from "../common/Button";
 
 class JobSeekerSalariesPage extends React.Component {
   state = {
-    jobTitle: " ",
-    location: " ",
+    jobTitle: "",
+    location: "United States",
+    companyJobTitleSearchResults: [],
+    locationSearchResults: [],
   };
 
   onSearchClick = () => {};
 
+  updateJobTitle = async (jobTitle) => {
+    if (jobTitle) {
+      console.log("if companyname: ", typeof jobTitle);
+      const { data: companyJobTitleSearchResults } = await getJobTitles(
+        jobTitle
+      );
+      console.log(
+        "companyJobTitleSearchResults: ",
+        companyJobTitleSearchResults
+      );
+      await this.setState({ companyJobTitleSearchResults });
+    }
+
+    await this.setState({
+      jobTitle,
+    });
+  };
+
+  updateLocation = async (location) => {
+    if (location) {
+      const { data: locationSearchResults } = await getLocations(location);
+      this.setState({ locationSearchResults });
+    }
+
+    this.setState({ location });
+  };
+
   render() {
+    const jobTitle = this.state.jobTitle ? this.state.jobTitle : " ";
+    const location = this.state.location ? this.state.location : " ";
+    const url = `/jobSeeker/salaries/search/${jobTitle}/${location}`;
     return (
       <div
         style={{
@@ -79,9 +112,7 @@ class JobSeekerSalariesPage extends React.Component {
                     What
                   </label>
                   <SearchBox
-                    onChange={(jobTitle) => {
-                      this.setState({ jobTitle });
-                    }}
+                    onChange={(jobTitle) => this.updateJobTitle(jobTitle)}
                     placeholder="Job title"
                     // innerLabel="What"
                     icon={
@@ -101,8 +132,22 @@ class JobSeekerSalariesPage extends React.Component {
                       height: "40px",
                       width: "90%",
                     }}
+                    list="jobTitleResults"
                     value={this.state.jobTitle}
                   />
+                  <datalist id="jobTitleResults">
+                    {this.state.companyJobTitleSearchResults.map((data) => (
+                      <option
+                        key={data}
+                        value={data}
+                        onClick={(e) =>
+                          this.updateJobTitle(e.target.textContent)
+                        }
+                      >
+                        {data}
+                      </option>
+                    ))}
+                  </datalist>
                 </div>
                 <div style={{ width: "300px" }}>
                   <label
@@ -118,9 +163,7 @@ class JobSeekerSalariesPage extends React.Component {
                     Where
                   </label>
                   <SearchBox
-                    onChange={(location) => {
-                      this.setState({ location });
-                    }}
+                    onChange={(location) => this.updateLocation(location)}
                     placeholder="location"
                     // innerLabel="What"
                     icon={
@@ -140,8 +183,22 @@ class JobSeekerSalariesPage extends React.Component {
                       height: "40px",
                       width: "90%",
                     }}
+                    list="locationResults"
                     value={this.state.location}
                   />
+                  <datalist id="locationResults">
+                    {this.state.locationSearchResults.map((data) => (
+                      <option
+                        key={data}
+                        value={data}
+                        onClick={(e) =>
+                          this.updateLocation(e.target.textContent)
+                        }
+                      >
+                        {data}
+                      </option>
+                    ))}
+                  </datalist>
                 </div>
                 {/* <Button
                   text="Search"
@@ -155,7 +212,7 @@ class JobSeekerSalariesPage extends React.Component {
                 /> */}
                 <Link
                   className="btn"
-                  to={`/jobSeeker/salaries/search/${this.state.jobTitle}/${this.state.location}`}
+                  to={url}
                   style={{
                     width: "130px",
                     hight: "43px",

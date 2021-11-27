@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 
 class JobSeekerCompanyRow extends React.Component {
   render() {
-    const { logo, companyName, learningScore, description } = this.props;
+    let { logo, name, rating, mission } = this.props;
+    if (!logo) {
+      logo = "https://www.oiltechconnect.com/front-end/img/default-logo.png";
+    }
     return (
       <React.Fragment>
         <div style={{ display: "flex", padding: "10px" }}>
@@ -22,9 +25,14 @@ class JobSeekerCompanyRow extends React.Component {
           </div>
           <div style={{ paddingLeft: "15px", paddingTop: "2px" }}>
             <div
-              style={{ fontSize: "1rem", color: "#2557a7", fontWeight: "700" }}
+              style={{
+                fontSize: "1rem",
+                color: "#2557a7",
+                fontWeight: "700",
+                width: "300px",
+              }}
             >
-              {companyName}
+              {name}
             </div>
             <Link
               to="/jobSeeker/reviews"
@@ -44,7 +52,7 @@ class JobSeekerCompanyRow extends React.Component {
                     fontWeight: "700",
                   }}
                 >
-                  {learningScore}
+                  {parseInt(rating)}
                 </span>
               </div>
               <div
@@ -76,7 +84,7 @@ class JobSeekerCompanyRow extends React.Component {
               marginTop: "5px",
             }}
           >
-            {description}
+            {mission}
           </div>
           <div style={{ color: "#2557a7", paddingTop: "7px" }}>
             <Link
