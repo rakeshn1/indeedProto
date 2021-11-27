@@ -1,10 +1,8 @@
 const { Reviews } = require("../models/review");
-const Company = require("../models/company");
-const { User } = require("../models/user")
-const _ = require('lodash')
+const { User } = require("../models/user");
+const _ = require("lodash");
 const { SalaryReview } = require("../models/salaryReview");
 const { Company } = require("../models/company");
-
 
 async function addReview(body, callback) {
   try {
@@ -62,46 +60,41 @@ async function getJobSearchResults(body, callback) {
 }
 
 async function handleJobSaveUnsave(msg, callback) {
-
   let res = {};
   try {
-    console.log("msg", msg)
+    console.log("msg", msg);
 
     const userId = msg.params.userId;
     const jobId = msg.body.jobId;
     const jobSeeker = await User.findById(userId);
 
-
     console.log("JJ", jobSeeker);
     console.log("Job", jobId);
 
-    const index = jobSeeker.savedJobs.indexOf(jobId)
-    console.log("index", index)
+    const index = jobSeeker.savedJobs.indexOf(jobId);
+    console.log("index", index);
 
     if (index === -1) {
-      jobSeeker.savedJobs.push(jobId)
+      jobSeeker.savedJobs.push(jobId);
       await jobSeeker.save();
       console.log("added:", jobSeeker);
-      res.data = "Added to saved jobs"
-    }
-    else {
-
+      res.data = "Added to saved jobs";
+    } else {
       jobSeeker.savedJobs.splice(index, 1);
       await jobSeeker.save();
       console.log("removed:", jobSeeker);
-      res.data = "Removed saved jobs"
+      res.data = "Removed saved jobs";
     }
 
     console.log("JJ", jobSeeker);
 
-    await jobSeeker.save()
+    await jobSeeker.save();
     callback(null, res);
   } catch (err) {
     console.log("error", err);
     callback(err, "Error");
   }
 }
-
 
 handle_request = (msg, callback) => {
   if (msg.path === "addReview") {
