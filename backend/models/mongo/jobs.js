@@ -29,8 +29,8 @@ const jobSchema = new mongoose.Schema({
     },
     rating: {
         type: Number,
-        minLength: 0,
-        maxlength: 5
+        min: 0,
+        maxl: 5
     },
 
     location: {

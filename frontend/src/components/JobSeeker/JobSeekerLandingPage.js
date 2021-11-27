@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Button from '../common/Button';
-import axios from 'axios';
+// import axios from 'axios';
 import SearchBox from '../common/SearchBox';
 import JobSearchResults from './JobSearchResults';
-import { apiURL } from '../../config';
-import http from '../../services/httpService';
+// import { apiURL } from '../../config';
+// import http from '../../services/httpService';
 import { getJobSearchResults } from '../../services/jobSeeker'
 import { NavLink } from 'react-router-dom';
 
@@ -17,7 +17,6 @@ const JobSeekerLandingPage = () => {
     const onWhatChangeHandler = (value) => {
         console.log(value);
         setWhatText(value)
-
     }
     const onWhereChangeHandler = (value) => {
         console.log(value);
