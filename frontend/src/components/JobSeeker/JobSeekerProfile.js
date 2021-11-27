@@ -12,11 +12,11 @@ import S3FileUpload from 'react-s3';
 
 
 const config = {
-    bucketName: 'uber-eats-proto',
-    dirName: 'resumeUpload/', /* optional */
-    region: 'us-east-2',
-    accessKeyId: 'AKIAUR4W3HRGHUKUAVWI',
-    secretAccessKey: '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'
+    bucketName: '',
+    dirName: '', /* optional */
+    region: '',
+    accessKeyId: '',
+    secretAccessKey: ''
 }
 const JobSeekerProfile = () => {
 
