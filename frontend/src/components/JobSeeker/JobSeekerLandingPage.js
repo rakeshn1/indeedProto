@@ -14,15 +14,22 @@ const JobSeekerLandingPage = () => {
     const [whatText, setWhatText] = useState()
     const [whereText, setWhereText] = useState()
     const [searchResults, setSearchResults] = useState()
-    const onWhatChangeHandler = (value) => {
+    const onWhatChangeHandler = async (value) => {
         console.log(value);
         setWhatText(value)
+
+        // if (whatText.length > 2) {
+        //     // fetchWhatSuggestionList();
+        // }
     }
     const onWhereChangeHandler = (value) => {
         console.log(value);
         setWhereText(value)
-
+        // if (whereText.length > 2) {
+        //     // fetchWhatSuggestionList();
+        // }
     }
+
 
     const [showResults, setShowResults] = useState(false);
     const onButtonClickHandler = async () => {

@@ -108,6 +108,8 @@ router.put("/handleJobSaveUnsave/:userId", async (req, res) => {
 router.get("/getJobSearchResults/", async (req, res) => {
   console.log(req.query)
   // console.log(req)
+  const what = req.query.what;
+  const where = req.query.where;
 
   req.body.path = "getJobSearchResults";
 
@@ -120,14 +122,50 @@ router.get("/getJobSearchResults/", async (req, res) => {
   //   return res.status(200).send(results);
   // });
 
-  Jobs.find({ "jobTitle": req.query.what })
-    .then(response => {
-
-      console.log("DONE", response);
-      res.status(200).send(response);
-    }).catch(err => {
-      console.log("NOT DONE")
+  let response;
+  if (!what && !where) {
+    response = [];
+  }
+  else if (what && where) {
+    response = await Jobs.find({
+      $and:
+        [
+          {
+            $or: [
+              { "jobTitle": new RegExp('.*' + req.query.what + '.*', "i") },
+              { "companyName": new RegExp('.*' + req.query.what + '.*', "i") }]
+          },
+          {
+            $or: [
+              { "location.city": new RegExp('.*' + req.query.where + '.*', "i") },
+              { "location.country": new RegExp('.*' + req.query.where + '.*', "i") },
+              { "location.state": new RegExp('.*' + req.query.where + '.*', "i") },
+              { "location.zipcode": new RegExp('.*' + req.query.where + '.*', "i") }
+            ]
+          }
+        ]
     })
+  }
+  else if (what && !where) {
+    response = await Jobs.find({
+      $or: [
+        { "jobTitle": new RegExp('.*' + req.query.what + '.*', "i") },
+        { "companyName": new RegExp('.*' + req.query.what + '.*', "i") }
+      ]
+    });
+  }
+  else {
+    response = await Jobs.find({
+      $or: [
+        { "location.city": new RegExp('.*' + req.query.where + '.*', "i") },
+        { "location.country": new RegExp('.*' + req.query.where + '.*', "i") },
+        { "location.state": new RegExp('.*' + req.query.where + '.*', "i") },
+        { "location.zipcode": new RegExp('.*' + req.query.where + '.*', "i") }
+      ]
+    })
+  }
+  console.log("response", response);
+  res.send(response)
 
 })
 

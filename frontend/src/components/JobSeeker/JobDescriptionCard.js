@@ -41,7 +41,7 @@ const JobDescriptionCard = (props) => {
 
     return (
 
-        <div className="job-description-card-wrapper" style={{ display: !(props.cardDetails) ? "none" : "block" }}>
+        <div className="job-description-card-wrapper" >
             <div className="job-description-header">
                 <div className="job-title">
                     <div><span>{props.cardDetails?.jobTitle} </span></div>

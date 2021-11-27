@@ -10,7 +10,7 @@ const TopNavbar = () => {
 
   if (!isAuthenticated) {
     navRight1 = (
-      <>
+      <div className="div-checker">
         <NavLink activeClassName="active" to="/chat" className="navbar-buttons">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -39,9 +39,13 @@ const TopNavbar = () => {
             <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z" />
           </svg>
         </NavLink>
-        <NavLink
+
+        {/* <NavLink
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
           activeClassName="active"
-          to="/jobSeekerprofile"
+          to="#"
+
+          id="dropdownMenuButton"
           className="navbar-buttons"
         >
           <svg
@@ -55,8 +59,37 @@ const TopNavbar = () => {
           >
             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
           </svg>
-        </NavLink>
-      </>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <NavLink onClick={(e) => { console.log(e.target.text) }} to="/jobSeekerProfile" className="dropdown-item">Profile</NavLink>
+            <a class="dropdown-item" href="/jobSeeker/myJobs">My Jobs</a>
+            <a class="dropdown-item" href="#">My Reviews</a>
+            <a class="dropdown-item" href="#">Sign Out</a>
+
+          </div>
+        </NavLink> */}
+        <span className="navbar-buttons">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="30"
+            height="20"
+            fill="currentColor"
+            className="bi bi-person-fill"
+            viewBox="0 0 20 20"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+
+          >
+            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+          </svg>
+
+          <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a className="dropdown-item" href="/jobSeekerProfile">Profile</a>
+            <a className="dropdown-item" href="/jobSeeker/myJobs">My Jobs</a>
+            <a className="dropdown-item" href="/jobSeeker/myReviews">My Reviews</a>
+            <a className="dropdown-item" href="./login">Sign Out</a>
+          </div>
+
+        </span>
+      </div>
     );
   } else {
     navRight1 = (
