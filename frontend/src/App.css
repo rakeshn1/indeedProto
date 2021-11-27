@@ -67,6 +67,7 @@ body {
   font-size: 14px;
   font-weight: 450;
   color: black;
+  /* background-color: green; */
 }
 
 .navbar-buttons-right {
@@ -104,11 +105,18 @@ body {
   justify-content: space-between;
 }
 
+
+
 /* .search-wrapper {
   display: flex;
   justify-content: space-between;
   margin-top: 5%;
 } */
+.dropdown-menu {
+
+  /* box-shadow: "1px 1px 25x black"; */
+  width: 250px;
+}
 
 .search-box {
   display: flex;
@@ -222,6 +230,10 @@ body {
   height: fit-content;
   margin-bottom: 10px;
   cursor: pointer;
+}
+
+.job-card-wrapper:active {
+  border: 1px solid #2557a7;
 }
 
 .review-card-wrapper {

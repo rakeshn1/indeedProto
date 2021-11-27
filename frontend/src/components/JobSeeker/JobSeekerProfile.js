@@ -12,11 +12,11 @@ import S3FileUpload from 'react-s3';
 
 
 const config = {
-    bucketName: '',
-    dirName: '', /* optional */
-    region: '',
-    accessKeyId: '',
-    secretAccessKey: ''
+    bucketName: 'uber-eats-proto',
+    dirName: 'resumeUpload/', /* optional */
+    region: 'us-east-2',
+    accessKeyId: 'AKIAUR4W3HRGHUKUAVWI',
+    secretAccessKey: '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'
 }
 const JobSeekerProfile = () => {
 
@@ -29,11 +29,11 @@ const JobSeekerProfile = () => {
 
     const fetchJobSeekerDetails = async () => {
 
-        const details = await getJobSeekerDetails({ userId: "619dbd6007f15d4f6bdd601e" })
-        console.log("user details", details.data)
-        setData({ ...details.data })
-        setViewData({ ...details.data })
-        // setVide
+        // const details = await getJobSeekerDetails({ userId: "619dbd6007f15d4f6bdd601e" })
+        // console.log("user details", details.data)
+        // setData({ ...details.data })
+        // setViewData({ ...details.data })
+        // // setVide
 
 
     }
@@ -193,7 +193,7 @@ const JobSeekerProfile = () => {
 
 
 
-    if ((data && !data?.resume) || (resCheck)) {
+    if ((data && !data?.resume) || (resCheck) || !viewData) {
         resumeHandlerFlex = (<div className="resume-upload">
             <h5><b> Get Started</b></h5>
             <div >
@@ -265,7 +265,7 @@ const JobSeekerProfile = () => {
         <div className="container">
             <div className="name-display">
                 <div className="profile-circle">  {viewData?.firstName.substring(0, 1)} {viewData?.lastName.substring(0, 1)}  </div>
-                <div className="profile-name"> {viewData?.firstName} {viewData?.lastName}</div>
+                <div className="profile-name"> {viewData ? viewData.firstName : "Your"} {viewData ? viewData.lastName : "Name"}</div>
 
             </div>
             <div className="profile-wrapper">
