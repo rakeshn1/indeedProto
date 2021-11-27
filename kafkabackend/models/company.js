@@ -5,22 +5,22 @@ const companySchema = new mongoose.Schema({
     workScore: {
         type: Number,
         min: 0,
-        max: 10
+        max: 100
     },
     happinessScore: {
         type: Number,
         min: 0,
-        max: 10
+        max: 100
     },
     learningScore: {
         type: Number,
         min: 0,
-        max: 10
+        max: 100
     },
     appreciationScore: {
         type: Number,
         min: 0,
-        max: 10
+        max: 100
     },
     about: {
         type: String,
@@ -91,8 +91,8 @@ const companySchema = new mongoose.Schema({
         maxlength: 255
     },
     headQuarters: {
-        type:Object,
-        required:true
+        type: Object,
+        required: true
     },
 
     websiteURL: {
@@ -101,6 +101,10 @@ const companySchema = new mongoose.Schema({
     },
     photos: {
         type: [String]
+    },
+    logo: {
+        type: String,
+        maxlength: 1024,
     },
 
 })
