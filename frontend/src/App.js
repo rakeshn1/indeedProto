@@ -20,33 +20,39 @@ import SignUpPage from "./components/SignUpPage";
 import SignInPage from "./components/SignInPage";
 
 import EmployerTopNavbar from "./components/common/EmployerTopNavBar";
-import EmployerReviews from "./components/Employer/EmployerReviews"
-import EmployerReports from "./components/Employer/EmployerReports"
-import EmployerJobPostings from "./components/Employer/EmployerJobPostings"
-import EmployerApplicants from "./components/Employer/EmployerApplicants"
-import CompanyDetails from "./components/Employer/CompanyDetails"
-import EmployerDetails from "./components/Employer/EmployerDetails"
+
+import EmployerReviews from "./components/Employer/EmployerReviews";
+import EmployerReports from "./components/Employer/EmployerReports";
+import EmployerJobPostings from "./components/Employer/EmployerJobPostings";
+import EmployerApplicants from "./components/Employer/EmployerApplicants";
+import CompanyDetails from "./components/Employer/CompanyDetails";
+import EmployerDetails from "./components/Employer/EmployerDetails";
 import JobSeekerMyJobs from "./components/JobSeeker/JobSeekerMyJobs";
-import JobSeekerSavedJobs from "./components/JobSeeker/JobSeekerSavedJobs"
-import JobSeekerAppliedJobs from "./components/JobSeeker/JobSeekerAppliedJobs"
+import JobSeekerSavedJobs from "./components/JobSeeker/JobSeekerSavedJobs";
+import JobSeekerAppliedJobs from "./components/JobSeeker/JobSeekerAppliedJobs";
 import JobSeekerMyReviews from "./components/JobSeeker/JobSeekerMyReviews";
 
 function App() {
-
   const location = useLocation();
 
   return (
     <div className="App">
-      {
-        (location.pathname !== '/login' && location.pathname !== '/signIn/email' && location.pathname !== '/signIn/returningUser' && location.pathname !== '/signIn/newUser' && location.pathname !== '/signUp') && <TopNavbar />
+      {/* {location.pathname !== "/signIn/email" &&
+        location.pathname !== "/signIn/returningUser" &&
+        location.pathname !== "/signIn/newUser" &&
+        location.pathname !== "/signUp" && <TopNavbar />} */}
 
-      }
+      {location.pathname !== "/login" &&
+        location.pathname !== "/signIn/email" &&
+        location.pathname !== "/signIn/returningUser" &&
+        location.pathname !== "/signIn/newUser" &&
+        location.pathname !== "/signUp" && <TopNavbar />}
 
       {/* <TopNavbar /> */}
       {/* <EmployerTopNavbar /> */}
       <Switch>
         <Route
-          path="/jobSeeker/reviews/search/:companyName/:location"
+          path="/jobSeeker/reviews/search/:companyNameAndJobTitle/:location"
           component={JobSeekerReviewsSearchPage}
         ></Route>
         <Route
@@ -100,8 +106,6 @@ function App() {
         <Route path="/jobSeeker/myJobs/appliedJobs">
           <JobSeekerAppliedJobs />
         </Route>
-
-
 
         <Route path="/jobSeeker/myReviews">
           <JobSeekerMyReviews />

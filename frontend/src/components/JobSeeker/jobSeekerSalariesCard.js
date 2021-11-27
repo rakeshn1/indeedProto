@@ -6,7 +6,7 @@ class JobSeekerSalariesCard extends React.Component {
     data: {
       jobTitle: "Software Engineer",
       location: "United States",
-      salariesReviewCount: "27.2K",
+      numberOfReviews: "27.2K",
       updatedOn: "November 17, 2021",
       averageSalary: "115,134",
       cashBonus: "4,000",
@@ -79,8 +79,8 @@ class JobSeekerSalariesCard extends React.Component {
                 Average base salary
               </h2>
               <div>
-                {this.state.data.salariesReviewCount} salaries reported, updated
-                at {this.state.data.updatedOn}
+                {this.props.numberOfReviews} salaries reported, updated at{" "}
+                {this.state.data.updatedOn}
               </div>
               <div
                 style={{
@@ -90,7 +90,7 @@ class JobSeekerSalariesCard extends React.Component {
                   fontWeight: "bold",
                 }}
               >
-                ${this.state.data.averageSalary}
+                ${this.props.averageSalary}
               </div>
               <div
                 style={{
@@ -112,9 +112,8 @@ class JobSeekerSalariesCard extends React.Component {
                 }}
               >
                 The average salary for a {this.props.jobTitle} is $
-                {this.state.data.averageSalary} per year in the{" "}
-                {this.props.location} and {this.state.data.cashBonus} cash bonus
-                per year.
+                {this.props.averageSalary} per year in the {this.props.location}{" "}
+                and {this.state.data.cashBonus} cash bonus per year.
               </h3>
             </div>
             <div className="col-8" style={{ paddingLeft: "30px" }}>

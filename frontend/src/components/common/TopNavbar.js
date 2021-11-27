@@ -1,6 +1,6 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom';
-import IndeedLogo from './IndeedLogo';
+import React from "react";
+import { NavLink } from "react-router-dom";
+import IndeedLogo from "./IndeedLogo";
 
 // const indeedLogo = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Indeed_logo.svg/2560px-Indeed_logo.svg.png";
 
@@ -109,37 +109,52 @@ const TopNavbar = () => {
           Sign In
         </NavLink>
       </>
-    )
+    );
   }
-
 
   return (
     <nav className="navbar">
-
       <div className="nav-left">
         <IndeedLogo />
         <div className="nav-left-tabs">
-
-          <NavLink exact={true} activeClassName='active' to="/jobSeekerLandingPage" className="navbar-buttons">Find jobs</NavLink>
-          <NavLink activeClassName='active' to="/jobSeeker" className="navbar-buttons">Company reviews</NavLink>
-          <NavLink activeClassName='active' to="/admin" className="navbar-buttons">Find salaries</NavLink>
+          <NavLink
+            exact={true}
+            activeClassName="active"
+            to="/jobSeekerLandingPage"
+            className="navbar-buttons"
+          >
+            Find jobs
+          </NavLink>
+          <NavLink
+            activeClassName="active"
+            to="/jobSeeker/reviews"
+            className="navbar-buttons"
+          >
+            Company reviews
+          </NavLink>
+          <NavLink
+            activeClassName="active"
+            to="/jobSeeker/salaries"
+            className="navbar-buttons"
+          >
+            Find salaries
+          </NavLink>
         </div>
       </div>
       <div className="nav-right">
-        <div className="nav-right-1">
-
-          {navRight1}
-        </div>
+        <div className="nav-right-1">{navRight1}</div>
         <div className="nav-right-2">
-
-          <NavLink activeClassName='active' to="/employerPostJob" className="navbar-buttons">
+          <NavLink
+            activeClassName="active"
+            to="/employerPostJob"
+            className="navbar-buttons"
+          >
             Employers/ Post Job
           </NavLink>
         </div>
       </div>
-    </nav >
+    </nav>
+  );
+};
 
-  )
-}
-
-export default TopNavbar
+export default TopNavbar;
