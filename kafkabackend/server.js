@@ -1,9 +1,10 @@
-var connection = new require('./kafka/connection');
-require('./db/Mongo')
-const companyAPI = require('./APIS/employer')
-const jobSeeker = require("./APIS/jobSeeker")
-const createUser = require("./APIS//createUser")
+var connection = new require("./kafka/connection");
+require("./db/Mongo");
+const companyAPI = require("./APIS/employer");
+const jobSeeker = require("./APIS/jobSeeker");
+const createUser = require("./APIS//createUser");
 const searchAPI = require("./APIS/searchAPI");
+const admin = require("./APIS/admin");
 
 function handleTopicRequest(topic_name, fname) {
   console.log("Inside Kfka2");
@@ -37,8 +38,6 @@ function handleTopicRequest(topic_name, fname) {
 
 handleTopicRequest("companytopic", companyAPI);
 handleTopicRequest("jobSeeker-topic", jobSeeker);
-
 handleTopicRequest("newUser-topic", createUser);
-
 handleTopicRequest("search-topic", searchAPI);
-
+handleTopicRequest("admin", admin);
