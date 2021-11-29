@@ -6,6 +6,7 @@ import JobSearchResults from './JobSearchResults';
 // import http from '../../services/httpService';
 import { getJobSearchResults } from '../../services/jobSeeker'
 import { NavLink } from 'react-router-dom';
+import { getCompanyNamesAndJobTitles, getLocations } from '../../services/searchService';
 
 
 const JobSeekerLandingPage = () => {
@@ -16,17 +17,24 @@ const JobSeekerLandingPage = () => {
     const onWhatChangeHandler = async (value) => {
         console.log(value);
         setWhatText(value)
+        const payload = {
+            what: whatText
+        }
+        if (whatText?.length > 2) {
+            const response = getCompanyNamesAndJobTitles(whatText);
+            console.log("whatList", response.data);
+        }
 
-        // if (whatText.length > 2) {
-        //     // fetchWhatSuggestionList();
-        // }
     }
-    const onWhereChangeHandler = (value) => {
+    const onWhereChangeHandler = async (value) => {
         console.log(value);
         setWhereText(value)
-        // if (whereText.length > 2) {
-        //     // fetchWhatSuggestionList();
-        // }
+
+        if (whereText?.length > 2) {
+            const response = getLocations(whereText);
+            console.log("where", response.data);
+
+        }
     }
 
 

@@ -29,10 +29,11 @@ const JobSeekerProfile = () => {
 
     const fetchJobSeekerDetails = async () => {
 
-        // const details = await getJobSeekerDetails({ userId: "619dbd6007f15d4f6bdd601e" })
-        // console.log("user details", details.data)
-        // setData({ ...details.data })
-        // setViewData({ ...details.data })
+        const details = await getJobSeekerDetails({ userId: "619dbd6007f15d4f6bdd601e" })
+        console.log("user details", details.data)
+        setData({ ...details.data })
+        setViewData({ ...details.data })
+        setResumeURL(details.data.resume)
         // // setVide
 
 
@@ -174,8 +175,6 @@ const JobSeekerProfile = () => {
                 country: data.address.country,
                 zipcode: data.address.zipcode,
             }
-            //  coverLetter = data.coverLetter,
-            //  companyRole = data.companyRoledata
         }
 
         const details = await updateJobSeekerDetails("619dbd6007f15d4f6bdd601e", payload)
@@ -188,9 +187,6 @@ const JobSeekerProfile = () => {
 
     }
     let resumeHandlerFlex = null;
-
-    // let auth = 0;
-
 
 
     if ((data && !data?.resume) || (resCheck) || !viewData) {
@@ -246,7 +242,7 @@ const JobSeekerProfile = () => {
                     </div>
                     <div style={{ width: "40%" }}>
                         <div style={{ display: "flex", justifyContent: "space-around" }} >
-                            <Button text="Download" style={{ fontSize: "14px", borderRadius: "5px", backgroundColor: "white", color: "#085ff7" }} onClick={downloadPDF} />
+                            <a href={resumeURL} target="_blank" rel="noreferrer" download="indeed_resume.pdf"><Button text="Download" style={{ fontSize: "14px", borderRadius: "5px", backgroundColor: "white", color: "#085ff7" }} ></Button></a>
 
                             <Button text="Replace" style={{ fontSize: "14px", borderRadius: "5px", color: "#085ff7", backgroundColor: "white" }} onClick={() => setResCheck(true)} />
                         </div>

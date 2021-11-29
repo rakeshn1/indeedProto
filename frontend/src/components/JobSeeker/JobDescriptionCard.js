@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { getSavedJobs, handleJobSaveUnsave } from '../../services/jobSeeker'
+import { applyJob, getJobSeekerDetails, getSavedJobs, handleJobSaveUnsave } from '../../services/jobSeeker'
 import Button from '../common/Button'
 import _ from 'lodash'
+import { useHistory } from 'react-router'
 
 const JobDescriptionCard = (props) => {
+    const [auth, setAuth] = useState(true)
+    const resume = "";
+
+    const history = useHistory();
     // const [savedJobs, setSavedJobs] = useState([])
     // const [heartIcon, setHeartIcon] = useState(false)
 
@@ -39,6 +44,39 @@ const JobDescriptionCard = (props) => {
         handleJobSaveUnsave(payload)
     }
 
+
+    const handleApplyJob = async () => {
+
+        const p = {
+            userId: "619dbd6007f15d4f6bdd601e"
+        }
+        const userDetails = await getJobSeekerDetails(p)
+        console.log("applying job for user with details", userDetails.data)
+
+        if (!auth) {
+            console.log("login to continue")
+            return;
+        }
+
+        if (userDetails && !userDetails.data.resume) {
+            alert("please add resume")
+            history.push("/jobSeekerProfile")
+        }
+        else {
+
+            const payload = {
+                jobId: props.cardDetails._id,
+                userId: "619dbd6007f15d4f6bdd601e",
+                companyId: props.cardDetails.companyId,
+                resumeURL: userDetails.data.resume
+            }
+
+            // if(payload.)
+            const result = await applyJob(payload);
+            console.log("after call", result.data.status);
+
+        }
+    }
     return (
 
         <div className="job-description-card-wrapper" >
@@ -80,6 +118,7 @@ const JobDescriptionCard = (props) => {
                             width: "120px",
                             fontSize: "15px"
                         }}
+                        onClick={handleApplyJob}
                     />
                     {/* {
 

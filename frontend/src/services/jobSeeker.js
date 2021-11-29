@@ -65,3 +65,9 @@ export async function updateJobSeekerDetails(userId, payload) {
   return await http.put(apiEndpoint + `/updateJobSeekerDetails/${userId}`, payload);
 }
 
+export async function applyJob(payload) {
+  console.log("payload", payload);
+  return await http.post(apiEndpoint + `/applyJob/`, payload);
+}
+
+
