@@ -6,8 +6,17 @@ import CompanySnapShot from "./CompanySnapShot";
 import AboutCompany from "./AboutCompany";
 import Jobs from "./Jobs";
 import "../../../styles/companyStyles.css";
+import { getCompanyDetails } from "../../../services/jobSeeker";
 
 class CompanyHome extends React.Component {
+  state = {
+    companyDetails: undefined,
+  };
+  componentWillMount = async () => {
+    let response = await getCompanyDetails("id");
+    this.setState({ CompanyDetails: response.data });
+  };
+
   render() {
     return (
       <div>
@@ -15,16 +24,16 @@ class CompanyHome extends React.Component {
         <div className="content">
           <Switch>
             <Route path="/companydetails/review">
-              <Reviews />
+              <Reviews companyDetails={this.state.companyDetails} />
             </Route>
             <Route path="/companydetails/about">
-              <AboutCompany />
+              <AboutCompany companyDetails={this.state.companyDetails} />
             </Route>
             <Route path="/companydetails/jobs">
-              <Jobs />
+              <Jobs companyDetails={this.state.companyDetails} />
             </Route>
             <Route path="/">
-              <CompanySnapShot />
+              <CompanySnapShot companyDetails={this.state.companyDetails} />
             </Route>
           </Switch>
         </div>

@@ -29,7 +29,7 @@ class AddReview extends React.Component {
     },
     errors: {},
   };
-
+  baseState = { ...this.state };
   schema = {
     companyName: Joi.string().required(),
     overallRating: Joi.number().required(),
@@ -223,7 +223,15 @@ class AddReview extends React.Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    await addReview(this.state.data);
+    try {
+      const response = await addReview(this.state.data);
+      if (response && response.status === 200) {
+        console.log("added reviews successfully");
+        // this.props.history.push("/companydetails");
+      }
+    } catch (ex) {
+      console.log(ex);
+    }
   };
   render() {
     return (
