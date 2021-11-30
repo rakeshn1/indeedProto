@@ -14,6 +14,8 @@ const JobSeekerLandingPage = () => {
     const [whatText, setWhatText] = useState()
     const [whereText, setWhereText] = useState()
     const [searchResults, setSearchResults] = useState()
+    const [showResults, setShowResults] = useState(false);
+
     const onWhatChangeHandler = async (value) => {
         console.log(value);
         setWhatText(value)
@@ -38,7 +40,6 @@ const JobSeekerLandingPage = () => {
     }
 
 
-    const [showResults, setShowResults] = useState(false);
     const onButtonClickHandler = async () => {
         //call to get jobs
         //api call with parameters what text value and where text value

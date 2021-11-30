@@ -1,16 +1,6 @@
 import React, { useState } from 'react'
 import SingleReview from './SingleReview'
 
-let reviewStatusOptions = [
-    { label: "UnApproved", value: 0 },
-    { label: "Approve", value: 1 },
-    { label: "Disapprove", value: 3 }
-]
-let pictureStatusOptions = [
-    { label: "UnApproved", value: 0 },
-    { label: "Approve", value: 1 },
-    { label: "Disapprove", value: 2 }
-]
 
 const AdminDashboard = () => {
 
@@ -222,9 +212,7 @@ const AdminDashboard = () => {
                                     </div>
 
                                 )
-
                             })
-
                     }
                 </ul>
             </div >

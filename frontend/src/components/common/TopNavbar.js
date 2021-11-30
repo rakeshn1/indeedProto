@@ -219,7 +219,22 @@ const TopNavbar = () => {
               >
                 Dashboard
               </NavLink>
+              <NavLink
+                activeClassName="active"
+                to="/companyProfilePage"
+                className="navbar-buttons"
+              >
+                Company Profile Page
+              </NavLink>
+              <NavLink
+                activeClassName="active"
+                to="/analyticsDashboard"
+                className="navbar-buttons"
+              >
+                Analytics
+              </NavLink>
             </React.Fragment>
+
           )}
         </div>
       </div>
