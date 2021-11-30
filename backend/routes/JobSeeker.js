@@ -161,10 +161,20 @@ router.get("/getJobSearchResults/", async (req, res) => {
   }
   console.log("response", response);
   res.send(response)
+});
 
-    .catch((err) => {
-      console.log("NOT DONE");
-    });
+
+router.post("/applyJob", async (req, res) => {
+  console.log(req.body);
+  let msg = {};
+  msg.body = req.body;
+  msg.path = "applyJob";
+  kafka.make_request("jobSeeker-topic", msg, function (err, results) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(results);
+  });
 });
 
 module.exports = router;

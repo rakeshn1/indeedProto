@@ -38,6 +38,9 @@ import JobSeekerSavedJobs from "./components/JobSeeker/JobSeekerSavedJobs";
 import JobSeekerAppliedJobs from "./components/JobSeeker/JobSeekerAppliedJobs";
 import JobSeekerMyReviews from "./components/JobSeeker/JobSeekerMyReviews";
 import Logout from "./components/logout";
+import AdminDashboard from "./components/Admin/AdminDashboard";
+import CompanyProfilePage from "./components/Admin/CompanyProfilePage";
+import AnalyticsDashboard from "./components/Admin/AnalyticsDashboard";
 
 function App() {
   const location = useLocation();
@@ -182,7 +185,10 @@ function App() {
           path="/jobSeeker/myReviews"
           component={JobSeekerMyReviews}
         ></JobSeekerRoute>
-        <AdminRoute path="/admin" component={Dashboard}></AdminRoute>
+        <AdminRoute path="/admin" component={AdminDashboard}></AdminRoute>
+        <AdminRoute path="/companyProfilePage" component={CompanyProfilePage}></AdminRoute>
+        <AdminRoute path="/analyticsDashboard" component={AnalyticsDashboard}></AdminRoute>
+
         <JobSeekerRoute
           path="/jobSearchResults"
           component={JobSearchResults}

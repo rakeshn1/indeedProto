@@ -3,6 +3,7 @@ const { User } = require("../models/user");
 const _ = require("lodash");
 const { SalaryReview } = require("../models/salaryReview");
 const { Company } = require("../models/company");
+const { JobApplication } = require("../models/jobApplications")
 
 async function addReview(body, callback) {
   try {
@@ -47,6 +48,31 @@ async function addSalaryReview(msg, callback) {
     callback(null, res);
   }
 }
+
+async function applyJob(msg, callback) {
+  const res = {};
+
+  try {
+    const jobApplication = new JobApplication({
+      jobId: msg.body.jobId,
+      userId: msg.body.userId,
+      companyId: msg.body.companyId,
+      resumeURL: msg.body.resumeURL,
+      status: 1
+    })
+
+    await jobApplication.save();
+    res.status = 200;
+    res.data = "Succesfully applied to job";
+    callback(null, res);
+  }
+  catch (err) {
+    res.status = 500
+    res.data = err
+    callback(null, res)
+  }
+}
+
 
 async function getJobSearchResults(body, callback) {
   try {
@@ -119,6 +145,12 @@ handle_request = (msg, callback) => {
     console.log("HERE");
     console.log("Kafka side1");
     addSalaryReview(msg, callback);
+  }
+
+  if (msg.path === "applyJob") {
+    delete msg.path;
+    console.log("apply job -reached kafka");
+    applyJob(msg, callback)
   }
 };
 
