@@ -1,54 +1,66 @@
 import React, { useEffect, useState } from 'react'
-import { applyJob, getJobSeekerDetails, getSavedJobs, handleJobSaveUnsave } from '../../services/jobSeeker'
+import { applyJob, getJobSeekerDetails, getSavedJobs, getAppliedJobs, handleJobSaveUnsave } from '../../services/jobSeeker'
 import Button from '../common/Button'
 import _ from 'lodash'
 import { useHistory } from 'react-router'
+import { getCurrentUser } from '../../services/auth'
 
 const JobDescriptionCard = (props) => {
     const [auth, setAuth] = useState(true)
     const resume = "";
 
+    const user = getCurrentUser()
+
     const history = useHistory();
-    // const [savedJobs, setSavedJobs] = useState([])
-    // const [heartIcon, setHeartIcon] = useState(false)
-
-    // useEffect(() => {
-    //     const response = getSavedJobs({ userId: "619f12eb7a93a10478dcae74" })
-    //     setSavedJobs(response);
-    //     heartIcon();
-    // }, [savedJobs])
-
-    let heart_Icon = (<svg xmlns="http://www.w3.org/2000/svg" width="30" height="38" fill="currentColor" class="bi bi-heart" viewBox="-5 -3 25 25">
+    const [savedJobs, setSavedJobs] = useState([])
+    const [appliedJobs, setAppliedJobs] = useState([])
+    const [heart_Icon, setHeartIcon] = useState(<svg xmlns="http://www.w3.org/2000/svg" width="30" height="38" fill="currentColor" class="bi bi-heart" viewBox="-5 -3 25 25">
         <path d="M12.38,2.25A4.49,4.49,0,0,0,9,3.82,4.49,4.49,0,0,0,5.63,2.25,4.08,4.08,0,0,0,1.5,6.38c0,2.83,2.55,5.15,6.41,8.66L9,16l1.09-1C14,11.52,16.5,9.21,16.5,6.38A4.08,4.08,0,0,0,12.38,2.25ZM9.08,13.91L9,14l-0.08-.08C5.35,10.68,3,8.54,3,6.38A2.56,2.56,0,0,1,5.63,3.75,2.93,2.93,0,0,1,8.3,5.52H9.7a2.91,2.91,0,0,1,2.67-1.77A2.56,2.56,0,0,1,15,6.38C15,8.54,12.65,10.68,9.08,13.91Z" />
     </svg>)
 
-    // const heartIcon = () => {
-    //     if (_.find(savedJobs, props.cardDetails._id)) {
-    //         heart_Icon = (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart" viewBox="0 0 20 20">
-    //             <path d="M12,21.35L10.55,20C5.4,15.36,2,12.28,2,8.5A5.45,5.45,0,0,1,7.5,3,6,6,0,0,1,12,5.09,6,6,0,0,1,16.5,3,5.45,5.45,0,0,1,22,8.5c0,3.78-3.4,6.86-8.55,11.54Z" />
-    //         </svg>)
-    //     }
-    //     else {
-    //         heart_Icon = (<svg xmlns="http://www.w3.org/2000/svg" width="30" height="38" fill="currentColor" class="bi bi-heart" viewBox="-5 -3 25 25">
-    //             <path d="M12.38,2.25A4.49,4.49,0,0,0,9,3.82,4.49,4.49,0,0,0,5.63,2.25,4.08,4.08,0,0,0,1.5,6.38c0,2.83,2.55,5.15,6.41,8.66L9,16l1.09-1C14,11.52,16.5,9.21,16.5,6.38A4.08,4.08,0,0,0,12.38,2.25ZM9.08,13.91L9,14l-0.08-.08C5.35,10.68,3,8.54,3,6.38A2.56,2.56,0,0,1,5.63,3.75,2.93,2.93,0,0,1,8.3,5.52H9.7a2.91,2.91,0,0,1,2.67-1.77A2.56,2.56,0,0,1,15,6.38C15,8.54,12.65,10.68,9.08,13.91Z" />
-    //         </svg>)
-    //     }
-    // }
+    useEffect(() => {
+        fetchSavedJobs()
+        fetchAppliedJobs()
+    }, [])
 
-    const handleSavedJobs = (jobId) => {
+    const fetchSavedJobs = async () => {
+        if (user) {
+            const { data } = await getSavedJobs({ userId: user._id })
+            console.log("response: ", data)
+            setSavedJobs(data);
+
+        }
+    }
+
+    const fetchAppliedJobs = async () => {
+        if (user) {
+            const { data } = await getAppliedJobs({ userId: user._id })
+            console.log("response: ", data)
+            setAppliedJobs(data);
+
+        }
+    }
+
+
+
+    const handleSavedJobs = async (jobId) => {
         console.log("JobId", jobId)
+        console.log("USER: ", user)
         const payload = {
             jobId,
-            userId: "619f12eb7a93a10478dcae74"
+            userId: user._id
         }
-        handleJobSaveUnsave(payload)
+        await handleJobSaveUnsave(payload)
+        const { data } = await getSavedJobs({ userId: user._id })
+        console.log("response: ", data)
+        setSavedJobs(data);
     }
 
 
     const handleApplyJob = async () => {
 
         const p = {
-            userId: "619dbd6007f15d4f6bdd601e"
+            userId: user._id
         }
         const userDetails = await getJobSeekerDetails(p)
         console.log("applying job for user with details", userDetails.data)
@@ -66,7 +78,7 @@ const JobDescriptionCard = (props) => {
 
             const payload = {
                 jobId: props.cardDetails._id,
-                userId: "619dbd6007f15d4f6bdd601e",
+                userId: user._id,
                 companyId: props.cardDetails.companyId,
                 resumeURL: userDetails.data.resume
             }
@@ -76,6 +88,7 @@ const JobDescriptionCard = (props) => {
             console.log("after call", result.data.status);
 
         }
+        fetchAppliedJobs()
     }
     return (
 
@@ -111,29 +124,70 @@ const JobDescriptionCard = (props) => {
                 </div>
                 <div className="buttons-in-a-line-wrapper">
 
-                    <Button
-                        text="Apply now"
-                        style={{
-                            height: "40px",
-                            width: "120px",
-                            fontSize: "15px"
-                        }}
-                        onClick={handleApplyJob}
-                    />
+                    {!(_.find(appliedJobs, (job) => {
+                        return job.toString() === props.cardDetails._id.toString()
+                    })) && (
+                            <Button
+                                text="Apply now"
+                                disabled={user ? false : true}
+                                style={{
+                                    height: "40px",
+                                    width: "120px",
+                                    fontSize: "15px"
+                                }}
+                                onClick={handleApplyJob}
+                            />)}
+
+                    {(_.find(appliedJobs, (job) => {
+                        return job.toString() === props.cardDetails._id.toString()
+                    })) && (
+                            <Button
+                                text="Applied"
+                                disabled
+                                style={{
+                                    backgroundColor: "green",
+                                    height: "40px",
+                                    width: "120px",
+                                    fontSize: "15px"
+                                }}
+                            // onClick={handleApplyJob}
+                            />)}
                     {/* {
 
                     } */}
-                    <div className="heart-button">
+                    {console.log("FAV: ", (_.find(savedJobs, (job) => {
+                        return job.toString() === props.cardDetails._id.toString()
+                    })))}
 
-                        <button onClick={() => handleSavedJobs(props.cardDetails?._id)}>
+                    {(_.find(savedJobs, (job) => {
+                        return job.toString() === props.cardDetails._id.toString()
+                    })) && (
+                            <div className="heart-button">
 
-                            {heart_Icon}
+                                <button disabled={user ? "" : "disabled"} onClick={() => handleSavedJobs(props.cardDetails?._id)}>
 
-                            {/* <svg xmlns="http://www.w3.org/2000/svg" width="30" height="38" fill="currentColor" class="bi bi-heart" viewBox="-5 -3 25 25">
+                                    {/* {heart_Icon} */}
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="38" fill="currentColor" class="bi bi-heart" viewBox="-2 -2 25 25">
+                                        <path d="M12,21.35L10.55,20C5.4,15.36,2,12.28,2,8.5A5.45,5.45,0,0,1,7.5,3,6,6,0,0,1,12,5.09,6,6,0,0,1,16.5,3,5.45,5.45,0,0,1,22,8.5c0,3.78-3.4,6.86-8.55,11.54Z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        )}
+
+                    {!(_.find(savedJobs, (job) => {
+                        return job.toString() === props.cardDetails._id.toString()
+                    })) && (<div className="heart-button">
+
+                        <button disabled={user ? "" : "disabled"} onClick={() => handleSavedJobs(props.cardDetails?._id)}>
+
+                            {/* {heart_Icon} */}
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="38" fill="black" class="bi bi-heart" viewBox="-5 -3 25 25">
                                 <path d="M12.38,2.25A4.49,4.49,0,0,0,9,3.82,4.49,4.49,0,0,0,5.63,2.25,4.08,4.08,0,0,0,1.5,6.38c0,2.83,2.55,5.15,6.41,8.66L9,16l1.09-1C14,11.52,16.5,9.21,16.5,6.38A4.08,4.08,0,0,0,12.38,2.25ZM9.08,13.91L9,14l-0.08-.08C5.35,10.68,3,8.54,3,6.38A2.56,2.56,0,0,1,5.63,3.75,2.93,2.93,0,0,1,8.3,5.52H9.7a2.91,2.91,0,0,1,2.67-1.77A2.56,2.56,0,0,1,15,6.38C15,8.54,12.65,10.68,9.08,13.91Z" />
-                            </svg> */}
+                            </svg>
                         </button>
-                    </div>
+                    </div>)}
 
                 </div>
             </div>

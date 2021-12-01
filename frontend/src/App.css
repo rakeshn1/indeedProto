@@ -256,8 +256,9 @@ body {
   /* padding: 20px; */
   height: fit-content;
   border-radius: 10px;
+  position: -webkit-sticky;
   position: sticky;
-  top: 10px;
+  top: 0;
   /* bottom: 10px; */
 }
 

@@ -19,18 +19,22 @@ const Chart = ({ data, labels, color, type, options }) => {
     );
 
 
-    const getLabels = async () => {
-
-    }
-
-
     useEffect(() => {
-        getLabels()
-
-    })
-
-
+        console.log("CHART DETAILS", data)
+        const chartDataIn = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Population',
+                    data: data,
+                    backgroundColor: color
+                }
+            ]
+        }
+        setChartData(chartDataIn)
+    }, [data])
     return (
+
         <div style={{ height: "500px", width: "600px", margin: "0px auto" }}>
             {type === "Bar"
                 &&

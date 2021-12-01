@@ -46,11 +46,16 @@ export async function handleJobSaveUnsave(payload) {
   return await http.put(apiEndpoint + `/handleJobSaveUnsave/${payload.userId}`, { jobId: payload.jobId });
 }
 
-
 export async function getSavedJobs(payload) {
   // console.log(apiURL + "/api/handleJobSaveUnsave/")
   console.log("payload", payload)
   return await http.get(apiEndpoint + `/getSavedJobs/${payload.userId}`);
+}
+
+export async function getAppliedJobs(payload) {
+  // console.log(apiURL + "/api/handleJobSaveUnsave/")
+  console.log("payload", payload)
+  return await http.get(apiEndpoint + `/getAppliedJobs/${payload.userId}`);
 }
 
 export async function getJobSeekerDetails(payload) {

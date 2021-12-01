@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const kafka = require("../kafka/client");
 const { Jobs } = require("../models/mongo/jobs.js");
 const { User } = require("../models/mongo/user");
+const { JobApplication } = require("../models/mongo/jobApplications")
+
 
 router.post("/addReview", async (req, res) => {
   console.log(req.body);
@@ -29,7 +31,31 @@ router.post("/addSalaryReview/", async (req, res) => {
 });
 
 router.get("/getSavedJobs/:userId", async (req, res) => {
-  console.log("here", req.body);
+  const userId = req.params.userId
+  try {
+    const response = await User.findById(userId);
+    console.log("User Details", response.savedJobs);
+    res.send(response.savedJobs);
+  } catch (err) {
+    console.log("error fetching user details", err);
+    res.send(err);
+  }
+});
+
+router.get("/getAppliedJobs/:userId", async (req, res) => {
+  const userId = req.params.userId
+  try {
+    const response = await JobApplication.find({ userId: mongoose.Types.ObjectId(userId) }).select("jobId");
+    const result = []
+    response.map((job) => {
+      result.push(job.jobId)
+    })
+    console.log("User Details", result);
+    res.send(result);
+  } catch (err) {
+    console.log("error fetching user details", err);
+    res.send(err);
+  }
 });
 
 router.get("/getJobSeekerDetails/:userId", async (req, res) => {

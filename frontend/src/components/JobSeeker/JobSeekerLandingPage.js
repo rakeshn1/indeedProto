@@ -15,16 +15,17 @@ const JobSeekerLandingPage = () => {
     const [whereText, setWhereText] = useState()
     const [searchResults, setSearchResults] = useState()
     const [showResults, setShowResults] = useState(false);
+    const [whatTextResults, setWhatTextResults] = useState([])
+    const [whereTextResults, setWhereTextResults] = useState([])
 
     const onWhatChangeHandler = async (value) => {
         console.log(value);
         setWhatText(value)
-        const payload = {
-            what: whatText
-        }
-        if (whatText?.length > 2) {
-            const response = getCompanyNamesAndJobTitles(whatText);
+
+        if (whatText?.length > 1) {
+            const response = await getCompanyNamesAndJobTitles(whatText);
             console.log("whatList", response.data);
+            setWhatTextResults(response.data)
         }
 
     }
@@ -32,12 +33,14 @@ const JobSeekerLandingPage = () => {
         console.log(value);
         setWhereText(value)
 
-        if (whereText?.length > 2) {
-            const response = getLocations(whereText);
+        if (whereText?.length > 1) {
+            const response = await getLocations(whereText);
             console.log("where", response.data);
-
+            setWhereTextResults(response.data)
         }
     }
+
+
 
 
     const onButtonClickHandler = async () => {
@@ -79,7 +82,21 @@ const JobSeekerLandingPage = () => {
                         width: "40%"
                     }}
                     value={whatText}
+                    list="whatTextResults"
                 />
+                <datalist id="whatTextResults">
+                    {whatTextResults.map((data) => (
+                        <option
+                            key={data}
+                            value={data}
+                            onClick={(e) =>
+                                this.onWhatChangeHandler(e.target.textContent)
+                            }
+                        >
+                            {data}
+                        </option>
+                    ))}
+                </datalist>
                 <SearchBox
                     onChange={onWhereChangeHandler}
                     placeholder="City, state, zip code, or “remote”"
@@ -92,7 +109,21 @@ const JobSeekerLandingPage = () => {
                         width: "40%",
                     }}
                     value={whereText}
+                    list="whereTextResults"
                 />
+                <datalist id="whereTextResults">
+                    {whereTextResults.map((data) => (
+                        <option
+                            key={data}
+                            value={data}
+                            onClick={(e) =>
+                                this.onWhereChangeHandler(e.target.textContent)
+                            }
+                        >
+                            {data}
+                        </option>
+                    ))}
+                </datalist>
                 <Button
                     text="Find Jobs"
                     onClick={onButtonClickHandler}
@@ -100,10 +131,10 @@ const JobSeekerLandingPage = () => {
 
             </div>
             <div >
-                <p className="link-connector"><NavLink style={{ textDecoration: "none", color: "#2557a7" }} to="/" >Post your resume</NavLink> It only takes a few seconds</p>
+                <p className="link-connector"><NavLink style={{ textDecoration: "none", color: "#2557a7" }} to="/jobSeekerProfile" >Post your resume</NavLink> It only takes a few seconds</p>
             </div>
             <div >
-                <p className="link-connector"><NavLink style={{ textDecoration: "none", color: "#2557a7" }} to="/" > Employers: Post a job </NavLink> - yout next hire is here</p>
+                <p className="link-connector"><NavLink style={{ textDecoration: "none", color: "#2557a7" }} to="/employer/jobPostings" > Employers: Post a job </NavLink> - yout next hire is here</p>
             </div>
             <div style={{ marginTop: "10px", borderBottom: "1px solid silver" }}></div>
             <div>

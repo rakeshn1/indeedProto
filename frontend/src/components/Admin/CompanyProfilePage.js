@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { getListOfAllReviewsExceptUnApproved } from '../../services/admin'
 import { getCompanyNames } from '../../services/searchService'
 import Button from '../common/Button'
 import SearchBox from '../common/SearchBox'
@@ -7,22 +8,23 @@ import SearchDataStats from './SearchDataStats'
 
 const CompanyProfilePage = () => {
 
-    const [companiesList, setCompaniesList] = useState(['a', 'b', 'c', 'd'])
-    const [showResults, setShowResults] = useState(true);
+    const [companiesList, setCompaniesList] = useState([])
+    const [showResults, setShowResults] = useState(false);
     const [selectedCompany, setSelectedCompany] = useState()
     // const [, setCompaniesList]=useState()
+
     const [searchText, setSearchText] = useState()
-    const fetchCompaniesList = async () => {
-        // const response = await getCompaniesList()
-        //setCompaniesList(response.data)
-    }
+    // const fetchCompaniesList = async () => {
+    //     const response = await getCompaniesNames()
+    //     setCompaniesList(response.data)
+    // }
 
     const onSearchTextChangeHandler = async (e) => {
-        console.log("search text:", e.target.value)
+        console.log("search text:", e)
         setSearchText(searchText);
-        const companyList = await getCompanyNames(e.target.value)
-        console.log("List", companyList)
-
+        const companyListIn = await getCompanyNames(e)
+        console.log("List", companyListIn)
+        setCompaniesList(companyListIn.data)
     }
 
     const setCompanyHandler = async (e) => {
@@ -33,7 +35,14 @@ const CompanyProfilePage = () => {
         setSelectedCompany({})
     }
 
-    const onButtonClickHandler = () => {
+    const onButtonClickHandler = async () => {
+        const payload = {
+            companyId: selectedCompany
+        }
+        const response = await getListOfAllReviewsExceptUnApproved(payload)
+        console.log("list of reviews", response.data)
+        showResults(true)
+        // setReviewsList(response.data);
 
     }
     return (
@@ -54,8 +63,21 @@ const CompanyProfilePage = () => {
                         // margin: "15px"
                     }}
                     value={searchText}
-
+                    list="companiesList"
                 />
+                <datalist id="companiesList">
+                    {companiesList.map((data) => (
+                        <option
+                            key={data}
+                            value={data}
+                            onClick={(e) =>
+                                this.onSearchTextChangeHandler(e)
+                            }
+                        >
+                            {data}
+                        </option>
+                    ))}
+                </datalist>
                 <Button
                     text="Get Company Data"
                     onClick={onButtonClickHandler}
@@ -77,7 +99,7 @@ const CompanyProfilePage = () => {
 
             <div>
 
-                {showResults === true ? <SearchDataStats /> : ""}
+                {showResults === true ? <SearchDataStats company={selectedCompany} /> : ""}
 
             </div>
 
