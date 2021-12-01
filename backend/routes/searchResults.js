@@ -24,6 +24,17 @@ router.get("/getCompanyNames/:term", async (req, res) => {
   });
 });
 
+router.get("/getCompaniesByName/:term", async (req, res) => {
+  const msg = {};
+  msg.term = req.params.term;
+  msg.path = "getCompaniesByName";
+  console.log("MSG = IN SEARCH: ", msg);
+  kafka.make_request("search-topic", msg, function (err, results) {
+    console.log("Results: ", results);
+    res.status(results.status).send(results.data);
+  });
+});
+
 router.get("/getJobTitles/:term", async (req, res) => {
   const msg = {};
   msg.term = req.params.term;

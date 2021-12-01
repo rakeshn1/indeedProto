@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import JobApplicantCard from './JobApplicantCard'
+import JobCard from './JobCard'
 
-const EmployerApplicants = () => {
+const ViewEmployerJobs = () => {
     return (
         <div>
             <div style={{ display: "flex", alignItems: "center", margin: "0px 5%" }}>
-                <JobApplicantCard />
+                <JobCard />
             </div>
         </div>
     )
 }
 
-export default EmployerApplicants
+export default ViewEmployerJobs
