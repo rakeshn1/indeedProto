@@ -20,6 +20,11 @@ import EmployerJobPostings from "./components/Employer/EmployerJobPostings"
 import EmployerApplicants from "./components/Employer/EmployerApplicants"
 import CompanyDetails from "./components/Employer/CompanyDetails"
 import EmployerDetails from "./components/Employer/EmployerDetails"
+import AddJobs from "./components/Employer/AddJobs"
+import ViewJobs from "./components/Employer/ViewEmployerJobs"
+import JobPostingsHeader from "./components/Employer/JobPostingsHeader";
+import MessagesLandingPage from "./components/common/Messages";
+
 function App() {
   return (
     <div className="App">
@@ -57,13 +62,19 @@ function App() {
           <EmployerReviews />
         </Route>
         <Route exact path="/employer/jobPostings">
-          <EmployerJobPostings />
+          <ViewJobs />
         </Route>
         <Route exact path="/employer/applicants">
           <EmployerApplicants />
         </Route>
         <Route exact path="/employer/reports">
           <EmployerReports />
+        </Route>
+        <Route path="/employer/addJobs">
+          <AddJobs />
+        </Route>
+        <Route path="/employer/viewJobs">
+          <ViewJobs />
         </Route>
         <Route path="/jobSeekerLandingPage">
           <JobSeekerLandingPage />
@@ -84,6 +95,9 @@ function App() {
 
         <Route path="/jobCard">
           <JobCard />
+        </Route>
+        <Route path="/chat">
+          <MessagesLandingPage />
         </Route>
 
         <Route path="/jobDescriptionCard">

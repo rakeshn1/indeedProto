@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
         maxlength: 1024
     },
     address: {
-        type:Object
+        type: Object
     },
     companyRole: {
         type: String,
@@ -57,4 +57,4 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 module.exports.userSchema = userSchema
-module.exports.User = User
+module.exports.Users = User

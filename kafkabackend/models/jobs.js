@@ -16,14 +16,14 @@ const jobSchema = new mongoose.Schema({
     responsibilities: {
         type: String
     },
-    companyName:{
+    companyName: {
         type: String,
         maxlength: 255
     },
-    salary:{
+    salary: {
         type: Number
     },
-    description:{
+    description: {
         type: String,
     },
     rating: {
@@ -32,8 +32,8 @@ const jobSchema = new mongoose.Schema({
         maxlength: 5
     },
     location: {
-        type:Object,
-        required:true
+        type: Object,
+        required: true
     },
     jobType: {
         // FullTime: 0, PartTime: 1, Remote: 2
@@ -47,7 +47,8 @@ const jobSchema = new mongoose.Schema({
         required: true
     },
     totalApplicants: {
-        type: Number
+        type: Number,
+        default: 0
     },
     numberOfSelectedApplicants: {
         type: Number
