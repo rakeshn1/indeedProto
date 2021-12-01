@@ -59,6 +59,35 @@ const getCompanyNames = async (msg, callback) => {
   }
 };
 
+const getCompaniesByName = async (msg, callback) => {
+  const res = {};
+  try {
+    msg.term = msg.term.toLowerCase();
+    console.log("msg.term: ", msg.term);
+    console.log("In getCompanyNames");
+    res.data = [];
+    const companyResults = await Company.find({}).select("name");
+
+    companyResults.forEach((company) => {
+      if (company.name.toLowerCase().startsWith(msg.term)) {
+        interData = {
+          name: company.name,
+          _id: company._id,
+        };
+        res.data.push(interData);
+      }
+    });
+
+    res.data = _.uniq(res.data);
+    res.status = 200;
+    callback(null, res);
+  } catch (err) {
+    res.status = 400;
+    res.data = err;
+    callback(null, res);
+  }
+};
+
 const getJobTitles = async (msg, callback) => {
   const res = {};
   try {
@@ -477,6 +506,11 @@ handle_request = (msg, callback) => {
     // delete msg.path;
     console.log("Kafka side1");
     getCompanyNames(msg, callback);
+  }
+  if (msg.path === "getCompaniesByName") {
+    // delete msg.path;
+    console.log("Kafka side1");
+    getCompaniesByName(msg, callback);
   }
   if (msg.path === "getJobTitles") {
     // delete msg.path;

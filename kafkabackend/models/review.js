@@ -26,12 +26,10 @@ const reviewSchema = new mongoose.Schema({
   review: {
     type: String,
     required: true,
-    maxlength: 1024,
   },
   pros: {
     type: String,
     required: true,
-    maxlength: 1024,
   },
   cons: {
     type: String,
@@ -54,8 +52,18 @@ const reviewSchema = new mongoose.Schema({
     type: String,
     maxlength: 1024,
   },
+  // helpfulnessScore: {
+  //   type: Object,
+  // },
   helpfulnessScore: {
-    type: Object,
+    yesCount: {
+      type: Number,
+      default: 0,
+    },
+    noCount: {
+      type: Number,
+      default: 0,
+    },
   },
   date: {
     type: Date,
