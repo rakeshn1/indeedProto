@@ -6,7 +6,9 @@ import Input from '../common/Input';
 import S3FileUpload from 'react-s3';
 import { getCurrentUser } from '../../services/auth';
 
-const user = getCurrentUser();
+
+
+
 const config = {
     bucketName: 'uber-eats-proto',
     dirName: 'resumeUpload/', /* optional */
@@ -15,6 +17,8 @@ const config = {
     secretAccessKey: 'VCF15W2dk3Uxjdw0rTMHnDEbKPHjU6zJM4PKRr0H'
 }
 const JobSeekerProfile = () => {
+
+    const user = getCurrentUser();
 
     const [data, setData] = useState();
     const [viewData, setViewData] = useState();
