@@ -23,7 +23,7 @@ class CompanyHeader extends React.Component {
               <div className="d-flex flex-row justify-content-between">
                 <span>
                   <Link
-                    to="/companydetails"
+                    to="/companydetails/:id"
                     className="link"
                     style={{ color: "black" }}
                   >

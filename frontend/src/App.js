@@ -60,7 +60,7 @@ function App() {
           path="/jobseeker/salaries"
           component={JobSeekerSalariesPage}
         ></Route>
-        <Route path="/companydetails">
+        <Route path="/companydetails/:id">
           <CompanyHome />
         </Route>
         <Route path="/company/addReview">

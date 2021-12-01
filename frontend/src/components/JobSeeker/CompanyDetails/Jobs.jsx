@@ -1,20 +1,26 @@
 import React from "react";
 import Input from "../../common/Input";
 import JobCard from "./JobCard";
+import { getJobPostings } from "../../../services/jobSeeker";
 
 class Jobs extends React.Component {
   state = {
     whatInput: undefined,
     whereInput: undefined,
   };
+
+  componentDidMount = async (id) => {
+    getJobPostings(id);
+  };
+
   render() {
     return (
       <div>
-        <div className="mt-5 mb-5">
-          <h3>
+        <div className="mt-4 mb-4">
+          <h4>
             <b>Amazon.com Jobs</b>
-          </h3>
-          <div className="mt-5 d-flex flex-row justify-content-between">
+          </h4>
+          <div className="mt-3 d-flex flex-row justify-content-between">
             <div>
               <h6>What</h6>
               <p
@@ -72,16 +78,40 @@ class Jobs extends React.Component {
               <JobCard />
               <JobCard />
             </div>
-            <div className="">
-              <div class="mb-1 job-desc-header">
-                <h6>
-                  <b>
-                    Amazon Grocery Fresh Associate - Up To $3,000 Sign-On Bonus
-                    & bonus
-                  </b>
-                </h6>
+            <div className="" style={{ width: "100%" }}>
+              <div
+                className="bg-white p-3"
+                style={{
+                  borderBottom: "2px solid #f2f2f2",
+                  borderTop: "4px solid red",
+                  boxShadow: "0 4px 4px rgb(0 0 0 / 8%)",
+                }}
+              >
+                <div class="job-desc-title">
+                  <img src="https://picsum.photos/50/50" alt="company-logo" />
+                  <div>
+                    <h6 className="ps-3">
+                      <b>
+                        Amazon Grocery Fresh Associate - Up To $3,000 Sign-On
+                        Bonus & bonus
+                      </b>
+                    </h6>
+                    <span className="p-3">City, State</span>
+                  </div>
+                </div>
+                <button
+                  className="submit-btn ms-2"
+                  style={{
+                    background: "#085ff7",
+                    fontSize: "18px",
+                    width: "fit-content",
+                    padding: "0 20px",
+                  }}
+                >
+                  Apply on company site
+                </button>
               </div>
-              <div className="job-desc p-2">
+              <div className="job-desc p-4">
                 <h6>
                   <b>Job Overview</b>
                 </h6>

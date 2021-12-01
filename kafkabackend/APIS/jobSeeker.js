@@ -42,9 +42,17 @@ async function getJobSearchResults(body, callback) {
 async function getCompanyReviews(body, callback) {
   try {
     let sortprops = {};
-    let filterprops = {
-      status: { $in: [1, 2] },
-    };
+    let filterprops = {};
+    if (body.params?.isFeatured) {
+      filterprops = {
+        status: { $in: [1, 2] },
+      };
+    } else {
+      filterprops = {
+        status: { $in: [1, 2] },
+      };
+    }
+
     let filteredKey;
     if (body.params?.filter) {
       filteredKey = JSON.parse(body.params?.filter);
@@ -84,7 +92,7 @@ async function getCompanyReviews(body, callback) {
       sortprops.date = -1;
     }
 
-    let pageNo = body.params.pageNo;
+    let pageNo = body.params.pageNo == undefined ? 1 : body.params.pageNo;
     let limit = 5;
     let skip = (pageNo - 1) * limit;
 

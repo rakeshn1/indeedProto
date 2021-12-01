@@ -1,7 +1,6 @@
 import React from "react";
 import "../../../styles/companyStyles.css";
 import Select from "../../common/Select";
-import Input from "../../common/Input";
 import ReviewCard from "./ReviewCard";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
@@ -58,72 +57,7 @@ class Reviews extends React.Component {
             </Link>
           </button>
         </div>
-        {/* <div className="p-3 rounded-corners" style={{ background: "#f3f2f1" }}>
-          {/* <div className="d-flex flex-row justify-content-between flex-wrap">
-            <Select
-              label="Job Title"
-              id="jobTitle"
-              name="jobTitle"
-              placeholder="All"
-              options={["industry", "amazon pharmacy", "Amazon Inc."]}
-              className="me-2 medium rounded-corners"
-              labelclass="label"
-              required
-              onChange={this.filterByJobTitle}
-            />
-            <Select
-              label="Location"
-              id="location"
-              name="location"
-              options={[1, 2, 2, 4]}
-              className="medium rounded-corners"
-              labelclass="label"
-              required
-            />
-          </div> */}
-        {/* <div>
-            <span className="side-heading mt-5">
-              <b>Ratings by category</b>
-            </span>
-            <div className="d-flex flex-row justify-content-between mt-3 flex-wrap">
-              <div className="rounded-pill me-1">
-                <span className="me-1">3.3</span>
-                <span className="me-1">
-                  <i class="fa fa-star"></i>
-                </span>
-                <span>Work-Life Balance</span>
-              </div>
-              <div className="rounded-pill me-1">
-                <span className="me-1">3.3</span>
-                <span className="me-1">
-                  <i class="fa fa-star"></i>
-                </span>
-                <span>Pay & Benefits</span>
-              </div>
-              <div className="rounded-pill me-1">
-                <span className="me-1">3.3</span>
-                <span className="me-1">
-                  <i class="fa fa-star"></i>
-                </span>
-                <span>Job Security & Advancement</span>
-              </div>
-              <div className="rounded-pill me-1">
-                <span className="me-1">3.3</span>
-                <span className="me-1">
-                  <i class="fa fa-star"></i>
-                </span>
-                <span>Management</span>
-              </div>
-              <div className="rounded-pill ">
-                <span className="me-1">3.3</span>
-                <span className="me-1">
-                  <i class="fa fa-star"></i>
-                </span>
-                <span>Culture</span>
-              </div>
-            </div>
-          </div>
-        </div>  */}
+
         <div
           className="p-3 rounded-corners mt-1 d-flex flex-row justify-content-between flex-wrap"
           style={{ background: "#f3f2f1" }}
