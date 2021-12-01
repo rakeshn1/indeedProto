@@ -30,6 +30,7 @@ import EmployerTopNavbar from "./components/common/EmployerTopNavBar";
 import EmployerReviews from "./components/Employer/EmployerReviews";
 import EmployerReports from "./components/Employer/EmployerReports";
 import EmployerJobPostings from "./components/Employer/EmployerJobPostings";
+import ViewEmployerJobs from "./components/Employer/ViewEmployerJobs";
 import EmployerApplicants from "./components/Employer/EmployerApplicants";
 import CompanyDetails from "./components/Employer/CompanyDetails";
 import EmployerDetails from "./components/Employer/EmployerDetails";
@@ -41,8 +42,8 @@ import Logout from "./components/logout";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import CompanyProfilePage from "./components/Admin/CompanyProfilePage";
 import AnalyticsDashboard from "./components/Admin/AnalyticsDashboard";
-import AddJobs from "./components/Employer/AddJobs"
-import ViewJobs from "./components/Employer/ViewEmployerJobs"
+import AddJobs from "./components/Employer/AddJobs";
+import ViewJobs from "./components/Employer/ViewEmployerJobs";
 import JobPostingsHeader from "./components/Employer/JobPostingsHeader";
 import MessagesLandingPage from "./components/common/Messages";
 
@@ -135,7 +136,11 @@ function App() {
           path="/company/addReview"
           component={AddReview}
         ></JobSeekerRoute>
-
+        {/* <EmployeerRoute
+          exact
+          path="/employer"
+          component={EmployerReviews}
+        ></EmployeerRoute> */}
         <EmployeerRoute
           exact
           path="/employer/reviews"
@@ -144,7 +149,7 @@ function App() {
         <EmployeerRoute
           exact
           path="/employer/jobPostings"
-          component={EmployerJobPostings}
+          component={ViewEmployerJobs}
         ></EmployeerRoute>
         <EmployeerRoute
           exact
@@ -168,7 +173,7 @@ function App() {
         ></EmployeerRoute>
         <EmployeerRoute
           exact
-          path="/employer/companyDetails"
+          path="/employer"
           component={CompanyDetails}
         ></EmployeerRoute>
         {!jwt && (
@@ -196,24 +201,27 @@ function App() {
           path="/jobSeeker/myJobs/appliedJobs"
           component={JobSeekerAppliedJobs}
         ></JobSeekerRoute>
-        {jwt && (<Route
-          exact
-          path="/chat"
-          component={MessagesLandingPage}
-        ></Route>)}
+        {jwt && (
+          <Route exact path="/chat" component={MessagesLandingPage}></Route>
+        )}
         <JobSeekerRoute
           path="/jobSeeker/myReviews"
           component={JobSeekerMyReviews}
         ></JobSeekerRoute>
         <AdminRoute path="/admin" component={AdminDashboard}></AdminRoute>
-        <AdminRoute path="/companyProfilePage" component={CompanyProfilePage}></AdminRoute>
-        <AdminRoute path="/analyticsDashboard" component={AnalyticsDashboard}></AdminRoute>
+        <AdminRoute
+          path="/companyProfilePage"
+          component={CompanyProfilePage}
+        ></AdminRoute>
+        <AdminRoute
+          path="/analyticsDashboard"
+          component={AnalyticsDashboard}
+        ></AdminRoute>
 
         <JobSeekerRoute
           path="/jobSearchResults"
           component={JobSearchResults}
         ></JobSeekerRoute>
-
 
         <Route
           exact
@@ -235,8 +243,8 @@ function App() {
         {/* <Redirect from="/" exact to="/jobSeekerLandingPage" /> */}
         <Redirect from="/" exact to="/home" />
         <Redirect from="/jobSeeker" exact to="/jobSeekerLandingPage" />
-      </Switch >
-    </div >
+      </Switch>
+    </div>
   );
 }
 
