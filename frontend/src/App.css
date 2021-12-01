@@ -10,6 +10,7 @@ body {
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+  /* color: #f04c4c; */
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -105,15 +106,12 @@ body {
   justify-content: space-between;
 }
 
-
-
 /* .search-wrapper {
   display: flex;
   justify-content: space-between;
   margin-top: 5%;
 } */
 .dropdown-menu {
-
   /* box-shadow: "1px 1px 25x black"; */
   width: 250px;
 }
@@ -164,7 +162,6 @@ body {
   border: 0px;
 }
 
-
 .link-connector {
   /* background-color: #085ff7; */
   margin-top: 20px;
@@ -177,17 +174,13 @@ body {
   text-decoration: none;
   /* color: #2557a7; */
   outline: none;
-  font-family: 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+  font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 16px;
   font-weight: 600;
-
-
 }
 
 .link-connector p {
   text-decoration: none;
-
-
 }
 
 .active {
@@ -374,9 +367,7 @@ body {
   border: 1px solid #d4d2d0;
   margin-left: auto;
   margin-right: auto;
-
 }
-
 
 .sign-in-box-wrapper h4 {
   font-size: 22px;
@@ -406,13 +397,11 @@ body {
 .sign-in-box-wrapper p {
   font-size: 14px;
   color: #696969;
-
 }
 
 .role-selection-wrapper {
   margin-bottom: 50px;
 }
-
 
 .name-display {
   width: 40%;
@@ -442,7 +431,6 @@ body {
   flex-direction: column;
   justify-content: center;
   text-align: center;
-
 }
 
 .profile-flex-box {
@@ -457,10 +445,10 @@ body {
 
 .profile-wrapper {
   /* background-color: yellow; */
-
 }
 
-.resume-upload button, .resume-upload label {
+.resume-upload button,
+.resume-upload label {
   border: 2px solid #085ff7;
   color: #085ff7;
   font-weight: 700;
@@ -472,7 +460,8 @@ body {
   margin: 20px 0px;
 }
 
-.resume-upload button:hover, .resume-upload label:hover {
+.resume-upload button:hover,
+.resume-upload label:hover {
   color: white;
   background-color: #085ff7;
 }
@@ -491,7 +480,6 @@ body {
   /* background-color: greenyellow; */
   border-bottom: 1px solid silver;
 }
-
 
 .my-jobs-card-left {
   display: flex;

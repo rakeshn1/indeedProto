@@ -2,7 +2,7 @@ const { Company } = require("../models/company");
 const { Jobs } = require("../models/jobs");
 const { Reviews } = require("../models/review");
 const { SalaryReview } = require("../models/salaryReview");
-const { JobApplications } = require("../models/jobApplications");
+const { JobApplication } = require("../models/jobApplications");
 const { User } = require("../models/user");
 const mongoose = require("mongoose");
 const _ = require("lodash");
@@ -86,7 +86,7 @@ const getListOfAllReviewsExceptUnApproved = async (msg, callback) => {
     const listOfReviews = await Reviews.find({
       status: { $ne: 0 },
       companyId: companyId,
-    }).select(["review", "reviewSummary"]);
+    }).select(["review", "reviewSummary", "status"]);
     res.status = 200;
     res.data = listOfReviews;
     callback(null, res);
@@ -104,7 +104,7 @@ const getJobStats = async (msg, callback) => {
     const company_Id = msg.params.companyId;
     console.log("companyId: ", company_Id);
     let jobStats = [];
-    jobStats = await JobApplications.aggregate([
+    jobStats = await JobApplication.aggregate([
       {
         $match: {
           companyId: mongoose.Types.ObjectId(company_Id),

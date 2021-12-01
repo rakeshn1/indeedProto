@@ -12,6 +12,10 @@ export async function getCompanyNames(term) {
   return await http.get(apiEndpoint + `/getCompanyNames/${term}`);
 }
 
+export async function getCompaniesByName(term) {
+  return await http.get(apiEndpoint + `/getCompaniesByName/${term}`);
+}
+
 export async function getJobTitles(term) {
   return await http.get(apiEndpoint + `/getJobTitles/${term}`);
 }

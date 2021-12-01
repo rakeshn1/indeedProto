@@ -8,23 +8,24 @@ const apiEndpoint = apiURL + "/admin";
 
 // const tokenKey = "token.indeed";
 
-
 export async function getNumberOfReviewsPerDay() {
-    // console.log(apiURL + "/api/handleJobSaveUnsave/")
-    // console.log("payload")
-    return await http.get(apiEndpoint + `/numberOfReviewsPerDay`);
+  // console.log(apiURL + "/api/handleJobSaveUnsave/")
+  // console.log("payload")
+  return await http.get(apiEndpoint + `/numberOfReviewsPerDay`);
 }
 
 export async function getTopfiveReviewedCompanies() {
-    // console.log(apiURL + "/api/handleJobSaveUnsave/")
-    // console.log("payload")
-    return await http.get(apiEndpoint + `/topfiveReviewedCompanies`);
+  // console.log(apiURL + "/api/handleJobSaveUnsave/")
+  // console.log("payload")
+  return await http.get(apiEndpoint + `/topfiveReviewedCompanies`);
 }
 
 export async function topfiveJobSeekersBasedOnAcceptedReviews() {
-    // console.log(apiURL + "/api/handleJobSaveUnsave/")
-    // console.log("payload")
-    return await http.get(apiEndpoint + `/topfiveJobSeekersBasedOnAcceptedReviews`);
+  // console.log(apiURL + "/api/handleJobSaveUnsave/")
+  // console.log("payload")
+  return await http.get(
+    apiEndpoint + `/topfiveJobSeekersBasedOnAcceptedReviews`
+  );
 }
 
 // export async function topFiveCompaniesBasedOnAverageRating() {
@@ -34,28 +35,41 @@ export async function topfiveJobSeekersBasedOnAcceptedReviews() {
 // }
 
 export async function topTenCeosApproved() {
-    // console.log(apiURL + "/api/handleJobSaveUnsave/")
-    // console.log("payload")
-    return await http.get(apiEndpoint + `/topTenCeosApproved`);
+  // console.log(apiURL + "/api/handleJobSaveUnsave/")
+  // console.log("payload")
+  return await http.get(apiEndpoint + `/topTenCeosApproved`);
 }
 export async function getListOfAllReviewsExceptUnApproved(payload) {
-    // console.log(apiURL + "/api/handleJobSaveUnsave/")
-    console.log("payload", payload)
-    return await http.get(apiEndpoint + `/getListOfAllReviewsExceptUnApproved/${payload.companyId}`);
+  // console.log(apiURL + "/api/handleJobSaveUnsave/")
+  console.log("payload", payload);
+  return await http.get(
+    apiEndpoint + `/getListOfAllReviewsExceptUnApproved/${payload.companyId}`
+  );
+}
+
+export async function getJobStats(payload) {
+  // console.log(apiURL + "/api/handleJobSaveUnsave/")
+  console.log("payload", payload);
+  return await http.get(apiEndpoint + `/getJobStats/${payload.companyId}`);
 }
 
 export async function getAllUnapprovedReviews() {
-    // console.log(apiURL + "/api/handleJobSaveUnsave/")
-    // console.log("payload")
-    return await http.get(apiEndpoint + `/getUnapprovedReviews`);
+  // console.log(apiURL + "/api/handleJobSaveUnsave/")
+  // console.log("payload")
+  return await http.get(apiEndpoint + `/getUnapprovedReviews`);
 }
 export async function updateReviewStatus(payload) {
-    // console.log(apiURL + "/api/handleJobSaveUnsave/")
-    console.log("payload123123123", payload)
-    return await http.post(apiEndpoint + `/updateStatusOfReview`, payload);
+  // console.log(apiURL + "/api/handleJobSaveUnsave/")
+  console.log("payload123123123", payload);
+  return await http.post(apiEndpoint + `/updateStatusOfReview`, payload);
 }
+
+export async function topFiveCompaniesBasedOnAverageRating() {
+  return await http.get(apiEndpoint + `/topFiveCompaniesBasedOnAverageRating`);
+}
+
 export async function updatePhotoStatus() {
-    // console.log(apiURL + "/api/handleJobSaveUnsave/")
-    // console.log("payload")
-    return await http.put(apiEndpoint + `/updateStatusOfPhoto`);
+  // console.log(apiURL + "/api/handleJobSaveUnsave/")
+  // console.log("payload")
+  return await http.put(apiEndpoint + `/updateStatusOfPhoto`);
 }
