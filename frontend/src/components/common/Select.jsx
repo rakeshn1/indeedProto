@@ -13,7 +13,9 @@ class Select extends React.Component {
           {this.props.required && <span className="required">*</span>}
         </p>
         <select {...this.props}>
-          <option value="">{this.props.placeholder}</option>
+          {this.props.placeholder && (
+            <option value="">{this.props.placeholder}</option>
+          )}
           {this.props.options?.map((opt) => (
             <option key={opt} value={opt}>
               {opt}
