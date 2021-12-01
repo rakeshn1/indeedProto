@@ -1,51 +1,80 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
+import { getReviews } from "../../services/searchService";
 import JobSeekerCompanyRow from "./JobSeekerCompanyRow";
 import SearchBox from "../common/SearchBox";
 import Button from "../common/Button";
+import {
+  getCompanyNamesAndJobTitles,
+  getLocations,
+} from "../../services/searchService";
 
 class JobSeekerReviewsSearchPage extends React.Component {
   state = {
-    companyName: "",
+    companyNameAndJobTitle: "",
     location: "",
-    newCompanyName: "Amazon2",
-    newLocation: "USA2",
+    companyNameAndJobTitleSearchResults: [],
+    locationSearchResults: [],
+    newCompanyNameAndJobTitle: "",
+    newLocation: "",
     data: {
-      companyName: "Amazon Play",
+      companyNameAndJobTitle: "Amazon Play",
       learningScore: "3.5",
       description:
         "Our mission is to be Earth's most customer-centric company.",
       logo: "https://www.laurel-group.com/wp-content/uploads/amazon-logo-square-300x300.png",
     },
-    newData: "",
+    companyData: [],
   };
 
   //   UNSAFE_componentWillReceiveProps = () => {
   //     this.componentDidMount();
   //   };
 
+  updateCompanyNameAndJobTitle = async (newCompanyNameAndJobTitle) => {
+    if (newCompanyNameAndJobTitle) {
+      // console.log("if companyname: ", typeof newCompanyNameAndJobTitle);
+      const { data: companyNameAndJobTitleSearchResults } =
+        await getCompanyNamesAndJobTitles(newCompanyNameAndJobTitle);
+      console.log(
+        "companyNameAndJobTitleSearchResults: ",
+        companyNameAndJobTitleSearchResults
+      );
+      await this.setState({ companyNameAndJobTitleSearchResults });
+    }
+
+    await this.setState({
+      newCompanyNameAndJobTitle,
+    });
+  };
+
+  updateLocation = async (newLocation) => {
+    if (newLocation) {
+      const { data: locationSearchResults } = await getLocations(newLocation);
+      this.setState({ locationSearchResults });
+    }
+
+    this.setState({ newLocation });
+  };
+
   apiCall = async () => {
-    const { companyName, location } = this.props.match.params;
+    let { companyNameAndJobTitle, location } = this.props.match.params;
+    console.log("companyNameAndJobTitle: ", companyNameAndJobTitle);
+    companyNameAndJobTitle =
+      companyNameAndJobTitle === " " ? "" : companyNameAndJobTitle;
+    location = location === " " ? "" : location;
+    const { data: companyData } = await getReviews(
+      companyNameAndJobTitle,
+      location
+    );
+    this.setState({ companyData });
     this.setState({
-      companyName,
+      companyNameAndJobTitle,
       location,
-      newCompanyName: companyName,
+      newCompanyNameAndJobTitle: companyNameAndJobTitle,
       newLocation: location,
     });
-    // console.log(this.props.match);
-    // await this.setState({
-    //   companyName,
-    //   location,
-    //   //   newCompanyName: companyName,
-    //   //   newLocation: location,
-    // });
-    // console.log(this.state);
-    // this.setState({
-    //   newData: this.state.newData + "1t",
-    //   newCompanyName: this.props.match.params.companyName,
-    //   newLocation: this.props.match.params.newLocation,
-    // });
-    // console.log();
+
     console.log("API called");
   };
 
@@ -56,12 +85,13 @@ class JobSeekerReviewsSearchPage extends React.Component {
 
   componentDidUpdate(prevProps) {
     console.log(
-      this.props.match.params.newLocation,
-      prevProps.match.params.newLocation
+      "HIIII: ",
+      this.props.match.params.location,
+      prevProps.match.params.location
     );
     if (
-      this.props.match.params.companyName !==
-        prevProps.match.params.companyName ||
+      this.props.match.params.companyNameAndJobTitle !==
+        prevProps.match.params.companyNameAndJobTitle ||
       this.props.match.params.location !== prevProps.match.params.location
     ) {
       this.apiCall();
@@ -72,21 +102,27 @@ class JobSeekerReviewsSearchPage extends React.Component {
     // return (
     //   <Redirect
     //     to={{
-    //       pathname: `/jobSeeker/reviews/search/${this.state.newCompanyName}/${this.state.newLocation}`,
+    //       pathname: `/jobSeeker/reviews/search/${this.state.newcompanyNameAndJobTitle}/${this.state.newLocation}`,
     //     }}
     //   ></Redirect>
     // );
-    this.props.history.push(
-      `/jobSeeker/reviews/search/${this.state.newCompanyName}/${this.state.newLocation}`
-    );
+
+    const companyNameAndJobTitle = this.state.newCompanyNameAndJobTitle
+      ? this.state.newCompanyNameAndJobTitle
+      : " ";
+    const location = this.state.newLocation ? this.state.newLocation : " ";
+
+    const url = `/jobSeeker/reviews/search/${companyNameAndJobTitle}/${location}`;
+
+    this.props.history.push(url);
   };
 
   render() {
     console.log("RENDER CALLED");
-    let dataRow = [];
-    for (let i = 0; i < 50; i++) {
-      dataRow.push(this.state.data);
-    }
+    // let dataRow = [];
+    // for (let i = 0; i < 50; i++) {
+    //   dataRow.push(this.state.data);
+    // }
     return (
       <div
         className="container"
@@ -114,9 +150,9 @@ class JobSeekerReviewsSearchPage extends React.Component {
               Company name or job title
             </label>
             <SearchBox
-              onChange={(companyName) => {
-                this.setState({ newCompanyName: companyName });
-              }}
+              onChange={(companyNameAndJobTitle) =>
+                this.updateCompanyNameAndJobTitle(companyNameAndJobTitle)
+              }
               placeholder="Job title, keywords, or company"
               // innerLabel="What"
               icon={
@@ -136,8 +172,22 @@ class JobSeekerReviewsSearchPage extends React.Component {
                 height: "40px",
                 width: "90%",
               }}
-              value={this.state.newCompanyName}
+              list="companyNamesAndJobTitles1"
+              value={this.state.newCompanyNameAndJobTitle}
             />
+            <datalist id="companyNamesAndJobTitles1">
+              {this.state.companyNameAndJobTitleSearchResults.map((data) => (
+                <option
+                  key={data}
+                  value={data}
+                  onClick={(e) =>
+                    this.updateCompanyNameAndJobTitle(e.target.textContent)
+                  }
+                >
+                  {data}
+                </option>
+              ))}
+            </datalist>
           </div>
           <div style={{ width: "350px" }}>
             <label
@@ -153,9 +203,7 @@ class JobSeekerReviewsSearchPage extends React.Component {
               City, state, or zip (optional)
             </label>
             <SearchBox
-              onChange={(location) => {
-                this.setState({ newLocation: location });
-              }}
+              onChange={(location) => this.updateLocation(location)}
               placeholder="Job title, keywords, or company"
               // innerLabel="What"
               icon={
@@ -175,8 +223,20 @@ class JobSeekerReviewsSearchPage extends React.Component {
                 height: "40px",
                 width: "90%",
               }}
+              list="locations1"
               value={this.state.newLocation}
             />
+            <datalist id="locations1">
+              {this.state.locationSearchResults.map((data) => (
+                <option
+                  key={data}
+                  value={data}
+                  onClick={(e) => this.updateLocation(e.target.textContent)}
+                >
+                  {data}
+                </option>
+              ))}
+            </datalist>
           </div>
           {/* <button
             className="btn btn-primary"
@@ -194,7 +254,7 @@ class JobSeekerReviewsSearchPage extends React.Component {
           />
           {/* <Link
             className="btn btn-primary"
-            to={`/jobSeeker/reviews/search/${this.state.newCompanyName}/${this.state.newLocation}`}
+            to={`/jobSeeker/reviews/search/${this.state.newcompanyNameAndJobTitle}/${this.state.newLocation}`}
           >
             Find Companies
           </Link> */}
@@ -210,10 +270,10 @@ class JobSeekerReviewsSearchPage extends React.Component {
             }}
           >
             Popular companies{" "}
-            {this.state.companyName !== " " && (
-              <span>for {this.state.companyName}</span>
+            {this.state.companyNameAndJobTitle !== "" && (
+              <span>for {this.state.companyNameAndJobTitle}</span>
             )}
-            {this.state.location !== " " && (
+            {this.state.location !== "" && (
               <span> in {this.state.location}</span>
             )}
           </h2>
@@ -231,9 +291,10 @@ class JobSeekerReviewsSearchPage extends React.Component {
         </div>
 
         <div>
-          {dataRow.map((row) => {
-            return <JobSeekerCompanyRow {...row}></JobSeekerCompanyRow>;
-          })}
+          {this.state.companyData &&
+            this.state.companyData.map((row) => {
+              return <JobSeekerCompanyRow {...row}></JobSeekerCompanyRow>;
+            })}
         </div>
       </div>
     );

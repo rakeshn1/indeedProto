@@ -2,9 +2,21 @@ import React from "react";
 import { Link } from "react-router-dom";
 import CompanyDetailsCard from "./common/CompanyDetailsCard";
 import ReviewCard from "./ReviewCard";
+import { titleCase } from "title-case";
+import { format } from "date-fns";
+import { getCompanyReviews } from "../../../services/jobSeeker";
 
 class CompanySnapShot extends React.Component {
+  state = {
+    reviews: undefined,
+  };
+  async componentDidMount() {
+    let params = { isFeatured: true };
+    const res = await getCompanyReviews("619ebb543ee1aa8bb08188a3", params);
+    this.setState({ reviews: res.data });
+  }
   render() {
+    console.log(this.props);
     return (
       <div className="p-3 mt-5">
         <div>
@@ -12,9 +24,15 @@ class CompanySnapShot extends React.Component {
             <b>About the company</b>
           </h4>
           <div className="mt-3 d-flex flex-row flex-wrap">
-            <CompanyDetailsCard title="CEO" content="Andrew Jassy" />
+            <CompanyDetailsCard
+              title="CEO"
+              content={this.props.companyDetails?.ceo}
+            />
 
-            <CompanyDetailsCard title=" Founded" content="1994" />
+            <CompanyDetailsCard
+              title=" Founded"
+              content={this.props.companyDetails?.founded}
+            />
 
             <CompanyDetailsCard
               title="CompanySize"
@@ -26,17 +44,11 @@ class CompanySnapShot extends React.Component {
             />
             <CompanyDetailsCard
               title="Industry"
-              content="Information Technology"
+              content={this.props.companyDetails?.industry}
             />
           </div>
-          <p className="mt-3">
-            At Amazon, you'll discover challenges that excite you as you develop
-            professionally and explore many career paths based on your interests
-            and abilities. We reward ambitious, talented individuals with a work
-            environment that fosters teamwork and collaboration while
-            encouraging innovative ideas and fresh thinking.
-          </p>
-          <Link to="/about" className="link">
+          <p className="mt-3">{this.props.companyDetails?.description}</p>
+          <Link to="/companydetails/about" className="link">
             <span style={{ color: "#2557A7" }}>
               <b>Learn more </b>
             </span>
@@ -46,36 +58,33 @@ class CompanySnapShot extends React.Component {
           <h4 className="mb-3">
             <b> Our Mission</b>
           </h4>
-          <p>
-            What unites Amazonians across teams and geographies is that we are
-            all striving to delight our customers and make their lives easier.
-            The scope and scale of our mission drives us to seek diverse
-            perspectives, be resourceful, and navigate through ambiguity.
-            Inventing and delivering things that were never thought possible
-            isn't easy, but we embrace this challenge every day. By working
-            together on behalf of our customers, we are building the future one
-            innovative product, service, and idea at a time. Are you ready to
-            embrace the challenge? Come build the future with us.
-          </p>
+          <p>{this.props.companyDetails?.mission}</p>
         </div>
         <div className="mt-5 ">
           <h4 className="mb-3">
             <b>Reviews</b>
           </h4>
-          <ReviewCard
-            rating={"5.0"}
-            role="Software Engineer"
-            city="San Francisco"
-            state="CA"
-            reviewedOn={new Date()}
-            pros={"Work environment"}
-            cons={
-              "Advancement is tough, moving beyond customer care is nearly impossible"
-            }
-            markedAsHelpful={23}
-            markedAsNotHelpful={10}
-            showHelpfulness={false}
-          />
+          {this.state.reviews &&
+            this.state.reviews?.map((review) => {
+              return (
+                <ReviewCard
+                  reviewSummary={review.reviewSummary}
+                  rating={review.rating}
+                  review={review.review}
+                  role={review.jobTitle}
+                  city={review.jobLocation}
+                  state="CA"
+                  reviewedOn={format(
+                    new Date(Date.parse(review.date)),
+                    "LLL do, yyyy"
+                  )}
+                  pros={review.pros}
+                  cons={review.cons}
+                  showHelpfulness={false}
+                  reviewId={review._id}
+                />
+              );
+            })}
         </div>
       </div>
     );

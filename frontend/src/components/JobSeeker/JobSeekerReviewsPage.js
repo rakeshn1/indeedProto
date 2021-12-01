@@ -1,15 +1,62 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import SearchBox from "../common/SearchBox";
+import {
+  getCompanyNamesAndJobTitles,
+  getLocations,
+} from "../../services/searchService";
 import Button from "../common/Button";
 
 class JobSeekerReviewsPage extends React.Component {
   state = {
-    companyName: " ",
-    location: " ",
+    companyNameAndJobTitle: "",
+    location: "",
+    companyNameAndJobTitleSearchResults: [],
+    locationSearchResults: [],
+  };
+
+  updateCompanyNameAndJobTitle = async (companyNameAndJobTitle) => {
+    if (companyNameAndJobTitle) {
+      console.log("if companyname: ", typeof companyNameAndJobTitle);
+      const { data: companyNameAndJobTitleSearchResults } =
+        await getCompanyNamesAndJobTitles(companyNameAndJobTitle);
+      console.log(
+        "companyNameAndJobTitleSearchResults: ",
+        companyNameAndJobTitleSearchResults
+      );
+      await this.setState({ companyNameAndJobTitleSearchResults });
+    }
+
+    await this.setState({
+      companyNameAndJobTitle,
+    });
+  };
+
+  updateLocation = async (location) => {
+    if (location) {
+      const { data: locationSearchResults } = await getLocations(location);
+      this.setState({ locationSearchResults });
+    }
+
+    this.setState({ location });
   };
 
   render() {
+    // let url = `/jobSeeker/reviews/search/`;
+    // if (this.state.companyNameAndJobTitle) {
+    //   url += `?companyNameAndJobTitle=${this.state.companyNameAndJobTitle}`;
+    // }
+    // if (this.state.location) {
+    //   url += `&location=${this.state.location}`;
+    // }
+
+    const companyNameAndJobTitle = this.state.companyNameAndJobTitle
+      ? this.state.companyNameAndJobTitle
+      : " ";
+    const location = this.state.location ? this.state.location : " ";
+
+    const url = `/jobSeeker/reviews/search/${companyNameAndJobTitle}/${location}`;
+
     return (
       <div
         className="container"
@@ -58,8 +105,8 @@ class JobSeekerReviewsPage extends React.Component {
               Company name or job title
             </label>
             <SearchBox
-              onChange={(companyName) => {
-                this.setState({ companyName });
+              onChange={(companyNameAndJobTitle) => {
+                this.updateCompanyNameAndJobTitle(companyNameAndJobTitle);
               }}
               placeholder="Job title, keywords, or company"
               // innerLabel="What"
@@ -80,8 +127,22 @@ class JobSeekerReviewsPage extends React.Component {
                 height: "40px",
                 width: "90%",
               }}
-              value={this.state.companyName}
+              list="companyNamesAndJobTitles"
+              value={this.state.companyNameAndJobTitle}
             />
+            <datalist id="companyNamesAndJobTitles">
+              {this.state.companyNameAndJobTitleSearchResults.map((data) => (
+                <option
+                  key={data}
+                  value={data}
+                  onClick={(e) =>
+                    this.updateCompanyNameAndJobTitle(e.target.textContent)
+                  }
+                >
+                  {data}
+                </option>
+              ))}
+            </datalist>
           </div>
           <div style={{ width: "350px" }}>
             <label
@@ -98,7 +159,7 @@ class JobSeekerReviewsPage extends React.Component {
             </label>
             <SearchBox
               onChange={(location) => {
-                this.setState({ location });
+                this.updateLocation(location);
               }}
               placeholder="Job title, keywords, or company"
               // innerLabel="What"
@@ -119,13 +180,25 @@ class JobSeekerReviewsPage extends React.Component {
                 height: "40px",
                 width: "90%",
               }}
+              list="locations"
               value={this.state.location}
             />
+            <datalist id="locations">
+              {this.state.locationSearchResults.map((data) => (
+                <option
+                  key={data}
+                  value={data}
+                  onClick={(e) => this.updateLocation(e.target.textContent)}
+                >
+                  {data}
+                </option>
+              ))}
+            </datalist>
           </div>
 
           <Link
             className="btn"
-            to={`/jobSeeker/reviews/search/${this.state.companyName}/${this.state.location}`}
+            to={url}
             style={{
               backgroundColor: "#2557a7",
               color: "white",
@@ -133,6 +206,7 @@ class JobSeekerReviewsPage extends React.Component {
               marginTop: "27px",
               marginBottom: "2px",
               borderRadius: "10px",
+              height: "40px",
             }}
           >
             Find Companies

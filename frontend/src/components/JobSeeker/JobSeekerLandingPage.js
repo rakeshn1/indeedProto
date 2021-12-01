@@ -1,26 +1,69 @@
-import React, { useState } from 'react'
-import Button from '../common/Button'
-import SearchBox from '../common/SearchBox'
-import JobSearchResults from './JobSearchResults'
+import React, { useState } from 'react';
+import Button from '../common/Button';
+import SearchBox from '../common/SearchBox';
+import JobSearchResults from './JobSearchResults';
+// import { apiURL } from '../../config';
+// import http from '../../services/httpService';
+import { getJobSearchResults } from '../../services/jobSeeker'
+import { NavLink } from 'react-router-dom';
+import { getCompanyNamesAndJobTitles, getLocations } from '../../services/searchService';
+
 
 const JobSeekerLandingPage = () => {
 
     const [whatText, setWhatText] = useState()
     const [whereText, setWhereText] = useState()
-    const onWhatChangeHandler = (value) => {
+    const [searchResults, setSearchResults] = useState()
+    const [showResults, setShowResults] = useState(false);
+    const [whatTextResults, setWhatTextResults] = useState([])
+    const [whereTextResults, setWhereTextResults] = useState([])
+
+    const onWhatChangeHandler = async (value) => {
         console.log(value);
         setWhatText(value)
 
+        if (whatText?.length > 1) {
+            const response = await getCompanyNamesAndJobTitles(whatText);
+            console.log("whatList", response.data);
+            setWhatTextResults(response.data)
+        }
+
     }
-    const onWhereChangeHandler = (value) => {
+    const onWhereChangeHandler = async (value) => {
         console.log(value);
         setWhereText(value)
 
+        if (whereText?.length > 1) {
+            const response = await getLocations(whereText);
+            console.log("where", response.data);
+            setWhereTextResults(response.data)
+        }
     }
 
-    const onButtonClickHandler = () => {
+
+
+
+    const onButtonClickHandler = async () => {
         //call to get jobs
         //api call with parameters what text value and where text value
+        const payload = {
+            what: whatText,
+            where: whereText
+        }
+
+        try {
+            const result = await getJobSearchResults(payload);
+            console.log("RR", result);
+            setSearchResults(result.data);
+            console.log("done")
+        }
+        catch {
+            console.log("error")
+        }
+
+        setShowResults(true);
+        console.log("what", whatText);
+        console.log("where", whereText);
     }
 
 
@@ -39,7 +82,21 @@ const JobSeekerLandingPage = () => {
                         width: "40%"
                     }}
                     value={whatText}
+                    list="whatTextResults"
                 />
+                <datalist id="whatTextResults">
+                    {whatTextResults.map((data) => (
+                        <option
+                            key={data}
+                            value={data}
+                            onClick={(e) =>
+                                this.onWhatChangeHandler(e.target.textContent)
+                            }
+                        >
+                            {data}
+                        </option>
+                    ))}
+                </datalist>
                 <SearchBox
                     onChange={onWhereChangeHandler}
                     placeholder="City, state, zip code, or “remote”"
@@ -52,15 +109,41 @@ const JobSeekerLandingPage = () => {
                         width: "40%",
                     }}
                     value={whereText}
+                    list="whereTextResults"
                 />
+                <datalist id="whereTextResults">
+                    {whereTextResults.map((data) => (
+                        <option
+                            key={data}
+                            value={data}
+                            onClick={(e) =>
+                                this.onWhereChangeHandler(e.target.textContent)
+                            }
+                        >
+                            {data}
+                        </option>
+                    ))}
+                </datalist>
                 <Button
                     text="Find Jobs"
                     onClick={onButtonClickHandler}
-                // style={{}}
                 />
 
             </div>
-            <JobSearchResults />
+            <div >
+                <p className="link-connector"><NavLink style={{ textDecoration: "none", color: "#2557a7" }} to="/jobSeekerProfile" >Post your resume</NavLink> It only takes a few seconds</p>
+            </div>
+            <div >
+                <p className="link-connector"><NavLink style={{ textDecoration: "none", color: "#2557a7" }} to="/employer/jobPostings" > Employers: Post a job </NavLink> - yout next hire is here</p>
+            </div>
+            <div style={{ marginTop: "10px", borderBottom: "1px solid silver" }}></div>
+            <div>
+
+                {showResults === true ? <JobSearchResults searchResults={searchResults} /> : ""}
+
+            </div>
+
+
         </div>
     )
 }
