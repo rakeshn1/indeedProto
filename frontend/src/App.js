@@ -195,11 +195,11 @@ function App() {
         ></JobSeekerRoute>
         <JobSeekerRoute
           path="/jobSeeker/myJobs/savedJobs"
-          component={JobSeekerSavedJobs}
+          component={JobSeekerMyJobs}
         ></JobSeekerRoute>
         <JobSeekerRoute
           path="/jobSeeker/myJobs/appliedJobs"
-          component={JobSeekerAppliedJobs}
+          component={JobSeekerMyJobs}
         ></JobSeekerRoute>
         {jwt && (
           <Route exact path="/chat" component={MessagesLandingPage}></Route>
