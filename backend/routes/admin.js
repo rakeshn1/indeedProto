@@ -69,15 +69,15 @@ router.get("/numberOfReviewsPerDay", async (req, res) => {
   });
 });
 
-router.get("/numberOfReviewsPerDay", async (req, res) => {
-  const msg = {};
-  msg.path = "numberOfReviewsPerDay";
-  console.log("MSG = ADMIN: ", msg);
-  kafka.make_request("admin", msg, function (err, results) {
-    console.log("Results: ", results);
-    res.status(results.status).send(results.data);
-  });
-});
+// router.get("/numberOfReviewsPerDay", async (req, res) => {
+//   const msg = {};
+//   msg.path = "numberOfReviewsPerDay";
+//   console.log("MSG = ADMIN: ", msg);
+//   kafka.make_request("admin", msg, function (err, results) {
+//     console.log("Results: ", results);
+//     res.status(results.status).send(results.data);
+//   });
+// });
 
 router.get("/topfiveReviewedCompanies", async (req, res) => {
   const msg = {};

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { getNumberOfReviewsPerDay, getTopfiveReviewedCompanies, topfiveJobSeekersBasedOnAcceptedReviews, topTenCeosApproved } from '../../services/admin';
 import Chart from './Chart';
 
 const AnalyticsDashboard = () => {
     const [view, setView] = useState()
-    const [chartData, setChartData] = useState([{ '_id': 2021 - 11 - 29, "count": 21 }, { '_id': 2021 - 11 - 22, "count": 25 }, { '_id': 2021 - 11 - 24, "count": 34 }])
+    const [chartData, setChartData] = useState([])
     const [labels, setLabels] = useState([])
     const [data, setData] = useState([])
 
@@ -77,22 +78,24 @@ const AnalyticsDashboard = () => {
 
 
     useEffect(() => {
+        console.log("here")
         reviewsPerDay();
         topFiveMostReviewedCompanies();
         topFiveJobSeekersAcceptedReviews();
-        topFiveCompaniesAverageRating();
+        // topFiveCompaniesAverageRating();
         topTenCEOs();
-        topTenCompaniesViewsPerDay();
+        // topTenCompaniesViewsPerDay();
 
-    })
+    }, [])
+
     const reviewsPerDay = async () => {
 
-        // const repsonse = await numberOfReviewsPerDay()
-        // console.log("views per day data", response.data)
+        const response = await getNumberOfReviewsPerDay();
+        console.log("views per day data", response.data)
         // setChartData(response.data)
         let labels_list = []
         let data_list = []
-        chartData.map(i => {
+        response.data.map(i => {
             labels_list.push(i._id)
             data_list.push(i.count)
         })
@@ -104,13 +107,13 @@ const AnalyticsDashboard = () => {
 
     const topFiveMostReviewedCompanies = async () => {
 
-        // const repsonse = await topfiveReviewedCompanies()
-        // console.log("top Five Reviewed Companies", response.data)
+        const response = await getTopfiveReviewedCompanies()
+        console.log("top Five Reviewed Companies", response.data)
         // setChartData(response.data)
 
         let labels_list = []
         let data_list = []
-        chartData.map(i => {
+        response.data.map(i => {
             labels_list.push(i.name)
             data_list.push(i.count)
         })
@@ -121,14 +124,14 @@ const AnalyticsDashboard = () => {
 
     const topFiveJobSeekersAcceptedReviews = async () => {
 
-        // const repsonse = await topfiveJobSeekersBasedOnAcceptedReviews()
-        // console.log(" top five JobSeekers Based On Accepted Reviews", response.data)
+        const response = await topfiveJobSeekersBasedOnAcceptedReviews()
+        console.log(" top five JobSeekers Based On Accepted Reviews", response.data)
         // setChartData(response.data)
         let labels_list = []
         let data_list = []
-        chartData.map(i => {
+        response.data.map(i => {
             // console.log(i)
-            labels_list.push(i.firstName + " " + i.LastName)
+            labels_list.push(i.email)
             data_list.push(i.count)
         })
 
@@ -138,7 +141,7 @@ const AnalyticsDashboard = () => {
 
     const topFiveCompaniesAverageRating = async () => {
 
-        // const repsonse = await topFiveCompaniesBasedOnAverageRating()
+        // const response = await topFiveCompaniesBasedOnAverageRating()
         // console.log(" top Five Companies Based On Average Rating", response.data)
         // setChartData(response.data)
         let labels_list = []
@@ -156,12 +159,12 @@ const AnalyticsDashboard = () => {
 
     const topTenCEOs = async () => {
 
-        // const repsonse = await topTenCeosApproved()
-        // console.log("top Ten Ceos Approved", response.data)
+        const response = await topTenCeosApproved()
+        console.log("top Ten Ceos Approved", response.data)
         // setChartData(response.data)
         let labels_list = []
         let data_list = []
-        chartData.map(i => {
+        response.data.map(i => {
             labels_list.push(i.ceo)
             data_list.push(i.approval)
         })
@@ -172,7 +175,7 @@ const AnalyticsDashboard = () => {
 
     const topTenCompaniesViewsPerDay = async () => {
 
-        // const repsonse = await topTenCompaniesBasedOnViewsPerDay()
+        // const response = await topTenCompaniesBasedOnViewsPerDay()
         // console.log("top Ten Companies Based On Views Per Day", response.data)
         // setChartData(response.data)
 
@@ -208,48 +211,49 @@ const AnalyticsDashboard = () => {
                     </select>
                 </div> */}
                 <div style={{ margin: "20px auto" }}>
+                    {data1 && labels1 && (<Chart
+                        labels={labels1}
+                        data={data1}
+                        type="Bar"
+                        color={["blue", "red", "orange", "yellow", "green"]}
+                    />)
+                    }
+                </div>
+                <div style={{ margin: "20px auto" }}>
                     <Chart
-                        labels={labels}
-                        data={data}
+                        labels={labels2}
+                        data={data2}
                         type="Bar"
                         color={["blue", "red", "orange", "yellow", "green"]}
                     />
                 </div>
                 <div style={{ margin: "20px auto" }}>
                     <Chart
-                        labels={labels}
-                        data={data}
-                        type="Bar"
-                        color={["blue", "red", "orange", "yellow", "green"]}
-                    />
-                </div>
-                <div style={{ margin: "20px auto" }}>
-                    <Chart
-                        labels={labels}
-                        data={data}
+                        labels={labels3}
+                        data={data3}
                         type="Bar"
                         color={["blue", "red", "orange", "yellow", "green"]}
 
                     />
                 </div><div style={{ margin: "20px auto" }}>
                     <Chart
-                        labels={labels}
-                        data={data}
+                        labels={labels4}
+                        data={data4}
                         type="Bar"
                         color={["blue", "red", "orange", "yellow", "green"]}
 
                     />
                 </div><div style={{ margin: "20px auto" }}>
                     <Chart
-                        labels={labels}
-                        data={data}
+                        labels={labels5}
+                        data={data5}
                         type="Bar"
                         color={["blue", "red", "orange", "yellow", "green", "lightblue", "grey", "purple", "brown", "silver"]}
                     />
                 </div><div style={{ margin: "20px auto" }}>
                     <Chart
-                        labels={labels}
-                        data={data}
+                        labels={labels6}
+                        data={data6}
                         type="Bar"
                         color={["blue", "red", "orange", "yellow", "green", "lightblue", "grey", "purple", "brown", "silver"]}
                     />

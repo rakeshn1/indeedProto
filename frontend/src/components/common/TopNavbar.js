@@ -117,7 +117,7 @@ const TopNavbar = () => {
       <>
         <NavLink
           activeClassName="active"
-          to="/postResume"
+          to="/login"
           className="navbar-buttons"
         >
           Post Your Resume

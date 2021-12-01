@@ -4,13 +4,9 @@ import Button from '../common/Button';
 import Input from '../common/Input';
 // import { ACCESS_SECRET_KEY_ID, ACCESS_KEY_ID } from '../../utils/constants';
 import S3FileUpload from 'react-s3';
-// import JobSeekerResumeUpload from './JobSeekerResumeUpload';
-// import fileDownload from 'js-file-download'
-// import http from '../../services/httpService';
-// import axios from 'axios'
-// import FileSaver from 'file-saver';
+import { getCurrentUser } from '../../services/auth';
 
-
+const user = getCurrentUser();
 const config = {
     bucketName: 'uber-eats-proto',
     dirName: 'resumeUpload/', /* optional */
@@ -20,7 +16,6 @@ const config = {
 }
 const JobSeekerProfile = () => {
 
-    // const [fileName,setFileName] = 
     const [data, setData] = useState();
     const [viewData, setViewData] = useState();
     const [showEditDiv, setShowEditDiv] = useState(false)
@@ -29,14 +24,11 @@ const JobSeekerProfile = () => {
 
     const fetchJobSeekerDetails = async () => {
 
-        const details = await getJobSeekerDetails({ userId: "619dbd6007f15d4f6bdd601e" })
+        const details = await getJobSeekerDetails({ userId: user._id })
         console.log("user details", details.data)
         setData({ ...details.data })
         setViewData({ ...details.data })
         setResumeURL(details.data.resume)
-        // // setVide
-
-
     }
 
     useEffect(() => {
@@ -47,10 +39,6 @@ const JobSeekerProfile = () => {
         setData({ ...data, [key]: value })
     }
     const handleAddressChange = (key1, key2, value) => {
-        // let newData = { ...data }
-
-
-        // console.log([])
 
         let newData = { ...data }
         let add = { ...newData.address, [key1]: { [key2]: value } }
@@ -75,12 +63,10 @@ const JobSeekerProfile = () => {
                 country: data.address.country,
                 zipcode: data.address.zipcode,
             }
-            //  coverLetter = data.coverLetter,
-            //  address = data.address,
-            //  companyRole = data.companyRoledata
+
         }
 
-        const details = await updateJobSeekerDetails("619dbd6007f15d4f6bdd601e", payload)
+        const details = await updateJobSeekerDetails(user._id, payload)
 
         console.log("updated user details", details.data)
         setData(details.data)
@@ -108,7 +94,7 @@ const JobSeekerProfile = () => {
             //  companyRole = data.companyRoledata
         }
 
-        const details = await updateJobSeekerDetails("619dbd6007f15d4f6bdd601e", payload)
+        const details = await updateJobSeekerDetails(user._id, payload)
 
         console.log("updated user details", details.data)
         setData(details.data)
@@ -131,35 +117,6 @@ const JobSeekerProfile = () => {
     }
 
 
-    const downloadPDF = () => {
-        //call to get current user pdf.
-        // var doc = new jsPDF(resumeURL)
-        // doc.save("pdf")
-
-
-        //     const blob = new Blob([output]);
-        // const fileDownloadUrl = URL.createObjectURL(blob);
-        // this.setState ({fileDownloadUrl: fileDownloadUrl}, 
-        //   () => {
-        //     this.dofileDownload.click(); 
-        //     URL.revokeObjectURL(fileDownloadUrl);  // free up storage--no longer needed.
-        //     this.setState({fileDownloadUrl: ""})
-        // })    
-        // http.get(resumeURL, {
-        //     responseType: 'blob',
-        // })
-        //     .then((res) => {
-        //         fileDownload(res.data, "Indeed Resume")
-        //     })
-
-
-        // const file = new Blob([blob], { type: 'application/pdf' });
-        // FileSaver.saveAs(
-        //     resumeURL,
-        //     "Resume.pdf");
-
-    }
-
     const deleteResume = async () => {
         await handleChange('resume', undefined)
 
@@ -177,7 +134,7 @@ const JobSeekerProfile = () => {
             }
         }
 
-        const details = await updateJobSeekerDetails("619dbd6007f15d4f6bdd601e", payload)
+        const details = await updateJobSeekerDetails(user._id, payload)
 
         console.log("updated user details", details.data)
         setData(details.data)
@@ -237,7 +194,6 @@ const JobSeekerProfile = () => {
                         </div>
                         <div>
                             {data && data?.resume.substring(data?.resume.lastIndexOf('/') + 1)}
-                            {/* {data?.resume} */}
                         </div>
                     </div>
                     <div style={{ width: "40%" }}>
@@ -260,7 +216,7 @@ const JobSeekerProfile = () => {
     return (
         <div className="container">
             <div className="name-display">
-                <div className="profile-circle">  {viewData?.firstName.substring(0, 1)} {viewData?.lastName.substring(0, 1)}  </div>
+                <div className="profile-circle">  {viewData?.firstName.substring(0, 1)}{viewData?.lastName.substring(0, 1)}  </div>
                 <div className="profile-name"> {viewData ? viewData.firstName : "Your"} {viewData ? viewData.lastName : "Name"}</div>
 
             </div>
@@ -288,7 +244,6 @@ const JobSeekerProfile = () => {
                         </div>
                         <Input
                             label="First Name"
-                            required
                             style={{
                                 width: "100%",
                                 border: "1px solid #696969",
@@ -297,10 +252,10 @@ const JobSeekerProfile = () => {
                             }}
                             onChange={(e) => { handleChange('firstName', e.target.value) }}
                             type="text"
+                            value={data?.firstName}
                         />
                         <Input
                             label="Last Name"
-                            required="true"
                             style={{
                                 width: "100%",
                                 border: "1px solid #696969",
@@ -308,13 +263,12 @@ const JobSeekerProfile = () => {
                                 color: "black"
                             }}
                             onChange={(e) => { handleChange('lastName', e.target.value) }}
-
+                            value={data?.lastName}
                             type="text"
 
                         />
                         <Input
                             label="Email"
-                            // required="true"
                             disabled
                             style={{
                                 width: "100%",
@@ -322,14 +276,12 @@ const JobSeekerProfile = () => {
                                 marginBottom: "20px",
                                 color: "black"
                             }}
-                            // onChange={(e) => { console.log(e.target.value) }}
                             value={viewData?.email}
                             type="text"
 
                         />
                         <Input
                             label="Phone Number"
-                            required="true"
                             style={{
                                 width: "100%",
                                 border: "1px solid #696969",
@@ -337,7 +289,7 @@ const JobSeekerProfile = () => {
                                 color: "black"
                             }}
                             onChange={(e) => { handleChange('phoneNumber', e.target.value) }}
-
+                            value={data?.phoneNumber}
                             type="text"
 
                         />
@@ -347,7 +299,6 @@ const JobSeekerProfile = () => {
                             Your street address is visible only to you.</p>
                         <Input
                             label="City"
-                            required="true"
                             style={{
                                 width: "100%",
                                 border: "1px solid #696969",
@@ -355,12 +306,11 @@ const JobSeekerProfile = () => {
                                 color: "black"
                             }}
                             onChange={(e) => { handleAddressChange('address', 'city', e.target.value) }}
-
+                            value={data?.address?.city}
                             type="text"
 
                         /> <Input
                             label="State"
-                            required="true"
                             style={{
                                 width: "100%",
                                 border: "1px solid #696969",
@@ -368,13 +318,12 @@ const JobSeekerProfile = () => {
                                 color: "black"
                             }}
                             onChange={(e) => { handleAddressChange('address', 'state', e.target.value) }}
-
+                            value={data?.address?.state}
                             type="text"
 
                         />
                         <Input
                             label="Country"
-                            required="true"
                             style={{
                                 width: "100%",
                                 border: "1px solid #696969",
@@ -382,13 +331,12 @@ const JobSeekerProfile = () => {
                                 color: "black"
                             }}
                             onChange={(e) => { handleAddressChange('address', 'country', e.target.value) }}
-
+                            value={data?.address?.country}
                             type="text"
 
                         />
                         <Input
                             label="Zip Code"
-                            required="true"
                             style={{
                                 width: "100%",
                                 border: "1px solid #696969",
@@ -396,11 +344,10 @@ const JobSeekerProfile = () => {
                                 color: "black"
                             }}
                             onChange={(e) => { handleAddressChange('address', 'zipcode', e.target.value) }}
-
+                            value={data?.address?.zipcode}
                             type="text"
 
                         />
-                        {/* <div>Number</div> */}
                         <div style={{ display: "flex", width: "30%", justifyContent: "space-between" }}>
                             <Button
                                 text="Save"

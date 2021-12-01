@@ -27,8 +27,9 @@ const getUnapprovedReviews = async (msg, callback) => {
 
 const updateStatusOfReview = async (msg, callback) => {
   const res = {};
+  console.log("msg", msg);
   try {
-    const _id = msg.body._id;
+    const _id = msg.body.reviewId;
     const status = msg.body.status;
 
     const review = await Reviews.findById(_id);
@@ -206,7 +207,7 @@ const topfiveJobSeekersBasedOnAcceptedReviews = async (msg, callback) => {
           count: {
             $sum: {
               $cond: [
-                { $and: [{ $eq: ["$status", 1] }, { $eq: ["$status", 2] }] },
+                { $or: [{ $eq: ["$status", 1] }, { $eq: ["$status", 2] }] },
                 1,
                 0,
               ],

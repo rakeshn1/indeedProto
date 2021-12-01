@@ -504,3 +504,5 @@ handle_request = (msg, callback) => {
     getSalaryReviewsRankedJobs(msg, callback);
   }
 };
+
+exports.handle_request = handle_request;

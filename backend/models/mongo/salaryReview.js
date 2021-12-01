@@ -37,6 +37,6 @@ const salaryReviewSchema = new mongoose.Schema({
   },
 });
 
-const SalaryReview = mongoose.model("SalaryReview", reviewSchema);
+const SalaryReview = mongoose.model("SalaryReview", salaryReviewSchema);
 module.exports.salaryReviewSchema = salaryReviewSchema;
 module.exports.SalaryReview = SalaryReview;

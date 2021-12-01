@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { getAllUnapprovedReviews, updatePhotoStatus, updateReviewStatus } from '../../services/admin'
 import SingleReview from './SingleReview'
 
 
@@ -9,17 +10,22 @@ const AdminDashboard = () => {
         review: "jkjabcacakcjadsajkndakndkanksajckanckajckancajkcnaaajskjnakscnascnacnkajscjkjabcacakcjadsajkndakndkanksajckanckajckancajkcnaaajskjnakscnascnacnkajscjkjabcacakcjadsajkndakndkanksajckanckajckancajkcnaaajskjnakscnascnacnkajscjkjabcacakcjadsajkndakndkanksajckanckajckancajkcnaaajskjnakscnascnacnkajscjkjabcacakcjadsajkndakndkanksajckanckajckancajkcnaaajskjnakscnascnacnkajscjkjabcacakcjadsajkndakndkanksajckanckajckancajkcnaaajskjnakscnascnacnkajscjkjabcacakcjadsajkndakndkanksajckanckajckancajkcnaaajskjnakscnascnacnkajscjkjabcacakcjadsajkndakndkanksajckanckajckancajkcnaaajskjnakscnascnacnkajscjkjabcacakcjadsajkndakndkanksajckanckajckancajkcnaaajskjnakscnascnacnkajscjkjabcacakcjadsajkndakndkanksajckanckajckancajkcnaaajskjnakscnascnacnkajscjkjabcacakcjadsajkndakndkanksajckanckajckancajkcnaaajskjnakscnascnacnkajscjkjabcacakcjadsajkndakndkanksajckanckajckancajkcnaaajskjnakscnascnacnkajsc"
     },
     { name: "somehting" }, { name: "new" }])
-    const [picturesData, setPicturesData] = useState([{ url: "https://dlcdnrog.asus.com/rog/media/158404796674.jpg" }, { ata: "pic" }])
+    const [picturesData, setPicturesData] = useState([{ url: "https://dlcdnrog.asus.com/rog/media/158404796674.jpg" }, { url: "pic" }])
     const [status, setStatus] = useState()
 
     const [view, setView] = useState("Reviews")
 
 
-    const fetchReviews = async () => {
-        //api call to get all 0 status reviews
 
-        // const reviews= await getAllReviews()
-        // setReviewData(reviews.data) 
+    useEffect(() => {
+        fetchReviews();
+    }, [])
+
+    const fetchReviews = async () => {
+        // api call to get all 0 status reviews
+
+        const reviews = await getAllUnapprovedReviews()
+        setReviewsData(reviews.data)
     }
 
     const fetchPictures = async () => {
@@ -58,46 +64,47 @@ const AdminDashboard = () => {
 
 
     // Unapproved: 0, Approved: 1, Featured: 2, Disapproved:3
-    const handleApproveReviewStatus = async (e) => {
+    const handleApproveReviewStatus = async (revId) => {
 
         // Unapproved: 0, Approved: 1, Featured: 2, Disapproved:3
 
         // api call to set the status of review
 
         const payload = {
-            reviewId: e._id,
+            reviewId: revId,
             status: 1
         }
 
         try {
-            // const response = await updateReviewStatus(payload) 
-            // console.log("updated status:", response.data)
+            const response = await updateReviewStatus(payload)
+            console.log("updated status:", response.data)
         }
 
         catch (err) {
             console.log("Error", err)
         }
-
+        await fetchReviews();
     }
-    const handleDisapproveReviewStatus = async (e) => {
+    const handleDisapproveReviewStatus = async (revId) => {
 
         // Unapproved: 0, Approved: 1, Featured: 2, Disapproved:3
 
         // api call to set the status of review
 
         const payload = {
-            reviewId: e._id,
+            reviewId: revId,
             status: 3
         }
 
         try {
-            // const response = await updateReviewStatus(payload) 
-            // console.log("updated status:", response.data)
+            const response = await updateReviewStatus(payload)
+            console.log("updated status:", response.data)
         }
 
         catch (err) {
             console.log("Error", err)
         }
+        await fetchReviews();
 
     }
 
@@ -108,8 +115,8 @@ const AdminDashboard = () => {
         }
 
         try {
-            // const response = await updatePhotoStatus(payload) 
-            // console.log("updated status:", response.data)
+            const response = await updatePhotoStatus(payload)
+            console.log("updated status:", response.data)
         }
 
         catch (err) {
@@ -124,13 +131,14 @@ const AdminDashboard = () => {
         }
 
         try {
-            // const response = await updatePhotoStatus(payload) 
-            // console.log("updated status:", response.data)
+            const response = await updatePhotoStatus(payload)
+            console.log("updated status:", response.data)
         }
 
         catch (err) {
             console.log("Error", err)
         }
+
     }
 
     return (
@@ -178,8 +186,8 @@ const AdminDashboard = () => {
 
                                             <div style={{ width: "25%", textAlign: "center", padding: "20px" }} >
 
-                                                <button type="button" style={{ padding: "10px", margin: "10px" }} className="btn btn-success" onClick={handleApproveReviewStatus}>Approve</button>
-                                                <button type="button" style={{ padding: "10px", margin: "10px" }} className="btn btn-danger" onClick={handleDisapproveReviewStatus}>Disapprove</button>
+                                                <button type="button" style={{ padding: "10px", margin: "10px" }} className="btn btn-success" onClick={() => handleApproveReviewStatus(item._id)}>Approve</button>
+                                                <button type="button" style={{ padding: "10px", margin: "10px" }} className="btn btn-danger" onClick={() => handleDisapproveReviewStatus(item._id)}>Disapprove</button>
                                             </div>
 
                                         </li>
