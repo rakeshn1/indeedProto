@@ -282,6 +282,41 @@ const topTenCeosApproved = async (msg, callback) => {
   }
 };
 
+const topFiveCompaniesBasedOnAverageRating = async (msg, callback) => {
+  const res = {};
+  try {
+    res.data = [];
+    let top10Ceos = [];
+    top10Ceos = await Reviews.aggregate([
+      {
+        $group: {
+          _id: "$companyId",
+          avgRating: { $avg: "$rating" },
+        },
+      },
+      { $sort: { avgRating: -1 } },
+      { $limit: 5 },
+    ]);
+
+    console.log("top10Ceos: ", top10Ceos);
+
+    await Promise.all(
+      top10Ceos.map(async (company) => {
+        const companyData = await Company.findById(company._id).select("name");
+        company.name = companyData.name;
+        res.data.push(company);
+      })
+    );
+
+    res.status = 200;
+    callback(null, res);
+  } catch (err) {
+    res.status = 500;
+    res.data = err;
+    callback(null, res);
+  }
+};
+
 handle_request = (msg, callback) => {
   if (msg.path === "getUnapprovedReviews") {
     // delete msg.path;
@@ -319,6 +354,10 @@ handle_request = (msg, callback) => {
     // delete msg.path;
     console.log("Kafka side1");
     topTenCeosApproved(msg, callback);
+  } else if (msg.path === "topFiveCompaniesBasedOnAverageRating") {
+    // delete msg.path;
+    console.log("Kafka side1");
+    topFiveCompaniesBasedOnAverageRating(msg, callback);
   }
 };
 

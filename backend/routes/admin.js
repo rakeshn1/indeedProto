@@ -109,4 +109,14 @@ router.get("/topTenCeosApproved", async (req, res) => {
   });
 });
 
+router.get("/topFiveCompaniesBasedOnAverageRating", async (req, res) => {
+  const msg = {};
+  msg.path = "topFiveCompaniesBasedOnAverageRating";
+  console.log("MSG = ADMIN: ", msg);
+  kafka.make_request("admin", msg, function (err, results) {
+    console.log("Results: ", results);
+    res.status(results.status).send(results.data);
+  });
+});
+
 module.exports = router;
