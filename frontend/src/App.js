@@ -41,6 +41,10 @@ import Logout from "./components/logout";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import CompanyProfilePage from "./components/Admin/CompanyProfilePage";
 import AnalyticsDashboard from "./components/Admin/AnalyticsDashboard";
+import AddJobs from "./components/Employer/AddJobs"
+import ViewJobs from "./components/Employer/ViewEmployerJobs"
+import JobPostingsHeader from "./components/Employer/JobPostingsHeader";
+import MessagesLandingPage from "./components/common/Messages";
 
 function App() {
   const location = useLocation();
@@ -126,16 +130,12 @@ function App() {
             component={JobSeekerSalariesPage}
           ></Route>
         )}
-        <Route path="/companydetails" component={CompanyHome}></Route>
+        <Route path="/companydetails/:id" component={CompanyHome}></Route>
         <JobSeekerRoute
           path="/company/addReview"
           component={AddReview}
         ></JobSeekerRoute>
-        <EmployeerRoute
-          exact
-          path="/employer"
-          component={CompanyDetails}
-        ></EmployeerRoute>
+
         <EmployeerRoute
           exact
           path="/employer/reviews"
@@ -155,6 +155,21 @@ function App() {
           exact
           path="/employer/reports"
           component={EmployerReports}
+        ></EmployeerRoute>
+        <EmployeerRoute
+          exact
+          path="/employer/addJobs"
+          component={AddJobs}
+        ></EmployeerRoute>
+        <EmployeerRoute
+          exact
+          path="/employer/viewJobs"
+          component={ViewJobs}
+        ></EmployeerRoute>
+        <EmployeerRoute
+          exact
+          path="/employer/companyDetails"
+          component={CompanyDetails}
         ></EmployeerRoute>
         {!jwt && (
           <Route
@@ -181,6 +196,11 @@ function App() {
           path="/jobSeeker/myJobs/appliedJobs"
           component={JobSeekerAppliedJobs}
         ></JobSeekerRoute>
+        {jwt && (<Route
+          exact
+          path="/chat"
+          component={MessagesLandingPage}
+        ></Route>)}
         <JobSeekerRoute
           path="/jobSeeker/myReviews"
           component={JobSeekerMyReviews}
@@ -194,11 +214,7 @@ function App() {
           component={JobSearchResults}
         ></JobSeekerRoute>
 
-        <Route
-          exact
-          path="/employer/companyDetails"
-          component={CompanyDetails}
-        ></Route>
+
         <Route
           exact
           path="/employer/employerDetails"
@@ -219,8 +235,8 @@ function App() {
         {/* <Redirect from="/" exact to="/jobSeekerLandingPage" /> */}
         <Redirect from="/" exact to="/home" />
         <Redirect from="/jobSeeker" exact to="/jobSeekerLandingPage" />
-      </Switch>
-    </div>
+      </Switch >
+    </div >
   );
 }
 

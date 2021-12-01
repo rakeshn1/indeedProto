@@ -2,7 +2,9 @@ const { Company } = require('../models/company')
 const { Reviews } = require('../models/review')
 const { Jobs } = require('../models/jobs')
 const { JobApplications } = require('../models/jobApplications')
-
+const { Users } = require('../models/user')
+const { Messages } = require('../models/message')
+const ObjectId = require('mongoose').Types.ObjectId
 const handleGetCompanyDetails = async (msg, callback) => {
     const res = {}
     try {
@@ -111,6 +113,27 @@ const updateCompanyDetails = async (msg, callback) => {
         callback(null, res)
     }
     catch (err) {
+        res.status = 400
+        callback(null, res)
+    }
+}
+
+const updateApplicationStatus = async (msg, callback) => {
+    const res = {}
+    console.log("msg for update status", msg)
+    try {
+        const result = await JobApplications.findOneAndUpdate({ _id: msg.applicationId }, {
+            status: msg.status
+        }, {
+            new: true
+        })
+        res.status = 200
+        console.log("Response after update application status ", result)
+        res.data = result
+        callback(null, res)
+    }
+    catch (err) {
+        console.log(err)
         res.status = 400
         callback(null, res)
     }
@@ -282,6 +305,174 @@ const updateJobApplication = async (msg, callback) => {
     }
 }
 
+const getApplicationDetails = async (msg, callback) => {
+    const res = {}
+    res.data = []
+    var userData = []
+    try {
+        var userIdObject = await JobApplications.find({ jobId: msg.jobApplicationID })
+        await Promise.all(userIdObject.map(async (jobApplication, index) => {
+            var result = await Users.find({ _id: jobApplication.userId })
+            userData.push(result[0])
+        }))
+        console.log("****", userData)
+        res.data.push(userIdObject)
+        res.data.push(userData)
+        res.status = 200
+
+
+
+        console.log("yaya", res.data)
+        callback(null, res)
+    }
+    catch (err) {
+        console.log(err)
+        res.status = 400
+        callback(null, res)
+    }
+}
+
+const createConversation = async (msg, callback) => {
+    const res = {}
+    try {
+        const {
+            companyId,
+            userId
+        } = msg
+
+        const conversationDetails = new Messages({
+            companyId,
+            userId,
+        })
+        const data = await conversationDetails.save();
+
+        console.log("Response after adding a conversation details ", res)
+        res.status = 200
+        res.data = data
+        callback(null, res)
+    }
+    catch (err) {
+        console.log(err)
+        res.status = 400
+        callback(null, res)
+    }
+}
+
+const updateConversation = async (msg, callback) => {
+    const res = {}
+
+    try {
+        const { message } = msg
+        console.log("_---------before push" + message)
+        const result = await Messages.findOneAndUpdate({ _id: msg.conversationId }, {
+            $push: { messages: message }
+        },
+            { new: true })
+        console.log("_---------" + result)
+        res.status = 200
+        console.log("Response after update Job Application ", result)
+        res.data = result
+        callback(null, res)
+    }
+    catch (err) {
+        res.status = 400
+        callback(null, res)
+    }
+}
+
+const handleGetAllConversations = async (msg, callback) => {
+    const res = {}
+    try {
+        const result = await Messages.aggregate([
+            {
+                $match: {
+                    $and: [{ companyId: ObjectId(msg.companyId) }],
+                },
+            },
+            // { $set: { useObjID: { $toObjectId: 'userId' } } },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'userRow',
+                },
+            },
+            { $unwind: '$userRow' },
+            {
+                $project: {
+                    _id: 1,
+                    userId: 1,
+                    companyId: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
+                    firstName: '$userRow.firstName',
+                    lastName: '$userRow.lastName'
+                },
+            },
+        ]);
+        // const result = await Messages.aggregate( [
+        //     { $match: { companyId: ObjectId(msg.companyId) } },
+        //     { $group: { _id: "$jobId" , count:{$sum:1}} }
+        // ] )
+        console.log("Results for get all conversation details", result)
+        res.status = 200
+        res.data = result
+        callback(null, res)
+    } catch (err) {
+        console.log(err)
+        res.status = 400
+        callback(null, res)
+    }
+}
+
+const handleGetConversation = async (msg, callback) => {
+    const res = {}
+    try {
+        const result = await Messages.aggregate([
+            {
+                $match: {
+                    $and: [{ _id: ObjectId(msg.id) }],
+                },
+            },
+            // { $set: { useObjID: { $toObjectId: 'userId' } } },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'userRow',
+                },
+            },
+            { $unwind: '$userRow' },
+            {
+                $project: {
+                    _id: 1,
+                    userId: 1,
+                    companyId: 1,
+                    messages: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
+                    firstName: '$userRow.firstName',
+                    lastName: '$userRow.lastName'
+                },
+            },
+        ]);
+        // const result = await Messages.aggregate( [
+        //     { $match: { companyId: ObjectId(msg.companyId) } },
+        //     { $group: { _id: "$jobId" , count:{$sum:1}} }
+        // ] )
+        console.log("Results for get conversation details", result)
+        res.status = 200
+        res.data = result
+        callback(null, res)
+    } catch (err) {
+        console.log(err)
+        res.status = 400
+        callback(null, res)
+    }
+}
+
 handle_request = (msg, callback) => {
     if (msg.path === "getCompanyDetails") {
         delete msg.path
@@ -299,6 +490,12 @@ handle_request = (msg, callback) => {
         delete msg.path
         console.log("handling updateCompanyDetails")
         updateCompanyDetails(msg, callback)
+    }
+
+    if (msg.path === "updateApplicationStatus") {
+        delete msg.path
+        console.log("handling updateApplicationStatus")
+        updateApplicationStatus(msg, callback)
     }
 
     if (msg.path === "getCompanyReviews") {
@@ -341,6 +538,38 @@ handle_request = (msg, callback) => {
         delete msg.path
         console.log("handling updateJob")
         updateJobApplication(msg, callback)
+    }
+
+
+
+    if (msg.path === "getApplicationDetails") {
+        delete msg.path
+        console.log("handling getApplicationDetails")
+        getApplicationDetails(msg, callback)
+    }
+
+    if (msg.path === "createConversation") {
+        delete msg.path
+        console.log("handling createConversation")
+        createConversation(msg, callback)
+    }
+
+    if (msg.path === "updateConversation") {
+        delete msg.path
+        console.log("handling updateJob")
+        updateConversation(msg, callback)
+    }
+
+    if (msg.path === "getAllConversations") {
+        delete msg.path
+        console.log("handling getAllConversations")
+        handleGetAllConversations(msg, callback)
+    }
+
+    if (msg.path === "getConversation") {
+        delete msg.path
+        console.log("handling getConversation")
+        handleGetConversation(msg, callback)
     }
 }
 

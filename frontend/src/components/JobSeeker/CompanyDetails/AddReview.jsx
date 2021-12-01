@@ -29,7 +29,7 @@ class AddReview extends React.Component {
     },
     errors: {},
   };
-
+  baseState = { ...this.state };
   schema = {
     companyName: Joi.string().required(),
     overallRating: Joi.number().required(),
@@ -98,7 +98,7 @@ class AddReview extends React.Component {
             name="reviewSummary"
             placeholder="Example: Productive and fun workplace with ping pong table"
             onChange={this.handleChange}
-            className="mb-3"
+            className="mb-3 bold-input"
             required
           />
           <TextArea
@@ -115,7 +115,7 @@ class AddReview extends React.Component {
             id="pros"
             name="pros"
             onChange={this.handleChange}
-            className="mb-3"
+            className="mb-3 bold-input"
             required
           />
           <Input
@@ -124,6 +124,7 @@ class AddReview extends React.Component {
             name="cons"
             onChange={this.handleChange}
             required
+            className="bold-input"
           />
         </div>
       </div>
@@ -140,7 +141,7 @@ class AddReview extends React.Component {
               name="jobTitle"
               label="Job Title at Amazon.com"
               onChange={this.handleChange}
-              className="mb-3"
+              className="mb-3 bold-input"
               required
             />
             <Input
@@ -148,7 +149,7 @@ class AddReview extends React.Component {
               id="jobLocation"
               name="jobLocation"
               onChange={this.handleChange}
-              className="mb-3"
+              className="mb-3 bold-input"
               required
             />
           </div>
@@ -207,7 +208,7 @@ class AddReview extends React.Component {
 
   getTips = () => {
     return (
-      <div>
+      <div className="start">
         <TextArea
           label="What is the hiring process at Apple?"
           id="tips"
@@ -222,7 +223,15 @@ class AddReview extends React.Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    await addReview(this.state.data);
+    try {
+      const response = await addReview(this.state.data);
+      if (response && response.status === 200) {
+        console.log("added reviews successfully");
+        // this.props.history.push("/companydetails");
+      }
+    } catch (ex) {
+      console.log(ex);
+    }
   };
   render() {
     return (

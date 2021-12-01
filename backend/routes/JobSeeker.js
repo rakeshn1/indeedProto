@@ -203,4 +203,30 @@ router.post("/applyJob", async (req, res) => {
   });
 });
 
+router.put("/updateReview/:id", async (req, res) => {
+  req.body.path = "UpdateHelpfulnessScore";
+  req.body.reviewId = req.params.id;
+  kafka.make_request("jobSeeker-topic", req.body, function (err, results) {
+    if (err) {
+      return res.status(400).send(err);
+    }
+
+    return res.status(200).send(results);
+  });
+});
+
+router.get("/getReviews/:id", async (req, res) => {
+  req.body.companyId = req.params.id;
+  req.body.params = req.query;
+  req.body.path = "getCompanyReviews";
+
+  kafka.make_request("jobSeeker-topic", req.body, function (err, results) {
+    if (err) {
+      return res.status(400).send(err);
+    }
+
+    return res.status(200).send(results);
+  });
+});
+
 module.exports = router;

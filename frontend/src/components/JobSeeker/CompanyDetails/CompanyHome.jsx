@@ -4,9 +4,20 @@ import CompanyHeader from "./CompanyHeader";
 import Reviews from "./Reviews";
 import CompanySnapShot from "./CompanySnapShot";
 import AboutCompany from "./AboutCompany";
+import Jobs from "./Jobs";
 import "../../../styles/companyStyles.css";
+import { getCompanyDetails } from "../../../services/jobSeeker";
 
 class CompanyHome extends React.Component {
+  state = {
+    companyDetails: undefined,
+  };
+  componentWillMount = async () => {
+    let response = await getCompanyDetails("61a3446cbbaf757f9a105d91");
+    console.log(response.data);
+    this.setState({ companyDetails: response.data });
+  };
+
   render() {
     return (
       <div>
@@ -14,13 +25,16 @@ class CompanyHome extends React.Component {
         <div className="content">
           <Switch>
             <Route path="/companydetails/review">
-              <Reviews />
+              <Reviews companyDetails={this.state.companyDetails} />
             </Route>
             <Route path="/companydetails/about">
-              <AboutCompany />
+              <AboutCompany companyDetails={this.state.companyDetails} />
+            </Route>
+            <Route path="/companydetails/jobs">
+              <Jobs companyDetails={this.state.companyDetails} />
             </Route>
             <Route path="/">
-              <CompanySnapShot />
+              <CompanySnapShot companyDetails={this.state.companyDetails} />
             </Route>
           </Switch>
         </div>
