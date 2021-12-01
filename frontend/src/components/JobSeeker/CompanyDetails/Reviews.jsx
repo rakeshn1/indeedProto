@@ -117,6 +117,8 @@ class Reviews extends React.Component {
           this.state.reviews?.map((review) => {
             return (
               <ReviewCard
+                reviewSummary={review.reviewSummary}
+                review={review.review}
                 rating={review.rating}
                 role={review.jobTitle}
                 city={review.jobLocation}

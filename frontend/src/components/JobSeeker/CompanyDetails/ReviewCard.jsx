@@ -13,12 +13,10 @@ class ReviewCard extends React.Component {
     this.setState({ isMarked: true });
     if (e.target.id == "isHelpful") {
       this.setState({ isMarkedAsHelpful: true });
-      // updateReview(this.props.reviewId, true);
-      updateReview("619dbb411dbfad55f814f4df", true);
+      updateReview(this.props.reviewId, true);
     } else {
       this.setState({ isMarkedAsNotHelpful: true });
-      // updateReview(this.props.reviewId, false);
-      updateReview("619dbb411dbfad55f814f4df", false);
+      updateReview(this.props.reviewId, false);
     }
     console.log(e.target.id);
   };
@@ -26,26 +24,16 @@ class ReviewCard extends React.Component {
   render() {
     return (
       <div>
-        <div className="d-flex flex-row justify-content-between p-3">
+        <div className="d-flex flex-row justify-start p-3">
           <h4>{this.props.rating}</h4>
           <div className="d-flex flex-column ps-4">
-            <h4>Great place to work!</h4>
+            <h4>{this.props.reviewSummary}</h4>
             <span style={{ fontSize: "12px" }}>
               {this.props.role} (Former Employee) - {this.props.city},{" "}
               {this.props.state} - {this.props.reviewedOn}
             </span>
             <span style={{ fontSize: "14px" }} className="pt-3">
-              At-Home (Remote) AppleCare Senior Level Technical Advisor (Former
-              Employee) - Pensacola, FL - November 18, 2020 Working at Apple was
-              a great experience. Work never felt like work because I loved what
-              I did and I loved interacting with the public. The store was
-              always electric, although others may say crazy. I'd say electric
-              because the experience was exhilarating. The managers were all
-              great and they were never above doing what they asked of their
-              employees. The benefits and pay were amazing for a part time job.
-              Working for a company with a brand such as Apple and experience to
-              match that brand made me want to stay forever. This is a job I
-              truly miss and I am thankful for the opportunity that I was given!
+              {this.props.review}
             </span>
             <span
               style={{ fontSize: "14px", fontWeight: 700 }}

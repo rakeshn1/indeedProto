@@ -68,7 +68,9 @@ class CompanySnapShot extends React.Component {
             this.state.reviews?.map((review) => {
               return (
                 <ReviewCard
+                  reviewSummary={review.reviewSummary}
                   rating={review.rating}
+                  review={review.review}
                   role={review.jobTitle}
                   city={review.jobLocation}
                   state="CA"
@@ -78,8 +80,6 @@ class CompanySnapShot extends React.Component {
                   )}
                   pros={review.pros}
                   cons={review.cons}
-                  markedAsHelpful={review.helpfulnessScore.yesCount}
-                  markedAsNotHelpful={review.helpfulnessScore.noCount}
                   showHelpfulness={false}
                   reviewId={review._id}
                 />
