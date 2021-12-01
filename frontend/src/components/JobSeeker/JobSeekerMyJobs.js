@@ -1,29 +1,86 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
-import JobSeekerAppliedJobs from './JobSeekerAppliedJobs'
-import JobSeekerSavedJobs from './JobSeekerSavedJobs'
+import React, { useEffect, useState } from "react";
+import { getCurrentUser } from "../../services/auth";
+import {
+  getSavedJobsWithDesc,
+  handleJobSaveUnsave,
+  getAppliedJobsWithDesc,
+} from "../../services/jobSeeker";
+import { NavLink } from "react-router-dom";
+import JobSeekerAppliedJobs from "./JobSeekerAppliedJobs";
+import JobSeekerSavedJobs from "./JobSeekerSavedJobs";
 
-const JobSeekerMyJobs = () => {
-    return (
-        <div className="container">
-            <div className="heading-my-jobs">
+const JobSeekerMyJobs = (props) => {
+  const user = getCurrentUser();
+  const [savedJobs, setSavedJobs] = useState([]);
+  const [appliedJobs, setAppliedJobs] = useState([]);
 
-                My jobs
-            </div>
+  useEffect(() => {
+    fetchSavedJobs();
+    fetchAppliedJobs();
+  }, []);
 
-            <div className="nav-left-tabs" style={{ marginTop: "55x", display: "flex", borderBottom: "1px solid silver" }}>
+  const fetchSavedJobs = async () => {
+    if (user) {
+      const { data } = await getSavedJobsWithDesc({ userId: user._id });
+      console.log("responseSaved: ", data);
+      setSavedJobs(data);
+    }
+  };
 
-                <NavLink exact={true} activeClassName='active' to="/jobSeeker/myJobs/savedJobs" className="navbar-buttons" style={{ width: "100px", display: "flex", fontSize: "16px" }} >Saved
-                    <div className="count-holder"> 20</div></NavLink>
+  const fetchAppliedJobs = async () => {
+    if (user) {
+      const { data } = await getAppliedJobsWithDesc({ userId: user._id });
+      console.log("responseApplied: ", data);
+      setAppliedJobs(data);
+    }
+  };
+  return (
+    <div className="container">
+      <div className="heading-my-jobs">My jobs</div>
 
-                <NavLink activeClassName='active' style={{ width: "100px", display: "flex", fontSize: "16px" }} to="/jobSeeker/myJobs/appliedJobs" className="navbar-buttons">Applied <div className="count-holder">19</div> </NavLink>
-            </div>
+      <div
+        className="nav-left-tabs"
+        style={{
+          marginTop: "55x",
+          display: "flex",
+          borderBottom: "1px solid silver",
+        }}
+      >
+        <NavLink
+          exact={true}
+          activeClassName="active"
+          to="/jobSeeker/myJobs/savedJobs"
+          className="navbar-buttons"
+          style={{ width: "100px", display: "flex", fontSize: "16px" }}
+        >
+          Saved
+          <div className="count-holder"> {savedJobs.length}</div>
+        </NavLink>
 
-            <JobSeekerSavedJobs />
-            <JobSeekerAppliedJobs />
+        <NavLink
+          activeClassName="active"
+          style={{ width: "100px", display: "flex", fontSize: "16px" }}
+          to="/jobSeeker/myJobs/appliedJobs"
+          className="navbar-buttons"
+        >
+          Applied <div className="count-holder">{appliedJobs.length}</div>{" "}
+        </NavLink>
+      </div>
 
-        </div >
-    )
-}
+      {props.location.pathname === "/jobSeeker/myJobs/savedJobs" && (
+        <JobSeekerSavedJobs
+          savedJobs={savedJobs}
+          appliedJobs={appliedJobs}
+          fetchAppliedJobs={fetchAppliedJobs}
+          fetchSavedJobs={fetchSavedJobs}
+        />
+      )}
 
-export default JobSeekerMyJobs
+      {props.location.pathname === "/jobSeeker/myJobs/appliedJobs" && (
+        <JobSeekerAppliedJobs appliedJobs={appliedJobs} />
+      )}
+    </div>
+  );
+};
+
+export default JobSeekerMyJobs;
