@@ -15,6 +15,9 @@ class JobSeekerSalariesPage extends React.Component {
   onSearchClick = () => {};
 
   updateJobTitle = async (jobTitle) => {
+    await this.setState({
+      jobTitle,
+    });
     if (jobTitle) {
       console.log("if companyname: ", typeof jobTitle);
       const { data: companyJobTitleSearchResults } = await getJobTitles(
@@ -26,19 +29,14 @@ class JobSeekerSalariesPage extends React.Component {
       );
       await this.setState({ companyJobTitleSearchResults });
     }
-
-    await this.setState({
-      jobTitle,
-    });
   };
 
   updateLocation = async (location) => {
+    this.setState({ location });
     if (location) {
       const { data: locationSearchResults } = await getLocations(location);
       this.setState({ locationSearchResults });
     }
-
-    this.setState({ location });
   };
 
   render() {

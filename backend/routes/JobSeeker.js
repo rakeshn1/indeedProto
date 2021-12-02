@@ -310,4 +310,14 @@ router.get("/getReviews/:id", async (req, res) => {
   });
 });
 
+router.get("/getJobSeekerReviews/:id", async (req, res) => {
+  req.body.jobSeekerId = req.params.id;
+  req.body.params = req.query;
+  req.body.path = "getJobSeekerReviews";
+
+  kafka.make_request("jobSeeker-topic", req.body, function (err, results) {
+    res.status(results.status).send(results.data);
+  });
+});
+
 module.exports = router;

@@ -3,7 +3,8 @@ const { User } = require("../models/user");
 const _ = require("lodash");
 const { SalaryReview } = require("../models/salaryReview");
 const { Company } = require("../models/company");
-const { JobApplication } = require("../models/jobApplications")
+const { JobApplication } = require("../models/jobApplications");
+const mongoose = require("mongoose");
 
 async function addReview(body, callback) {
   try {
@@ -74,21 +75,19 @@ async function applyJob(msg, callback) {
       userId: msg.body.userId,
       companyId: msg.body.companyId,
       resumeURL: msg.body.resumeURL,
-      status: 1
-    })
+      status: 1,
+    });
 
     await jobApplication.save();
     res.status = 200;
     res.data = "Succesfully applied to job";
     callback(null, res);
-  }
-  catch (err) {
-    res.status = 500
-    res.data = err
-    callback(null, res)
+  } catch (err) {
+    res.status = 500;
+    res.data = err;
+    callback(null, res);
   }
 }
-
 
 async function getJobSearchResults(body, callback) {
   try {
@@ -98,6 +97,40 @@ async function getJobSearchResults(body, callback) {
   } catch (ex) {
     console.log(ex);
     callback(ex, "Error");
+  }
+}
+
+async function getJobSeekerReviews(msg, callback) {
+  const res = {};
+  try {
+    res.data = [];
+    const result = await Reviews.find({
+      jobSeekerId: mongoose.Types.ObjectId(msg.jobSeekerId),
+    }).lean();
+
+    const data = [];
+
+    await Promise.all(
+      result.map(async (jobData) => {
+        const companyData = await Company.findById(jobData.companyId).select([
+          "name",
+          "logo",
+        ]);
+
+        jobData["companyName"] = companyData.name;
+        jobData["companyLogo"] = companyData.logo;
+
+        data.push(jobData);
+      })
+    );
+
+    res.status = 200;
+    res.data = data;
+    callback(null, res);
+  } catch (err) {
+    res.status = 500;
+    res.data = err;
+    callback(null, res);
   }
 }
 
@@ -211,39 +244,33 @@ handle_request = (msg, callback) => {
     delete msg.path;
     console.log("Kafka side1");
     addReview(msg, callback);
-  }
-  if (msg.path === "getJobSearchResults") {
+  } else if (msg.path === "getJobSearchResults") {
     delete msg.path;
     console.log("Kafka side1");
     getJobSearchResults(msg, callback);
-  }
-
-  if (msg.path === "UpdateHelpfulnessScore") {
+  } else if (msg.path === "UpdateHelpfulnessScore") {
     delete msg.path;
     updateReview(msg, callback);
-  }
-
-  if (msg.path === "getCompanyReviews") {
+  } else if (msg.path === "getCompanyReviews") {
     delete msg.path;
     getCompanyReviews(msg, callback);
-  }
-  if (msg.path === "jobSaveUnsave") {
+  } else if (msg.path === "jobSaveUnsave") {
     delete msg.path;
     console.log("Kafka side1 - HERE");
     handleJobSaveUnsave(msg, callback);
-  }
-
-  if (msg.path === "addSalaryReview") {
+  } else if (msg.path === "addSalaryReview") {
     delete msg.path;
     console.log("HERE");
     console.log("Kafka side1");
     addSalaryReview(msg, callback);
-  }
-
-  if (msg.path === "applyJob") {
+  } else if (msg.path === "applyJob") {
     delete msg.path;
     console.log("apply job -reached kafka");
-    applyJob(msg, callback)
+    applyJob(msg, callback);
+  } else if (msg.path === "getJobSeekerReviews") {
+    delete msg.path;
+    console.log("apply job -reached kafka");
+    getJobSeekerReviews(msg, callback);
   }
 };
 
