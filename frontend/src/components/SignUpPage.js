@@ -10,20 +10,39 @@ import Input from "./common/Input";
 const SignupPage = () => {
   let [emailId, setEmailId] = useState();
   let [password, setPassword] = useState();
+  let [emailIdError, setEmailIdError] = useState("");
+  let [passwordError, setPasswordError] = useState("");
   // let [role, setRole] = useState();
 
   const history = useHistory();
   let [isEmployer, setIsEmployer] = useState(false);
-  let [isJobSeeker, setIsJobSeeker] = useState(false);
-  let [message, setMessage] = useState("");
+  let [isJobSeeker, setIsJobSeeker] = useState(true);
+  let [message, setMessage] = useState();
   const handleEmailIdChange = (e) => {
+    // console.log("________");
+    var pattern = new RegExp(
+      /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
+    );
+
+    if (!pattern.test(e.target.value)) {
+      setEmailIdError("Enter Valid Email Address");
+    } else {
+      setEmailIdError("");
+    }
     console.log(e.target.value);
     setEmailId(e.target.value);
+    setMessage();
   };
 
   const handlePasswordChange = (e) => {
+    if (e.target.value.length === 0) {
+      setPasswordError("Please enter a password");
+    } else {
+      setPasswordError("");
+    }
     console.log(e.target.value);
     setPassword(e.target.value);
+    setMessage();
   };
 
   const createAccountHandler = async (e) => {
@@ -44,7 +63,7 @@ const SignupPage = () => {
       const result = await addAccount(payload);
       console.log("after call", result.data.status);
       if (result.data.status === 200) history.push("/login");
-      else setMessage(" Incorrectly filled. Please recheck fields.");
+      else setMessage(" User with credentials already present, please SignIn");
 
       console.log("done");
     } catch {
@@ -96,26 +115,36 @@ const SignupPage = () => {
           style={{
             width: "100%",
             border: "1px solid #696969",
-            marginBottom: "20px",
+            // marginBottom: "20px",
             color: "black",
           }}
           className="input-styler"
           onChange={handleEmailIdChange}
           type="email"
         />
+        {emailIdError && (
+          <div className="alert alert-danger" style={{ marginBottom: "20px" }}>
+            {emailIdError}
+          </div>
+        )}
         <Input
           label="Password"
           required="true"
           style={{
             width: "100%",
             border: "1px solid #696969",
-            marginBottom: "20px",
+            // marginBottom: "20px",
             color: "black",
           }}
           className="input-styler"
           onChange={handlePasswordChange}
           type="password"
         />
+        {passwordError && (
+          <div className="alert alert-danger" style={{ marginBottom: "20px" }}>
+            {passwordError}
+          </div>
+        )}
         <p></p>
         <div className="role-selection-wrapper">
           <p style={{ color: "black" }}>
@@ -136,12 +165,12 @@ const SignupPage = () => {
           </div>
           <div class="form-check">
             <input
+              defaultChecked
               class="form-inp"
               type="radio"
               name="flexRadioDefault"
               id="flexRadioDefault2"
               onClick={handleJobSeekerSelect}
-
             />
             <label class="form-check-label" for="flexRadioDefault2">
               Job Seeker
@@ -150,16 +179,25 @@ const SignupPage = () => {
         </div>
         <Button
           text="Create Account"
+          disabled={
+            !emailIdError && !passwordError && emailId && password
+              ? ""
+              : "disabled"
+          }
           onClick={createAccountHandler}
           style={{
             width: "100%",
           }}
         />
         <br />
-        <h5 style={{ color: "red" }}>{message}</h5>
-      </div>
-      <div style={{ marginTop: "20px", color: "#2557a7" }}>
-        <NavLink to="/login">Have an account? Sign in </NavLink>
+        {message && (
+          <p style={{ marginTop: "-20px", fontSize: "15px", color: "red" }}>
+            {message}
+          </p>
+        )}
+        <div style={{ color: "#2557a7" }}>
+          <NavLink to="/login">Have an account? Sign in </NavLink>
+        </div>
       </div>
     </div>
   );
