@@ -33,6 +33,10 @@ export async function getCompanyReviews(id, params) {
   return await http.get(apiEndpoint + `/getReviews/${id}`, { params: params });
 }
 
+export async function getJobSeekerReviews(id) {
+  return await http.get(apiEndpoint + `/getJobSeekerReviews/${id}`, {});
+}
+
 export async function getCompanyDetails(id) {
   return await http.get(apiURL + `/employer/api/getCompanyDetails/${id}`);
 }

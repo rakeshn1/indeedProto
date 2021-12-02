@@ -47,6 +47,8 @@ import ViewJobs from "./components/Employer/ViewEmployerJobs";
 import JobPostingsHeader from "./components/Employer/JobPostingsHeader";
 import MessagesLandingPage from "./components/common/Messages";
 
+import NotFound from "./components/common/NotFound";
+
 function App() {
   const location = useLocation();
   const jwt = getJwt();
@@ -243,6 +245,7 @@ function App() {
         {/* <Redirect from="/" exact to="/jobSeekerLandingPage" /> */}
         <Redirect from="/" exact to="/home" />
         <Redirect from="/jobSeeker" exact to="/jobSeekerLandingPage" />
+        <Route from="*" exact component={NotFound} />
       </Switch>
     </div>
   );

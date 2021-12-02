@@ -23,7 +23,7 @@ const JobSearchResults = (props) => {
 
   const setFirst = async () => {
     console.log("here");
-    if (props.searchResults && !cardDetails) {
+    if (props.searchResults.length > 0 && !cardDetails) {
       setCardDetails(props.searchResults[0]);
       setSelectedJobCard(props.searchResults[0]._id);
     }
@@ -42,7 +42,7 @@ const JobSearchResults = (props) => {
     const data = paginate(props.searchResults, currentPage, pageSize);
     setTotalCount(props.searchResults.length);
     setData(data);
-  }, [currentPage]);
+  }, [currentPage, props.searchResults]);
 
   let card = null;
   if (cardDetails) card = <JobDescriptionCard cardDetails={cardDetails} />;
