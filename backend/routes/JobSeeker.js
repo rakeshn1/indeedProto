@@ -320,4 +320,30 @@ router.get("/getJobSeekerReviews/:id", async (req, res) => {
   });
 });
 
+router.get("/getRatings/:id", async (req, res) => {
+  console.log("in get ratings");
+  console.log(req.params.id);
+  req.body.companyId = req.params.id;
+  req.body.path = "getCompanyRatings";
+  kafka.make_request("jobSeeker-topic", req.body, function (err, results) {
+    if (err) {
+      return res.status(400).send(err);
+    }
+
+    return res.status(200).send(results);
+  });
+});
+
+router.get("/getTotalReviews/:id", async (req, res) => {
+  req.body.companyId = req.params.id;
+  req.body.path = "getTotalReviews";
+  kafka.make_request("jobSeeker-topic", req.body, function (err, results) {
+    if (err) {
+      return res.status(400).send(err);
+    }
+
+    return res.status(200).send(results);
+  });
+});
+
 module.exports = router;

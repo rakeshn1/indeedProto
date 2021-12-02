@@ -44,6 +44,9 @@ const reviewSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  state: {
+    type: String,
+  },
   CEOApproval: {
     type: Boolean,
     required: true,
