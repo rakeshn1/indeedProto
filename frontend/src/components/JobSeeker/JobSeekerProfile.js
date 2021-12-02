@@ -39,8 +39,9 @@ const JobSeekerProfile = () => {
     };
     const handleAddressChange = (key1, key2, value) => {
         let newData = { ...data };
-        let add = { ...newData.address, [key1]: { [key2]: value } };
-        setData({ ...data, ...add });
+        newData = { ...newData, address: { ...newData.address, [key2]: value } };
+        console.log(newData)
+        setData(newData);
     };
 
     const makeEditable = () => {
@@ -523,6 +524,7 @@ const JobSeekerProfile = () => {
                                 handleChange("firstName", e.target.value);
                             }}
                             type="text"
+                            className="input-styler"
                             value={data?.firstName}
                         />
                         <Input
@@ -536,6 +538,7 @@ const JobSeekerProfile = () => {
                             onChange={(e) => {
                                 handleChange("lastName", e.target.value);
                             }}
+                            className="input-styler"
                             value={data?.lastName}
                             type="text"
                         />
@@ -548,6 +551,7 @@ const JobSeekerProfile = () => {
                                 marginBottom: "20px",
                                 color: "black",
                             }}
+                            className="input-styler"
                             value={viewData?.email}
                             type="text"
                         />
@@ -563,6 +567,7 @@ const JobSeekerProfile = () => {
                                 handleChange("phoneNumber", e.target.value);
                             }}
                             value={data?.phoneNumber}
+                            className="input-styler"
                             type="text"
                         />
                         <h5>
@@ -585,6 +590,8 @@ const JobSeekerProfile = () => {
                             }}
                             value={data?.address?.city}
                             type="text"
+                            className="input-styler"
+
                         />{" "}
                         <Input
                             label="State"
@@ -599,6 +606,8 @@ const JobSeekerProfile = () => {
                             }}
                             value={data?.address?.state}
                             type="text"
+                            className="input-styler"
+
                         />
                         <Input
                             label="Country"
@@ -613,6 +622,8 @@ const JobSeekerProfile = () => {
                             }}
                             value={data?.address?.country}
                             type="text"
+                            className="input-styler"
+
                         />
                         <Input
                             label="Zip Code"
@@ -627,6 +638,8 @@ const JobSeekerProfile = () => {
                             }}
                             value={data?.address?.zipcode}
                             type="text"
+                            className="input-styler"
+
                         />
                         <div
                             style={{

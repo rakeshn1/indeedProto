@@ -1,5 +1,5 @@
 import React from "react";
-
+import moment from 'moment'
 const JobCard = (props) => {
   //   const className =
   //     props.selecetdJobCard === props.card._id
@@ -74,7 +74,7 @@ const JobCard = (props) => {
       </div>
 
       <div className="job-card-posted-ago">
-        {props.card?.datePosted}
+        {moment(props.card?.datePosted).fromNow()}
         {/* 7 days ago */}
       </div>
     </div>

@@ -65,7 +65,9 @@ const JobSeekerSignIn = () => {
             border: "1px solid #696969",
             marginBottom: "20px",
             color: "black",
+
           }}
+          className="input-styler"
           onChange={handleEmailIdChange}
         />
         <Input
@@ -77,6 +79,7 @@ const JobSeekerSignIn = () => {
             marginBottom: "20px",
             color: "black",
           }}
+          className="input-styler"
           onChange={handlePasswordChange}
           type="password"
         />
@@ -87,7 +90,7 @@ const JobSeekerSignIn = () => {
             width: "100%",
           }}
         />
-        <div style={{ backgroundColor: "yellow" }}>{message}</div>
+        <div style={{ color: "red" }}>{message}</div>
         <div style={{ marginTop: "20px", color: "#2557a7" }}>
           <NavLink to="/signUp">New user? Sign up </NavLink>
         </div>

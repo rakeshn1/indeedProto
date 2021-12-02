@@ -99,6 +99,7 @@ const SignupPage = () => {
             marginBottom: "20px",
             color: "black",
           }}
+          className="input-styler"
           onChange={handleEmailIdChange}
           type="email"
         />
@@ -111,6 +112,7 @@ const SignupPage = () => {
             marginBottom: "20px",
             color: "black",
           }}
+          className="input-styler"
           onChange={handlePasswordChange}
           type="password"
         />
@@ -139,6 +141,7 @@ const SignupPage = () => {
               name="flexRadioDefault"
               id="flexRadioDefault2"
               onClick={handleJobSeekerSelect}
+
             />
             <label class="form-check-label" for="flexRadioDefault2">
               Job Seeker
@@ -153,7 +156,7 @@ const SignupPage = () => {
           }}
         />
         <br />
-        <h5>{message}</h5>
+        <h5 style={{ color: "red" }}>{message}</h5>
       </div>
       <div style={{ marginTop: "20px", color: "#2557a7" }}>
         <NavLink to="/login">Have an account? Sign in </NavLink>
