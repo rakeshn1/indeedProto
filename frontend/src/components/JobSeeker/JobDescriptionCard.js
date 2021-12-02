@@ -10,6 +10,7 @@ import Button from "../common/Button";
 import _ from "lodash";
 import { useHistory } from "react-router";
 import { getCurrentUser } from "../../services/auth";
+import { Link } from "react-router-dom";
 
 const JobDescriptionCard = (props) => {
   const [auth, setAuth] = useState(true);
@@ -55,8 +56,12 @@ const JobDescriptionCard = (props) => {
   };
 
   const handleSavedJobs = async (jobId) => {
+    if (!user) {
+      history.push("/login");
+      return;
+    }
     console.log("JobId", jobId);
-    console.log("USER: ", user);
+    console.log("User: ", user);
     const payload = {
       jobId,
       userId: user._id,
@@ -68,16 +73,15 @@ const JobDescriptionCard = (props) => {
   };
 
   const handleApplyJob = async () => {
+    if (!user) {
+      history.push("/login");
+      return;
+    }
     const p = {
       userId: user._id,
     };
     const userDetails = await getJobSeekerDetails(p);
     console.log("applying job for user with details", userDetails.data);
-
-    if (!auth) {
-      console.log("login to continue");
-      return;
-    }
 
     if (userDetails && !userDetails.data.resume) {
       alert("please add resume");
@@ -88,6 +92,7 @@ const JobDescriptionCard = (props) => {
         userId: user._id,
         companyId: props.cardDetails.companyId,
         resumeURL: userDetails.data.resume,
+        coverLetterURL: userDetails.data.coverLetter,
       };
 
       // if(payload.)
@@ -107,7 +112,13 @@ const JobDescriptionCard = (props) => {
 
         <div className="job-card-company-details">
           <span>
-            {props.cardDetails?.companyName} <b> 4.3 </b>{" "}
+            <Link
+              style={{ textDecoration: "none", color: "black" }}
+              to={`/companyDetails/${props.cardDetails?.companyId}`}
+            >
+              {props.cardDetails?.companyName}
+            </Link>{" "}
+            <b> 4.3 </b>{" "}
             <svg
               width="18"
               height="18"
@@ -124,7 +135,7 @@ const JobDescriptionCard = (props) => {
             <span>
               {props.cardDetails?.location.city},{" "}
               {props.cardDetails?.location.state},{" "}
-              {props.cardDetails?.location.zipCode}
+              {props.cardDetails?.location.zipcode}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -135,7 +146,9 @@ const JobDescriptionCard = (props) => {
               >
                 <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
               </svg>
-              Remote
+              {props?.cardDetails?.jobType === 0 && "Full Time"}
+              {props?.cardDetails?.jobType === 1 && "Part Time"}
+              {props?.cardDetails?.jobType === 2 && "Remote"}
             </span>
           </p>
         </div>
@@ -145,7 +158,7 @@ const JobDescriptionCard = (props) => {
           }) && (
             <Button
               text="Apply now"
-              disabled={user ? false : true}
+              // disabled={user ? false : true}
               style={{
                 height: "40px",
                 width: "120px",
@@ -209,7 +222,7 @@ const JobDescriptionCard = (props) => {
           }) && (
             <div className="heart-button">
               <button
-                disabled={user ? "" : "disabled"}
+                // disabled={user ? "" : "disabled"}
                 onClick={() => handleSavedJobs(props.cardDetails?._id)}
               >
                 {/* {heart_Icon} */}
@@ -234,7 +247,15 @@ const JobDescriptionCard = (props) => {
           <h4>
             <b>Job Details</b>
           </h4>
-          <p>{props.cardDetails?.description}</p>
+          <p>
+            <b>Salary:</b> ${props.cardDetails?.salary}
+          </p>
+          <p>
+            <b>JobType: </b>
+            {props?.cardDetails?.jobType === 0 && "Full Time"}
+            {props?.cardDetails?.jobType === 1 && "Part Time"}
+            {props?.cardDetails?.jobType === 2 && "Remote"}
+          </p>
         </div>
 
         <div>
@@ -242,11 +263,21 @@ const JobDescriptionCard = (props) => {
             <b>Full Job Description</b>
           </h5>
           <p>{props.cardDetails?.description}</p>
-          {/* <p>Moxtra provides a client engagement platform designed for the mobile era. Moxtra solutions deliver high-touch and personalized digital experiences to enhance client engagement and accelerate transactions. Founded by former WebEx co-founder and CEO Subrah Iyar and WebEx veteran Stanley Huang, Moxtra comes from a rich heritage in the collaboration space.</p> */}
+          <p>
+            <b>Location:</b> {props.cardDetails?.location.city},{" "}
+            {props.cardDetails?.location.state},{" "}
+            {props.cardDetails?.location.zipcode}{" "}
+          </p>
+          <p>
+            <b>Compensation:</b> ${props.cardDetails?.salary}
+          </p>
 
           <h5>
-            <b>Responsibilitie</b>
+            <b>Responsibilities</b>
           </h5>
+          <p>
+            <b>What You'll Do</b>
+          </p>
           <p>{props.cardDetails?.responsibilities}</p>
         </div>
       </div>

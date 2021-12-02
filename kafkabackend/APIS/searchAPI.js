@@ -378,7 +378,7 @@ const getSalaryReviewsMainData = async (msg, callback) => {
     const result = await SalaryReview.aggregate([
       {
         $match: {
-          jobTitle: { $regex: msg.jobTitle, $options: "i" },
+          jobTitle: { $regex: "" + msg.jobTitle + "", $options: "i" },
           companyId: { $in: selectedCompanyIds },
         },
       },
