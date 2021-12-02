@@ -38,8 +38,8 @@ class ReviewCard extends React.Component {
           <div className="d-flex flex-column ps-4">
             <h4>{this.props.reviewSummary}</h4>
             <span style={{ fontSize: "12px" }}>
-              {this.props.role} (Former Employee) - {this.props.city},{" "}
-              {this.props.state ?? `USA`} - {this.props.reviewedOn}
+              {this.props.role} - {this.props.city}, {this.props.state ?? `USA`}{" "}
+              - {this.props.reviewedOn}
             </span>
             {this.props.status === 2 && (
               <div className="featured-review">

@@ -156,7 +156,7 @@ class Jobs extends React.Component {
                 className="bg-white p-3"
                 style={{
                   borderBottom: "2px solid #f2f2f2",
-                  borderTop: "4px solid red",
+                  borderTop: "4px solid #085ff7",
                   boxShadow: "0 4px 4px rgb(0 0 0 / 8%)",
                 }}
               >
@@ -183,23 +183,28 @@ class Jobs extends React.Component {
                   Apply on company site
                 </button>
               </div>
+
               <div className="job-desc p-4">
-                <h6>
+                <h6 className="mb-3">
                   <b>Job Overview</b>
                 </h6>
                 <p>
-                  You’ll be part of the Amazon grocery team that supports one of
-                  Amazon’s busiest services: online grocery orders. It’s similar
-                  to a shopper role, except that you’ll be working in a grocery
-                  warehouse, but it’s not like our other bigger buildings, it’s
-                  more like the size of a grocery store. Amazon Fresh offers
-                  customers everything from cereal to ice cream to fresh
-                  flowers, so you’ll be preparing orders for customers, working
-                  in different environments – including refrigerated and freezer
-                  spaces for part of your shift. It can be cold, but we’ll
-                  provide you with the right gear to stay warm!
+                  <b>Salary:</b> ${currentJob?.salary}
                 </p>
-                <h6>Duties & Responsibilities</h6>
+
+                <p>
+                  <b>JobType: </b>
+                  {currentJob?.jobType === 0 && "Full Time"}
+                  {currentJob?.jobType === 1 && "Part Time"}
+                  {currentJob?.jobType === 2 && "Remote"}
+                </p>
+                <p>
+                  <b>Location:</b> {currentJob?.location.city},{" "}
+                  {currentJob?.location.state}, {currentJob?.location.zipcode}{" "}
+                </p>
+                <h6 className="mb-3">
+                  <b>Duties & Responsibilities</b>
+                </h6>
                 <p>{currentJob?.responsibilities}</p>
                 {/* <ul>
                   <li>Prepare grocery orders for delivery</li>

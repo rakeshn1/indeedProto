@@ -301,7 +301,7 @@ button {
 }
 
 .jobCard.activeJob {
-  border-left: 4px solid red;
+  border-left: 4px solid #085ff7;
 }
 
 .jobListItem {
