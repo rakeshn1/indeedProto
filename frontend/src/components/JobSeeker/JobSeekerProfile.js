@@ -8,27 +8,18 @@ import Input from "../common/Input";
 // import { ACCESS_SECRET_KEY_ID, ACCESS_KEY_ID } from '../../utils/constants';
 import S3FileUpload from "react-s3";
 import { getCurrentUser } from "../../services/auth";
-
-<<<<<<< HEAD
-
+import { coverConfig, resumeConfig } from "../../config";
 
 
-=======
->>>>>>> 86af4f955487b49d5ccb2bffcd06f40055d16d4a
-const config = {
-    bucketName: "uber-eats-proto",
-    dirName: "resumeUpload/" /* optional */,
-    region: "us-east-2",
-    accessKeyId: "AKIAUR4W3HRGHUKUAVWI",
-    secretAccessKey: "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",
-};
 const JobSeekerProfile = () => {
     const user = getCurrentUser();
     const [data, setData] = useState();
     const [viewData, setViewData] = useState();
     const [showEditDiv, setShowEditDiv] = useState(false);
     const [resumeURL, setResumeURL] = useState();
+    const [coverLetterURL, setCoverLetterURL] = useState();
     const [resCheck, setResCheck] = useState(false);
+    const [coverCheck, setCoverCheck] = useState(false);
 
     const fetchJobSeekerDetails = async () => {
         const details = await getJobSeekerDetails({ userId: user._id });
@@ -36,6 +27,7 @@ const JobSeekerProfile = () => {
         setData({ ...details.data });
         setViewData({ ...details.data });
         setResumeURL(details.data.resume);
+        setCoverLetterURL(details.data.coverLetter);
     };
 
     useEffect(() => {
@@ -68,6 +60,7 @@ const JobSeekerProfile = () => {
                 country: data.address.country,
                 zipcode: data.address.zipcode,
             },
+            coverLetter: coverLetterURL
         };
 
         const details = await updateJobSeekerDetails(user._id, payload);
@@ -78,6 +71,34 @@ const JobSeekerProfile = () => {
         await fetchJobSeekerDetails();
     };
 
+    const saveCoverLetterURL = async (e) => {
+        await handleChange("coverLetter", coverLetterURL);
+
+        console.log("data", data);
+        console.log("coverLetter", coverLetterURL);
+        const payload = {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            phoneNumber: data.phoneNumber,
+            resume: resumeURL,
+            address: {
+                city: data.address.city,
+                state: data.address.state,
+                country: data.address.country,
+                zipcode: data.address.zipcode,
+            },
+            coverLetter: coverLetterURL,
+        };
+
+        const details = await updateJobSeekerDetails(user._id, payload);
+
+        console.log("updated user details", details.data);
+        setData(details.data);
+        // setResCheck(false);
+
+        await fetchJobSeekerDetails();
+
+    }
     const saveURL = async (e) => {
         await handleChange("resume", resumeURL);
 
@@ -94,8 +115,7 @@ const JobSeekerProfile = () => {
                 country: data.address.country,
                 zipcode: data.address.zipcode,
             },
-            //  coverLetter = data.coverLetter,
-            //  companyRole = data.companyRoledata
+            coverLetter: data.coverLetter,
         };
 
         const details = await updateJobSeekerDetails(user._id, payload);
@@ -106,11 +126,24 @@ const JobSeekerProfile = () => {
 
         await fetchJobSeekerDetails();
     };
+
+
     const uploadResume = async (e) => {
         console.log(e.target.files[0]);
-        await S3FileUpload.uploadFile(e.target.files[0], config)
+        await S3FileUpload.uploadFile(e.target.files[0], resumeConfig)
             .then((data) => {
                 setResumeURL(data.location);
+            })
+            .catch((err) => {
+                alert(err);
+            });
+    };
+
+    const uploadCoverLetter = async (e) => {
+        console.log(e.target.files[0]);
+        await S3FileUpload.uploadFile(e.target.files[0], coverConfig)
+            .then((data) => {
+                setCoverLetterURL(data.location);
             })
             .catch((err) => {
                 alert(err);
@@ -132,6 +165,7 @@ const JobSeekerProfile = () => {
                 country: data.address.country,
                 zipcode: data.address.zipcode,
             },
+            coverLetter: data.coverLetter
         };
 
         const details = await updateJobSeekerDetails(user._id, payload);
@@ -142,17 +176,176 @@ const JobSeekerProfile = () => {
 
         await fetchJobSeekerDetails();
     };
+
+    const deleteCoverLetter = async () => {
+        await handleChange("coverLetter", undefined);
+
+        console.log("resume", data.resume);
+        const payload = {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            phoneNumber: data.phoneNumber,
+            resume: data.resume,
+            address: {
+                city: data.address.city,
+                state: data.address.state,
+                country: data.address.country,
+                zipcode: data.address.zipcode,
+            },
+            coverLetter: ""
+        };
+
+        const details = await updateJobSeekerDetails(user._id, payload);
+
+        console.log("updated user details", details.data);
+        setData(details.data);
+        // setResCheck(true)
+
+        await fetchJobSeekerDetails();
+    };
+
+
+    //COVER LETTER
+    let coverLetterHandlerFlex = null;
+
+    if ((data && !data?.coverLetter) || coverCheck || !viewData) {
+        coverLetterHandlerFlex = (
+            <div className="resume-upload">
+                <h5>
+                    <b>  Upload Cover Letter</b>
+                </h5>
+                <div>
+                    <input
+                        style={{ width: "100%", padding: "10px" }}
+                        type="file"
+                        onChange={uploadCoverLetter}
+                    />
+                </div>
+                <Button
+                    text="Save"
+                    onClick={saveCoverLetterURL}
+                    style={{
+                        margin: "0px 5px",
+                        backgroundColor: "#085ff7",
+                        color: "white",
+                        borderRadius: "20px",
+                        border: "2px solid #085ff7",
+                        width: "100%",
+                    }}
+                />
+                <p>
+                    {" "}
+                    By continuing, you agree to create a public Cover Letter and agree to
+                    receiving job opportunities from employers.
+                </p>
+            </div>
+        );
+    } else {
+        coverLetterHandlerFlex = (
+            <div className="resume-upload">
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <h5>
+                        <b>
+                            Cover Letter</b>
+                    </h5>
+                    <div onClick={deleteCoverLetter}>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            viewBox="0 0 16 16"
+                        >
+                            <path d="m15.536 7.8987c-0.1953-0.19526-0.5119-0.19526-0.7071 0l-2.8284 2.8284-2.8285-2.8284c-0.19526-0.19527-0.51185-0.19527-0.70711 0l-0.56568 0.56568c-0.19527 0.19526-0.19526 0.51185 0 0.70711l2.8285 2.8284-2.8285 2.8285c-0.19526 0.1952-0.19526 0.5118 0 0.7071l0.56568 0.5657c0.19527 0.1952 0.51185 0.1952 0.70711 0l2.8285-2.8285 2.8284 2.8284c0.1952 0.1953 0.5118 0.1953 0.7071 0l0.5657-0.5657c0.1952-0.1953 0.1952-0.5118 0-0.7071l-2.8284-2.8284 2.8283-2.8284c0.1953-0.19526 0.1953-0.51184 0-0.70711l-0.5656-0.56568z" />
+                        </svg>
+                    </div>
+                </div>
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginTop: "20px",
+                    }}
+                >
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            width: "40%",
+                        }}
+                    >
+                        <div>
+                            <svg width="44" height="64" viewBox="0 0 44 64">
+                                <path
+                                    d="M0 2C0 0.895431 0.895431 0 2 0H27C28.1046 0 29 0.895431 29 2V13C29 14.1046 29.8954 15 31 15H42C43.1046 15 44 15.8954 44 17V62C44 63.1046 43.1046 64 42 64H2C0.895431 64 0 63.1046 0 62V2Z"
+                                    fill="#E4E2E0"
+                                ></path>
+                                <path
+                                    d="M0 44H44V62C44 63.1046 43.1046 64 42 64H2C0.895431 64 0 63.1046 0 62V44Z"
+                                    fill="#085ff7"
+                                ></path>
+                                <text fill="#FFFFFF" font-weight="700" font-size="12">
+                                    {" "}
+                                    <tspan x="10" y="58">
+                                        PDF
+                                    </tspan>
+                                </text>
+                            </svg>
+                        </div>
+                        <div>
+                            {data &&
+                                data?.coverLetter.substring(data?.coverLetter.lastIndexOf("/") + 1)}
+                        </div>
+                    </div>
+                    <div style={{ width: "40%" }}>
+                        <div style={{ display: "flex", justifyContent: "space-around" }}>
+                            <a
+                                href={coverLetterURL}
+                                target="_blank"
+                                rel="noreferrer"
+                                download="indeed_coverLetter.pdf"
+                            >
+                                <Button
+                                    text="Download"
+                                    style={{
+                                        fontSize: "14px",
+                                        borderRadius: "5px",
+                                        backgroundColor: "white",
+                                        color: "#085ff7",
+                                    }}
+                                ></Button>
+                            </a>
+
+                            <Button
+                                text="Replace"
+                                style={{
+                                    fontSize: "14px",
+                                    borderRadius: "5px",
+                                    color: "#085ff7",
+                                    backgroundColor: "white",
+                                }}
+                                onClick={() => setCoverCheck(true)}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+
+    //RESUME 
     let resumeHandlerFlex = null;
 
     if ((data && !data?.resume) || resCheck || !viewData) {
         resumeHandlerFlex = (
             <div className="resume-upload">
                 <h5>
-                    <b> Get Started</b>
+                    <b> Upload Resume</b>
                 </h5>
                 <div>
                     <input
-                        style={{ width: "100%" }}
+                        style={{ width: "100%", padding: "10px" }}
                         type="file"
                         onChange={uploadResume}
                     />
@@ -284,6 +477,8 @@ const JobSeekerProfile = () => {
             </div>
             <div className="profile-wrapper">
                 <div class="profile-flex-box">{resumeHandlerFlex}</div>
+                <div class="profile-flex-box">{coverLetterHandlerFlex}</div>
+
                 {showEditDiv === false ? (
                     <div class="profile-flex-box">
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
