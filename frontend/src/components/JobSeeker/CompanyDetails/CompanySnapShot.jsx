@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import CompanyDetailsCard from "./common/CompanyDetailsCard";
+import CompanyHappinessCard from "./common/CompanyHappinessCard";
 import ReviewCard from "./ReviewCard";
 import { titleCase } from "title-case";
 import { format } from "date-fns";
@@ -12,8 +13,8 @@ class CompanySnapShot extends React.Component {
   };
   async componentDidMount() {
     let params = { isFeatured: true };
-    const res = await getCompanyReviews("619ebb543ee1aa8bb08188a3", params);
-    this.setState({ reviews: res.data });
+    const res = await getCompanyReviews(this.props.companyDetails?._id, params);
+    this.setState({ reviews: res.data.reviews });
   }
   render() {
     console.log(this.props);
@@ -21,6 +22,37 @@ class CompanySnapShot extends React.Component {
       <div className="p-3 mt-5">
         <div>
           <h4 className="mb-3">
+            <b>Work happiness</b>
+          </h4>
+          <div className="mt-3 d-flex flex-row flex-wrap">
+            <CompanyHappinessCard
+              title="Appreciation Score"
+              content={
+                "Do people feel they are appreciated as a person at work?"
+              }
+              score={this.props.companyDetails?.appreciationScore}
+            />
+
+            <CompanyHappinessCard
+              title="Happiness Score"
+              content={"Do people feel happy at work most of the time?"}
+              score={this.props.companyDetails?.happinessScore}
+            />
+
+            <CompanyHappinessCard
+              title="Learning Score"
+              content="Do people feel they often learn something at work?"
+              score={this.props.companyDetails?.learningScore}
+            />
+            {/* <CompanyHappinessCard
+              title="Work Score"
+              content="more than $ 10B (USD) "
+              score={this.props.companyDetails?.workScore}
+            /> */}
+          </div>
+        </div>
+        <div>
+          <h4 className="mt-3 mb-3">
             <b>About the company</b>
           </h4>
           <div className="mt-3 d-flex flex-row flex-wrap">
@@ -36,11 +68,22 @@ class CompanySnapShot extends React.Component {
 
             <CompanyDetailsCard
               title="CompanySize"
-              content="more than 10,000"
+              content={
+                <div>
+                  <p style={{ marginBottom: 0, fontSize: "12px" }}>more than</p>
+                  <span>{`${this.props.companyDetails?.companySize}`}</span>
+                </div>
+              }
             />
             <CompanyDetailsCard
               title="Revenue"
-              content="more than $ 10B (USD) "
+              content={
+                <div>
+                  <p style={{ marginBottom: 0, fontSize: "12px" }}>more than</p>
+                  <span>{`$${this.props.companyDetails?.revenue}M (USD)`}</span>
+                </div>
+              }
+              // content={`more than $${this.props.companyDetails?.revenue}B (USD)`}
             />
             <CompanyDetailsCard
               title="Industry"
@@ -68,12 +111,12 @@ class CompanySnapShot extends React.Component {
             this.state.reviews?.map((review) => {
               return (
                 <ReviewCard
-                  reviewSummary={review.reviewSummary}
+                  reviewSummary={titleCase(review.reviewSummary)}
                   rating={review.rating}
-                  review={review.review}
-                  role={review.jobTitle}
-                  city={review.jobLocation}
-                  state="CA"
+                  review={titleCase(review.review)}
+                  role={titleCase(review.jobTitle)}
+                  city={titleCase(review.jobLocation)}
+                  state={review?.state?.toUpperCase()}
                   reviewedOn={format(
                     new Date(Date.parse(review.date)),
                     "LLL do, yyyy"
@@ -82,6 +125,7 @@ class CompanySnapShot extends React.Component {
                   cons={review.cons}
                   showHelpfulness={false}
                   reviewId={review._id}
+                  status={review.status}
                 />
               );
             })}

@@ -6,10 +6,10 @@ import { apiURL } from "../config";
 
 const apiEndpoint = apiURL + "/jobSeeker";
 
-export async function addReview(review) {
+export async function addReview(review, companyId, jobSeekerId) {
   const result = {
-    jobSeekerId: "6174aeb47623fc4a4f1a6bb0",
-    companyId: "619ebb543ee1aa8bb08188a3",
+    jobSeekerId: jobSeekerId,
+    companyId: companyId,
     rating: review.overallRating,
     workLifeBal: review.workLifeBal,
     jobSecurity: review.jobSecurity,
@@ -24,6 +24,7 @@ export async function addReview(review) {
     jobLocation: review.jobLocation,
     CEOApproval: review.ceoApproval,
     howShouldIPrepare: review.tips,
+    state: review.state,
     status: 0,
   };
   return await http.post(apiEndpoint + "/addReview", result);
@@ -48,40 +49,47 @@ export async function updateReview(reviewid, isHelpful) {
 }
 
 export async function getJobSearchResults(payload) {
-  console.log(apiURL + "/api/getJobSearchResults/")
-  console.log("payload", payload)
-  return await http.get(apiEndpoint + `/getJobSearchResults/`, { params: payload });
+  console.log(apiURL + "/api/getJobSearchResults/");
+  console.log("payload", payload);
+  return await http.get(apiEndpoint + `/getJobSearchResults/`, {
+    params: payload,
+  });
 }
-
 
 export async function handleJobSaveUnsave(payload) {
   // console.log(apiURL + "/api/handleJobSaveUnsave/")
-  console.log("payload", payload)
-  return await http.put(apiEndpoint + `/handleJobSaveUnsave/${payload.userId}`, { jobId: payload.jobId });
+  console.log("payload", payload);
+  return await http.put(
+    apiEndpoint + `/handleJobSaveUnsave/${payload.userId}`,
+    { jobId: payload.jobId }
+  );
 }
 
 export async function getSavedJobs(payload) {
   // console.log(apiURL + "/api/handleJobSaveUnsave/")
-  console.log("payload", payload)
+  console.log("payload", payload);
   return await http.get(apiEndpoint + `/getSavedJobs/${payload.userId}`);
 }
 
 export async function getAppliedJobs(payload) {
   // console.log(apiURL + "/api/handleJobSaveUnsave/")
-  console.log("payload", payload)
+  console.log("payload", payload);
   return await http.get(apiEndpoint + `/getAppliedJobs/${payload.userId}`);
 }
 
 export async function getJobSeekerDetails(payload) {
   // console.log(apiURL + "/api/handleJobSaveUnsave/")
-  console.log("payload", payload)
+  console.log("payload", payload);
   return await http.get(apiEndpoint + `/getJobSeekerDetails/${payload.userId}`);
 }
 
 export async function updateJobSeekerDetails(userId, payload) {
   // console.log(apiURL + "/api/handleJobSaveUnsave/")
-  console.log("payload", payload)
-  return await http.put(apiEndpoint + `/updateJobSeekerDetails/${userId}`, payload);
+  console.log("payload", payload);
+  return await http.put(
+    apiEndpoint + `/updateJobSeekerDetails/${userId}`,
+    payload
+  );
 }
 
 export async function applyJob(payload) {
@@ -89,4 +97,9 @@ export async function applyJob(payload) {
   return await http.post(apiEndpoint + `/applyJob/`, payload);
 }
 
-
+export async function getCompanyratings(id) {
+  return await http.get(apiEndpoint + `/getRatings/${id}`);
+}
+export async function getTotalReviews(id) {
+  return await http.get(apiEndpoint + `/getTotalReviews/${id}`);
+}

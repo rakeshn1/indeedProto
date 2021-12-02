@@ -4,8 +4,7 @@ const mongoose = require("mongoose");
 const kafka = require("../kafka/client");
 const { Jobs } = require("../models/mongo/jobs.js");
 const { User } = require("../models/mongo/user");
-const { JobApplication } = require("../models/mongo/jobApplications")
-
+const { JobApplication } = require("../models/mongo/jobApplications");
 
 router.post("/addReview", async (req, res) => {
   console.log(req.body);
@@ -31,7 +30,7 @@ router.post("/addSalaryReview/", async (req, res) => {
 });
 
 router.get("/getSavedJobs/:userId", async (req, res) => {
-  const userId = req.params.userId
+  const userId = req.params.userId;
   try {
     const response = await User.findById(userId);
     console.log("User Details", response.savedJobs);
@@ -43,13 +42,15 @@ router.get("/getSavedJobs/:userId", async (req, res) => {
 });
 
 router.get("/getAppliedJobs/:userId", async (req, res) => {
-  const userId = req.params.userId
+  const userId = req.params.userId;
   try {
-    const response = await JobApplication.find({ userId: mongoose.Types.ObjectId(userId) }).select("jobId");
-    const result = []
+    const response = await JobApplication.find({
+      userId: mongoose.Types.ObjectId(userId),
+    }).select("jobId");
+    const result = [];
     response.map((job) => {
-      result.push(job.jobId)
-    })
+      result.push(job.jobId);
+    });
     console.log("User Details", result);
     res.send(result);
   } catch (err) {
@@ -146,49 +147,57 @@ router.get("/getJobSearchResults/", async (req, res) => {
   let response;
   if (!what && !where) {
     response = [];
-  }
-  else if (what && where) {
+  } else if (what && where) {
     response = await Jobs.find({
-      $and:
-        [
-          {
-            $or: [
-              { "jobTitle": new RegExp('.*' + req.query.what + '.*', "i") },
-              { "companyName": new RegExp('.*' + req.query.what + '.*', "i") }]
-          },
-          {
-            $or: [
-              { "location.city": new RegExp('.*' + req.query.where + '.*', "i") },
-              { "location.country": new RegExp('.*' + req.query.where + '.*', "i") },
-              { "location.state": new RegExp('.*' + req.query.where + '.*', "i") },
-              { "location.zipcode": new RegExp('.*' + req.query.where + '.*', "i") }
-            ]
-          }
-        ]
-    })
-  }
-  else if (what && !where) {
+      $and: [
+        {
+          $or: [
+            { jobTitle: new RegExp(".*" + req.query.what + ".*", "i") },
+            { companyName: new RegExp(".*" + req.query.what + ".*", "i") },
+          ],
+        },
+        {
+          $or: [
+            { "location.city": new RegExp(".*" + req.query.where + ".*", "i") },
+            {
+              "location.country": new RegExp(
+                ".*" + req.query.where + ".*",
+                "i"
+              ),
+            },
+            {
+              "location.state": new RegExp(".*" + req.query.where + ".*", "i"),
+            },
+            {
+              "location.zipcode": new RegExp(
+                ".*" + req.query.where + ".*",
+                "i"
+              ),
+            },
+          ],
+        },
+      ],
+    });
+  } else if (what && !where) {
     response = await Jobs.find({
       $or: [
-        { "jobTitle": new RegExp('.*' + req.query.what + '.*', "i") },
-        { "companyName": new RegExp('.*' + req.query.what + '.*', "i") }
-      ]
+        { jobTitle: new RegExp(".*" + req.query.what + ".*", "i") },
+        { companyName: new RegExp(".*" + req.query.what + ".*", "i") },
+      ],
+    });
+  } else {
+    response = await Jobs.find({
+      $or: [
+        { "location.city": new RegExp(".*" + req.query.where + ".*", "i") },
+        { "location.country": new RegExp(".*" + req.query.where + ".*", "i") },
+        { "location.state": new RegExp(".*" + req.query.where + ".*", "i") },
+        { "location.zipcode": new RegExp(".*" + req.query.where + ".*", "i") },
+      ],
     });
   }
-  else {
-    response = await Jobs.find({
-      $or: [
-        { "location.city": new RegExp('.*' + req.query.where + '.*', "i") },
-        { "location.country": new RegExp('.*' + req.query.where + '.*', "i") },
-        { "location.state": new RegExp('.*' + req.query.where + '.*', "i") },
-        { "location.zipcode": new RegExp('.*' + req.query.where + '.*', "i") }
-      ]
-    })
-  }
   console.log("response", response);
-  res.send(response)
+  res.send(response);
 });
-
 
 router.post("/applyJob", async (req, res) => {
   console.log(req.body);
@@ -220,6 +229,32 @@ router.get("/getReviews/:id", async (req, res) => {
   req.body.params = req.query;
   req.body.path = "getCompanyReviews";
 
+  kafka.make_request("jobSeeker-topic", req.body, function (err, results) {
+    if (err) {
+      return res.status(400).send(err);
+    }
+
+    return res.status(200).send(results);
+  });
+});
+
+router.get("/getRatings/:id", async (req, res) => {
+  console.log("in get ratings");
+  console.log(req.params.id);
+  req.body.companyId = req.params.id;
+  req.body.path = "getCompanyRatings";
+  kafka.make_request("jobSeeker-topic", req.body, function (err, results) {
+    if (err) {
+      return res.status(400).send(err);
+    }
+
+    return res.status(200).send(results);
+  });
+});
+
+router.get("/getTotalReviews/:id", async (req, res) => {
+  req.body.companyId = req.params.id;
+  req.body.path = "getTotalReviews";
   kafka.make_request("jobSeeker-topic", req.body, function (err, results) {
     if (err) {
       return res.status(400).send(err);
