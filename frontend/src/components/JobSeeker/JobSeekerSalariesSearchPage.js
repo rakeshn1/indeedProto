@@ -106,12 +106,15 @@ class JobSeekerSalariesSearchPage extends React.Component {
   }
 
   apiCall = async () => {
+    this.setState({ numberOfReviews: 0, averageSalary: 0, rankedJobs: [] });
     const { jobTitle, location } = this.props.match.params;
     const { data } = await getSalaryReviewsMainData(jobTitle, location);
     console.log("data: ", data);
     this.setState({
-      numberOfReviews: data[0].numberOfReviews,
-      averageSalary: data[0].averageSalary.toFixed(),
+      numberOfReviews: data[0]?.numberOfReviews ? data[0]?.numberOfReviews : 0,
+      averageSalary: data[0]?.averageSalary
+        ? data[0]?.averageSalary.toFixed()
+        : 0,
     });
     const { data: rankedJobs } = await getSalaryReviewsRankedJobs(
       jobTitle,

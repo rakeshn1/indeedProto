@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const JobCard = (props) => {
   //   const className =
@@ -24,7 +25,13 @@ const JobCard = (props) => {
 
       <div className="job-card-company-details">
         <span>
-          {props.card?.companyName} <b> 4.3 </b>{" "}
+          <Link
+            style={{ textDecoration: "none", color: "black" }}
+            to={`/companyDetails/${props.card?.companyId}`}
+          >
+            {props.card?.companyName}
+          </Link>{" "}
+          <b> 4.3 </b>{" "}
           <svg
             width="18"
             height="18"
@@ -60,17 +67,11 @@ const JobCard = (props) => {
       <div className="job-card-salary">
         <span>$ {props.card?.salary} a year</span>
       </div>
-      <div className="job-card-role-summary">
-        <ul>
-          <li>
-            Refine ideas and come up with new ones to design a highly polished
-            visual experience.
-          </li>
-          <li>
-            Collaborate with other designers to help build a strong design team
-            and culture.
-          </li>
-        </ul>
+      <div
+        style={{ marginBottom: "10px", height: "60px" }}
+        className="job-card-role-summary overflow-hidden"
+      >
+        {props?.card?.description}
       </div>
 
       <div className="job-card-posted-ago">

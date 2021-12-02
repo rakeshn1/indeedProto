@@ -75,6 +75,7 @@ async function applyJob(msg, callback) {
       userId: msg.body.userId,
       companyId: msg.body.companyId,
       resumeURL: msg.body.resumeURL,
+      coverLetterURL: msg.body.coverLetterURL,
       status: 1,
     });
 

@@ -9,7 +9,12 @@ class JobSeekerCompanyRow extends React.Component {
     }
     return (
       <React.Fragment>
-        <div style={{ display: "flex", padding: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            padding: "10px",
+          }}
+        >
           <div>
             <img
               className="card-img-top"
@@ -23,17 +28,21 @@ class JobSeekerCompanyRow extends React.Component {
               }}
             ></img>
           </div>
-          <div style={{ paddingLeft: "15px", paddingTop: "2px" }}>
-            <div
+          <div
+            style={{ paddingLeft: "15px", paddingTop: "2px", width: "500px" }}
+          >
+            <Link
               style={{
                 fontSize: "1rem",
                 color: "#2557a7",
                 fontWeight: "700",
                 width: "300px",
+                textDecoration: "none",
               }}
+              to="/companyDetails/about"
             >
               {name}
-            </div>
+            </Link>
             <Link
               to="/jobSeeker/reviews"
               style={{ display: "flex", color: "#2d2d2d" }}
@@ -80,8 +89,11 @@ class JobSeekerCompanyRow extends React.Component {
               fontSize: "0.75rem",
               lineHeight: "1.5",
               color: "#767676",
-              paddingLeft: "100px",
+              // paddingLeft: "100px",
               marginTop: "5px",
+              width: "100%",
+              maxHeight: "100px",
+              overflow: "auto",
             }}
           >
             {mission}
@@ -113,7 +125,7 @@ class JobSeekerCompanyRow extends React.Component {
             color: "black",
             backgroundColor: "black",
             height: "1px",
-            width: "950px",
+            width: "100%",
           }}
         ></hr>
       </React.Fragment>

@@ -5,6 +5,7 @@ import {
   handleJobSaveUnsave,
   getAppliedJobs,
   applyJob,
+  getJobSeekerDetails,
 } from "../../services/jobSeeker";
 import Button from "../common/Button";
 import _ from "lodash";
@@ -22,7 +23,13 @@ const JobSeekerSavedJobs = ({
   const handleApplyNow = async (jobId, companyId) => {
     console.log("Applied: ", jobId, companyId);
     // const user = getCurrentUser();
-    if (user && !user.resume) {
+    const p = {
+      userId: user._id,
+    };
+    const userDetails = await getJobSeekerDetails(p);
+    console.log("applying job for user with details", userDetails.data);
+    console.log("U:", user);
+    if (userDetails.data && !userDetails.data.resume) {
       alert("please add resume");
       history.push("/jobSeekerProfile");
     } else {
@@ -30,7 +37,8 @@ const JobSeekerSavedJobs = ({
         jobId: jobId,
         userId: user._id,
         companyId: companyId,
-        resumeURL: user.resume,
+        resumeURL: userDetails.data.resume,
+        coverLetterURL: userDetails.data.coverLetter,
       };
 
       const result = await applyJob(payload);
