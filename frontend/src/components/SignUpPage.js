@@ -118,6 +118,7 @@ const SignupPage = () => {
             // marginBottom: "20px",
             color: "black",
           }}
+          className="input-styler"
           onChange={handleEmailIdChange}
           type="email"
         />
@@ -135,6 +136,7 @@ const SignupPage = () => {
             // marginBottom: "20px",
             color: "black",
           }}
+          className="input-styler"
           onChange={handlePasswordChange}
           type="password"
         />

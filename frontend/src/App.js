@@ -135,7 +135,7 @@ function App() {
         )}
         <Route path="/companydetails/:id" component={CompanyHome}></Route>
         <JobSeekerRoute
-          path="/company/addReview"
+          path="/company/:id/addReview"
           component={AddReview}
         ></JobSeekerRoute>
         {/* <EmployeerRoute

@@ -82,6 +82,7 @@ const JobSeekerSignIn = () => {
             marginBottom: "20px",
             color: "black",
           }}
+          className="input-styler"
           onChange={handleEmailIdChange}
         />
         {emailIdError && (
@@ -98,6 +99,7 @@ const JobSeekerSignIn = () => {
             marginBottom: "20px",
             color: "black",
           }}
+          className="input-styler"
           onChange={handlePasswordChange}
           type="password"
         />
