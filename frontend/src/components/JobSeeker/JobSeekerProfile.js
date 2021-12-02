@@ -10,7 +10,6 @@ import S3FileUpload from "react-s3";
 import { getCurrentUser } from "../../services/auth";
 import { coverConfig, resumeConfig } from "../../config";
 
-
 const JobSeekerProfile = () => {
     const user = getCurrentUser();
     const [data, setData] = useState();
@@ -37,13 +36,13 @@ const JobSeekerProfile = () => {
     const handleChange = (key, value) => {
         setData({ ...data, [key]: value });
     };
+
     const handleAddressChange = (key1, key2, value) => {
         let newData = { ...data };
         newData = { ...newData, address: { ...newData.address, [key2]: value } };
         console.log(newData)
         setData(newData);
-    };
-
+    }
     const makeEditable = () => {
         setShowEditDiv(!showEditDiv);
     };
@@ -51,17 +50,17 @@ const JobSeekerProfile = () => {
         setShowEditDiv(!showEditDiv);
 
         const payload = {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            phoneNumber: data.phoneNumber,
+            firstName: data?.firstName,
+            lastName: data?.lastName,
+            phoneNumber: data?.phoneNumber,
             resume: resumeURL,
             address: {
-                city: data.address.city,
-                state: data.address.state,
-                country: data.address.country,
-                zipcode: data.address.zipcode,
+                city: data?.address?.city,
+                state: data?.address?.state,
+                country: data?.address?.country,
+                zipcode: data?.address?.zipcode,
             },
-            coverLetter: coverLetterURL
+            coverLetter: coverLetterURL,
         };
 
         const details = await updateJobSeekerDetails(user._id, payload);
@@ -78,15 +77,15 @@ const JobSeekerProfile = () => {
         console.log("data", data);
         console.log("coverLetter", coverLetterURL);
         const payload = {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            phoneNumber: data.phoneNumber,
+            firstName: data?.firstName,
+            lastName: data?.lastName,
+            phoneNumber: data?.phoneNumber,
             resume: resumeURL,
             address: {
-                city: data.address.city,
-                state: data.address.state,
-                country: data.address.country,
-                zipcode: data.address.zipcode,
+                city: data?.address?.city,
+                state: data?.address?.state,
+                country: data?.address?.country,
+                zipcode: data?.address?.zipcode,
             },
             coverLetter: coverLetterURL,
         };
@@ -95,28 +94,27 @@ const JobSeekerProfile = () => {
 
         console.log("updated user details", details.data);
         setData(details.data);
-        // setResCheck(false);
+        setCoverCheck(false);
 
         await fetchJobSeekerDetails();
-
-    }
+    };
     const saveURL = async (e) => {
         await handleChange("resume", resumeURL);
 
         console.log("data", data);
         console.log("resume", resumeURL);
         const payload = {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            phoneNumber: data.phoneNumber,
+            firstName: data?.firstName,
+            lastName: data?.lastName,
+            phoneNumber: data?.phoneNumber,
             resume: resumeURL,
             address: {
-                city: data.address.city,
-                state: data.address.state,
-                country: data.address.country,
-                zipcode: data.address.zipcode,
+                city: data?.address?.city,
+                state: data?.address?.state,
+                country: data?.address?.country,
+                zipcode: data?.address?.zipcode,
             },
-            coverLetter: data.coverLetter,
+            coverLetter: data?.coverLetter,
         };
 
         const details = await updateJobSeekerDetails(user._id, payload);
@@ -127,7 +125,6 @@ const JobSeekerProfile = () => {
 
         await fetchJobSeekerDetails();
     };
-
 
     const uploadResume = async (e) => {
         console.log(e.target.files[0]);
@@ -156,17 +153,17 @@ const JobSeekerProfile = () => {
 
         console.log("resume", data.resume);
         const payload = {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            phoneNumber: data.phoneNumber,
+            firstName: data?.firstName,
+            lastName: data?.lastName,
+            phoneNumber: data?.phoneNumber,
             resume: "",
             address: {
-                city: data.address.city,
-                state: data.address.state,
-                country: data.address.country,
-                zipcode: data.address.zipcode,
+                city: data?.address?.city,
+                state: data?.address?.state,
+                country: data?.address?.country,
+                zipcode: data?.address?.zipcode,
             },
-            coverLetter: data.coverLetter
+            coverLetter: data?.coverLetter,
         };
 
         const details = await updateJobSeekerDetails(user._id, payload);
@@ -183,17 +180,17 @@ const JobSeekerProfile = () => {
 
         console.log("resume", data.resume);
         const payload = {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            phoneNumber: data.phoneNumber,
-            resume: data.resume,
+            firstName: data?.firstName,
+            lastName: data?.lastName,
+            phoneNumber: data?.phoneNumber,
+            resume: data?.resume,
             address: {
-                city: data.address.city,
-                state: data.address.state,
-                country: data.address.country,
-                zipcode: data.address.zipcode,
+                city: data?.address?.city,
+                state: data?.address?.state,
+                country: data?.address?.country,
+                zipcode: data?.address?.zipcode,
             },
-            coverLetter: ""
+            coverLetter: "",
         };
 
         const details = await updateJobSeekerDetails(user._id, payload);
@@ -205,7 +202,6 @@ const JobSeekerProfile = () => {
         await fetchJobSeekerDetails();
     };
 
-
     //COVER LETTER
     let coverLetterHandlerFlex = null;
 
@@ -213,7 +209,7 @@ const JobSeekerProfile = () => {
         coverLetterHandlerFlex = (
             <div className="resume-upload">
                 <h5>
-                    <b>  Upload Cover Letter</b>
+                    <b> Upload Cover Letter</b>
                 </h5>
                 <div>
                     <input
@@ -246,8 +242,7 @@ const JobSeekerProfile = () => {
             <div className="resume-upload">
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <h5>
-                        <b>
-                            Cover Letter</b>
+                        <b>Cover Letter</b>
                     </h5>
                     <div onClick={deleteCoverLetter}>
                         <svg
@@ -295,7 +290,9 @@ const JobSeekerProfile = () => {
                         </div>
                         <div>
                             {data &&
-                                data?.coverLetter.substring(data?.coverLetter.lastIndexOf("/") + 1)}
+                                data?.coverLetter.substring(
+                                    data?.coverLetter.lastIndexOf("/") + 1
+                                )}
                         </div>
                     </div>
                     <div style={{ width: "40%" }}>
@@ -334,8 +331,7 @@ const JobSeekerProfile = () => {
         );
     }
 
-
-    //RESUME 
+    //RESUME
     let resumeHandlerFlex = null;
 
     if ((data && !data?.resume) || resCheck || !viewData) {
@@ -467,13 +463,13 @@ const JobSeekerProfile = () => {
             <div className="name-display">
                 <div className="profile-circle">
                     {" "}
-                    {viewData?.firstName.substring(0, 1)}
-                    {viewData?.lastName.substring(0, 1)}{" "}
+                    {viewData?.firstName?.substring(0, 1)}
+                    {viewData?.lastName?.substring(0, 1)}{" "}
                 </div>
                 <div className="profile-name">
                     {" "}
-                    {viewData ? viewData.firstName : "Your"}{" "}
-                    {viewData ? viewData.lastName : "Name"}
+                    {viewData?.firstName ? viewData.firstName : "Your"}{" "}
+                    {viewData?.lastName ? viewData.lastName : "Name"}
                 </div>
             </div>
             <div className="profile-wrapper">
@@ -538,8 +534,8 @@ const JobSeekerProfile = () => {
                             onChange={(e) => {
                                 handleChange("lastName", e.target.value);
                             }}
-                            className="input-styler"
                             value={data?.lastName}
+                            className="input-styler"
                             type="text"
                         />
                         <Input
@@ -551,8 +547,8 @@ const JobSeekerProfile = () => {
                                 marginBottom: "20px",
                                 color: "black",
                             }}
-                            className="input-styler"
                             value={viewData?.email}
+                            className="input-styler"
                             type="text"
                         />
                         <Input
@@ -589,9 +585,8 @@ const JobSeekerProfile = () => {
                                 handleAddressChange("address", "city", e.target.value);
                             }}
                             value={data?.address?.city}
-                            type="text"
                             className="input-styler"
-
+                            type="text"
                         />{" "}
                         <Input
                             label="State"
@@ -605,9 +600,8 @@ const JobSeekerProfile = () => {
                                 handleAddressChange("address", "state", e.target.value);
                             }}
                             value={data?.address?.state}
-                            type="text"
                             className="input-styler"
-
+                            type="text"
                         />
                         <Input
                             label="Country"
@@ -621,9 +615,8 @@ const JobSeekerProfile = () => {
                                 handleAddressChange("address", "country", e.target.value);
                             }}
                             value={data?.address?.country}
-                            type="text"
                             className="input-styler"
-
+                            type="text"
                         />
                         <Input
                             label="Zip Code"
@@ -637,9 +630,8 @@ const JobSeekerProfile = () => {
                                 handleAddressChange("address", "zipcode", e.target.value);
                             }}
                             value={data?.address?.zipcode}
-                            type="text"
                             className="input-styler"
-
+                            type="text"
                         />
                         <div
                             style={{

@@ -68,6 +68,9 @@ class JobSeekerSalariesSearchPage extends React.Component {
   };
 
   updateJobTitle = async (newJobTitle) => {
+    await this.setState({
+      newJobTitle,
+    });
     if (newJobTitle) {
       console.log("if companyname: ", typeof newJobTitle);
       const { data: companyJobTitleSearchResults } = await getJobTitles(
@@ -79,19 +82,14 @@ class JobSeekerSalariesSearchPage extends React.Component {
       );
       await this.setState({ companyJobTitleSearchResults });
     }
-
-    await this.setState({
-      newJobTitle,
-    });
   };
 
   updateLocation = async (newLocation) => {
+    this.setState({ newLocation });
     if (newLocation) {
       const { data: locationSearchResults } = await getLocations(newLocation);
       this.setState({ locationSearchResults });
     }
-
-    this.setState({ newLocation });
   };
 
   componentDidUpdate(prevProps) {
@@ -108,12 +106,15 @@ class JobSeekerSalariesSearchPage extends React.Component {
   }
 
   apiCall = async () => {
+    this.setState({ numberOfReviews: 0, averageSalary: 0, rankedJobs: [] });
     const { jobTitle, location } = this.props.match.params;
     const { data } = await getSalaryReviewsMainData(jobTitle, location);
     console.log("data: ", data);
     this.setState({
-      numberOfReviews: data[0].numberOfReviews,
-      averageSalary: data[0].averageSalary.toFixed(),
+      numberOfReviews: data[0]?.numberOfReviews ? data[0]?.numberOfReviews : 0,
+      averageSalary: data[0]?.averageSalary
+        ? data[0]?.averageSalary.toFixed()
+        : 0,
     });
     const { data: rankedJobs } = await getSalaryReviewsRankedJobs(
       jobTitle,

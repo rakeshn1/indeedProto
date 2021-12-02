@@ -1,5 +1,6 @@
 import React from "react";
 import { format } from "date-fns";
+import StarRating from "react-svg-star-rating";
 import { updateReview } from "../../../services/jobSeeker";
 
 class ReviewCard extends React.Component {
@@ -25,13 +26,29 @@ class ReviewCard extends React.Component {
     return (
       <div>
         <div className="d-flex flex-row justify-start p-3">
-          <h4>{this.props.rating}</h4>
+          <div style={{ minWidth: "50px", textAlign: "center" }}>
+            <h4 style={{ marginBottom: "-5px" }}>{this.props.rating}</h4>
+            <StarRating
+              size={10}
+              initialRating={this.props.rating}
+              isReadOnly={true}
+              activeColor={"#9d2b6b"}
+            />
+          </div>
           <div className="d-flex flex-column ps-4">
             <h4>{this.props.reviewSummary}</h4>
             <span style={{ fontSize: "12px" }}>
-              {this.props.role} (Former Employee) - {this.props.city},{" "}
-              {this.props.state} - {this.props.reviewedOn}
+              {this.props.role} - {this.props.city}, {this.props.state ?? `USA`}{" "}
+              - {this.props.reviewedOn}
             </span>
+            {this.props.status === 2 && (
+              <div className="featured-review">
+                <p style={{ marginBottom: 0 }}>
+                  <b>Indeed Featured review</b>
+                </p>
+                <span>The most useful review selected by Indeed</span>
+              </div>
+            )}
             <span style={{ fontSize: "14px" }} className="pt-3">
               {this.props.review}
             </span>
@@ -58,7 +75,7 @@ class ReviewCard extends React.Component {
               Cons
             </span>
             <span style={{ fontSize: "14px" }} className="pb-1">
-              {this.props.pros}
+              {this.props.cons}
             </span>
             {this.props.showHelpfulness && (
               <div>

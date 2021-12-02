@@ -32,6 +32,9 @@ class JobSeekerReviewsSearchPage extends React.Component {
   //   };
 
   updateCompanyNameAndJobTitle = async (newCompanyNameAndJobTitle) => {
+    await this.setState({
+      newCompanyNameAndJobTitle,
+    });
     if (newCompanyNameAndJobTitle) {
       // console.log("if companyname: ", typeof newCompanyNameAndJobTitle);
       const { data: companyNameAndJobTitleSearchResults } =
@@ -42,19 +45,14 @@ class JobSeekerReviewsSearchPage extends React.Component {
       );
       await this.setState({ companyNameAndJobTitleSearchResults });
     }
-
-    await this.setState({
-      newCompanyNameAndJobTitle,
-    });
   };
 
   updateLocation = async (newLocation) => {
+    this.setState({ newLocation });
     if (newLocation) {
       const { data: locationSearchResults } = await getLocations(newLocation);
       this.setState({ locationSearchResults });
     }
-
-    this.setState({ newLocation });
   };
 
   apiCall = async () => {
