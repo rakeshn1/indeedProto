@@ -201,6 +201,19 @@ body {
   font-size: 14px;
 }
 
+.input-styler{
+
+  border-radius: 10px;
+  height: 45px;
+  outline: none;
+  padding:10px
+}
+
+.input-styler.active{
+  background-color: #1e4688;
+
+}
+
 .button button:hover {
   background-color: #1e4688;
 }

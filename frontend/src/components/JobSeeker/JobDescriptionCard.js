@@ -84,6 +84,7 @@ const JobDescriptionCard = (props) => {
     console.log("applying job for user with details", userDetails.data);
 
     if (userDetails && !userDetails.data.resume) {
+
       alert("please add resume");
       history.push("/jobSeekerProfile");
     } else {
@@ -95,7 +96,6 @@ const JobDescriptionCard = (props) => {
         coverLetterURL: userDetails.data.coverLetter,
       };
 
-      // if(payload.)
       const result = await applyJob(payload);
       console.log("after call", result.data.status);
     }
@@ -156,33 +156,33 @@ const JobDescriptionCard = (props) => {
           {!_.find(appliedJobs, (job) => {
             return job.toString() === props.cardDetails._id.toString();
           }) && (
-            <Button
-              text="Apply now"
-              // disabled={user ? false : true}
-              style={{
-                height: "40px",
-                width: "120px",
-                fontSize: "15px",
-              }}
-              onClick={handleApplyJob}
-            />
-          )}
+              <Button
+                text="Apply now"
+                // disabled={user ? false : true}
+                style={{
+                  height: "40px",
+                  width: "120px",
+                  fontSize: "15px",
+                }}
+                onClick={handleApplyJob}
+              />
+            )}
 
           {_.find(appliedJobs, (job) => {
             return job.toString() === props.cardDetails._id.toString();
           }) && (
-            <Button
-              text="Applied"
-              disabled
-              style={{
-                backgroundColor: "green",
-                height: "40px",
-                width: "120px",
-                fontSize: "15px",
-              }}
+              <Button
+                text="Applied"
+                disabled
+                style={{
+                  backgroundColor: "green",
+                  height: "40px",
+                  width: "120px",
+                  fontSize: "15px",
+                }}
               // onClick={handleApplyJob}
-            />
-          )}
+              />
+            )}
           {/* {
 
                     } */}
@@ -196,50 +196,50 @@ const JobDescriptionCard = (props) => {
           {_.find(savedJobs, (job) => {
             return job.toString() === props.cardDetails._id.toString();
           }) && (
-            <div className="heart-button">
-              <button
-                disabled={user ? "" : "disabled"}
-                onClick={() => handleSavedJobs(props.cardDetails?._id)}
-              >
-                {/* {heart_Icon} */}
-
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="30"
-                  height="38"
-                  fill="currentColor"
-                  class="bi bi-heart"
-                  viewBox="-2 -2 25 25"
+              <div className="heart-button">
+                <button
+                  disabled={user ? "" : "disabled"}
+                  onClick={() => handleSavedJobs(props.cardDetails?._id)}
                 >
-                  <path d="M12,21.35L10.55,20C5.4,15.36,2,12.28,2,8.5A5.45,5.45,0,0,1,7.5,3,6,6,0,0,1,12,5.09,6,6,0,0,1,16.5,3,5.45,5.45,0,0,1,22,8.5c0,3.78-3.4,6.86-8.55,11.54Z" />
-                </svg>
-              </button>
-            </div>
-          )}
+                  {/* {heart_Icon} */}
+
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="38"
+                    fill="currentColor"
+                    class="bi bi-heart"
+                    viewBox="-2 -2 25 25"
+                  >
+                    <path d="M12,21.35L10.55,20C5.4,15.36,2,12.28,2,8.5A5.45,5.45,0,0,1,7.5,3,6,6,0,0,1,12,5.09,6,6,0,0,1,16.5,3,5.45,5.45,0,0,1,22,8.5c0,3.78-3.4,6.86-8.55,11.54Z" />
+                  </svg>
+                </button>
+              </div>
+            )}
 
           {!_.find(savedJobs, (job) => {
             return job.toString() === props.cardDetails._id.toString();
           }) && (
-            <div className="heart-button">
-              <button
-                // disabled={user ? "" : "disabled"}
-                onClick={() => handleSavedJobs(props.cardDetails?._id)}
-              >
-                {/* {heart_Icon} */}
-
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="30"
-                  height="38"
-                  fill="black"
-                  class="bi bi-heart"
-                  viewBox="-5 -3 25 25"
+              <div className="heart-button">
+                <button
+                  // disabled={user ? "" : "disabled"}
+                  onClick={() => handleSavedJobs(props.cardDetails?._id)}
                 >
-                  <path d="M12.38,2.25A4.49,4.49,0,0,0,9,3.82,4.49,4.49,0,0,0,5.63,2.25,4.08,4.08,0,0,0,1.5,6.38c0,2.83,2.55,5.15,6.41,8.66L9,16l1.09-1C14,11.52,16.5,9.21,16.5,6.38A4.08,4.08,0,0,0,12.38,2.25ZM9.08,13.91L9,14l-0.08-.08C5.35,10.68,3,8.54,3,6.38A2.56,2.56,0,0,1,5.63,3.75,2.93,2.93,0,0,1,8.3,5.52H9.7a2.91,2.91,0,0,1,2.67-1.77A2.56,2.56,0,0,1,15,6.38C15,8.54,12.65,10.68,9.08,13.91Z" />
-                </svg>
-              </button>
-            </div>
-          )}
+                  {/* {heart_Icon} */}
+
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="38"
+                    fill="black"
+                    class="bi bi-heart"
+                    viewBox="-5 -3 25 25"
+                  >
+                    <path d="M12.38,2.25A4.49,4.49,0,0,0,9,3.82,4.49,4.49,0,0,0,5.63,2.25,4.08,4.08,0,0,0,1.5,6.38c0,2.83,2.55,5.15,6.41,8.66L9,16l1.09-1C14,11.52,16.5,9.21,16.5,6.38A4.08,4.08,0,0,0,12.38,2.25ZM9.08,13.91L9,14l-0.08-.08C5.35,10.68,3,8.54,3,6.38A2.56,2.56,0,0,1,5.63,3.75,2.93,2.93,0,0,1,8.3,5.52H9.7a2.91,2.91,0,0,1,2.67-1.77A2.56,2.56,0,0,1,15,6.38C15,8.54,12.65,10.68,9.08,13.91Z" />
+                  </svg>
+                </button>
+              </div>
+            )}
         </div>
       </div>
       <div className="job-description-content-wrapper">

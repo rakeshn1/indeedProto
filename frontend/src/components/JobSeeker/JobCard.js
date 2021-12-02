@@ -1,4 +1,5 @@
 import React from "react";
+import moment from 'moment'
 import { Link } from "react-router-dom";
 
 const JobCard = (props) => {
@@ -75,7 +76,7 @@ const JobCard = (props) => {
       </div>
 
       <div className="job-card-posted-ago">
-        {props.card?.datePosted}
+        {moment(props.card?.datePosted).fromNow()}
         {/* 7 days ago */}
       </div>
     </div>
