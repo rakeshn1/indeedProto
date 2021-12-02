@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 const kafka = require("../kafka/client");
 const { Jobs } = require("../models/mongo/jobs.js");
 const { User } = require("../models/mongo/user");
-const { JobApplication } = require("../models/mongo/jobApplications")
-
+const { JobApplication } = require("../models/mongo/jobApplications");
+const { Company } = require("../models/mongo/company");
 
 router.post("/addReview", async (req, res) => {
   console.log(req.body);
@@ -31,7 +31,7 @@ router.post("/addSalaryReview/", async (req, res) => {
 });
 
 router.get("/getSavedJobs/:userId", async (req, res) => {
-  const userId = req.params.userId
+  const userId = req.params.userId;
   try {
     const response = await User.findById(userId);
     console.log("User Details", response.savedJobs);
@@ -42,16 +42,89 @@ router.get("/getSavedJobs/:userId", async (req, res) => {
   }
 });
 
-router.get("/getAppliedJobs/:userId", async (req, res) => {
-  const userId = req.params.userId
+router.get("/getSavedJobsWithDesc/:userId", async (req, res) => {
+  const userId = req.params.userId;
   try {
-    const response = await JobApplication.find({ userId: mongoose.Types.ObjectId(userId) }).select("jobId");
-    const result = []
+    const response = await User.findById(userId);
+    console.log("User Details", response.savedJobs);
+
+    result = [];
+    await Promise.all(
+      response.savedJobs.map(async (job) => {
+        const jobData = await Jobs.findById(job._id);
+        result.push(jobData);
+      })
+    );
+
+    await Promise.all(
+      result.map(async (jobData) => {
+        const companyData = await Company.findById(jobData.companyId).select([
+          "name",
+          "logo",
+        ]);
+        jobData.companyName = companyData.name;
+        jobData.companyLogo = companyData.logo;
+        // res.data.push(jobData);
+      })
+    );
+
+    res.send(result);
+  } catch (err) {
+    console.log("error fetching user details", err);
+    res.send(err);
+  }
+});
+
+router.get("/getAppliedJobs/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const response = await JobApplication.find({
+      userId: mongoose.Types.ObjectId(userId),
+    }).select("jobId");
+    const result = [];
     response.map((job) => {
-      result.push(job.jobId)
-    })
+      result.push(job.jobId);
+    });
     console.log("User Details", result);
     res.send(result);
+  } catch (err) {
+    console.log("error fetching user details", err);
+    res.send(err);
+  }
+});
+
+router.get("/getAppliedJobsWithDesc/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const response = await JobApplication.find({
+      userId: mongoose.Types.ObjectId(userId),
+    }).select("jobId");
+    const result = [];
+    response.map((job) => {
+      result.push(job.jobId);
+    });
+    console.log("User Details", result);
+    const jobsData = [];
+    await Promise.all(
+      result.map(async (job) => {
+        const jobData = await Jobs.findById(job._id);
+        jobsData.push(jobData);
+      })
+    );
+
+    await Promise.all(
+      jobsData.map(async (jobData) => {
+        const companyData = await Company.findById(jobData.companyId).select([
+          "name",
+          "logo",
+        ]);
+        jobData.companyName = companyData.name;
+        jobData.companyLogo = companyData.logo;
+        // res.data.push(jobData);
+      })
+    );
+
+    res.send(jobsData);
   } catch (err) {
     console.log("error fetching user details", err);
     res.send(err);
@@ -146,49 +219,57 @@ router.get("/getJobSearchResults/", async (req, res) => {
   let response;
   if (!what && !where) {
     response = [];
-  }
-  else if (what && where) {
+  } else if (what && where) {
     response = await Jobs.find({
-      $and:
-        [
-          {
-            $or: [
-              { "jobTitle": new RegExp('.*' + req.query.what + '.*', "i") },
-              { "companyName": new RegExp('.*' + req.query.what + '.*', "i") }]
-          },
-          {
-            $or: [
-              { "location.city": new RegExp('.*' + req.query.where + '.*', "i") },
-              { "location.country": new RegExp('.*' + req.query.where + '.*', "i") },
-              { "location.state": new RegExp('.*' + req.query.where + '.*', "i") },
-              { "location.zipcode": new RegExp('.*' + req.query.where + '.*', "i") }
-            ]
-          }
-        ]
-    })
-  }
-  else if (what && !where) {
+      $and: [
+        {
+          $or: [
+            { jobTitle: new RegExp(".*" + req.query.what + ".*", "i") },
+            { companyName: new RegExp(".*" + req.query.what + ".*", "i") },
+          ],
+        },
+        {
+          $or: [
+            { "location.city": new RegExp(".*" + req.query.where + ".*", "i") },
+            {
+              "location.country": new RegExp(
+                ".*" + req.query.where + ".*",
+                "i"
+              ),
+            },
+            {
+              "location.state": new RegExp(".*" + req.query.where + ".*", "i"),
+            },
+            {
+              "location.zipcode": new RegExp(
+                ".*" + req.query.where + ".*",
+                "i"
+              ),
+            },
+          ],
+        },
+      ],
+    });
+  } else if (what && !where) {
     response = await Jobs.find({
       $or: [
-        { "jobTitle": new RegExp('.*' + req.query.what + '.*', "i") },
-        { "companyName": new RegExp('.*' + req.query.what + '.*', "i") }
-      ]
+        { jobTitle: new RegExp(".*" + req.query.what + ".*", "i") },
+        { companyName: new RegExp(".*" + req.query.what + ".*", "i") },
+      ],
+    });
+  } else {
+    response = await Jobs.find({
+      $or: [
+        { "location.city": new RegExp(".*" + req.query.where + ".*", "i") },
+        { "location.country": new RegExp(".*" + req.query.where + ".*", "i") },
+        { "location.state": new RegExp(".*" + req.query.where + ".*", "i") },
+        { "location.zipcode": new RegExp(".*" + req.query.where + ".*", "i") },
+      ],
     });
   }
-  else {
-    response = await Jobs.find({
-      $or: [
-        { "location.city": new RegExp('.*' + req.query.where + '.*', "i") },
-        { "location.country": new RegExp('.*' + req.query.where + '.*', "i") },
-        { "location.state": new RegExp('.*' + req.query.where + '.*', "i") },
-        { "location.zipcode": new RegExp('.*' + req.query.where + '.*', "i") }
-      ]
-    })
-  }
   console.log("response", response);
-  res.send(response)
+  res.send(response);
 });
-
 
 router.post("/applyJob", async (req, res) => {
   console.log(req.body);

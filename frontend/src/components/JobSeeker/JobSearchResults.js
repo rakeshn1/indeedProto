@@ -1,48 +1,77 @@
-import React, { useEffect, useState } from 'react'
-import JobCard from './JobCard'
-import JobDescriptionCard from './JobDescriptionCard'
+import React, { useEffect, useState } from "react";
+import JobCard from "./JobCard";
+import JobDescriptionCard from "./JobDescriptionCard";
 import _ from "lodash";
+import Pagination from "../common/pagination";
+import { paginate } from "../../utils/paginate";
 
 const JobSearchResults = (props) => {
+  const [pageSize, setPageSize] = useState(3);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [data, setData] = useState([]);
+  const [cardDetails, setCardDetails] = useState();
+  const [selecetdJobCard, setSelectedJobCard] = useState();
 
-    const [cardDetails, setCardDetails] = useState()
+  const onCardClick = async (cardId) => {
+    console.log("card click", cardId);
 
-    const onCardClick = async (cardId) => {
-        console.log("card click", cardId)
+    const cardDesc = _.find(props.searchResults, { _id: cardId });
+    setSelectedJobCard(cardId);
+    setCardDetails(cardDesc);
+  };
 
-        const cardDesc = _.find(props.searchResults, { '_id': cardId })
-
-        setCardDetails(cardDesc)
+  const setFirst = async () => {
+    console.log("here");
+    if (props.searchResults && !cardDetails) {
+      setCardDetails(props.searchResults[0]);
+      setSelectedJobCard(props.searchResults[0]._id);
     }
+  };
 
-    const setFirst = async () => {
-        console.log("here")
-        if (props.searchResults && !cardDetails)
-            setCardDetails(props.searchResults[0]);
-    }
+  useEffect(() => {
+    setFirst();
+  });
 
-    useEffect(() => {
-        setFirst();
-    })
+  const handlePageChange = (page) => {
+    // console.log(page);
+    setCurrentPage(page);
+  };
 
-    let card = null
-    if (cardDetails)
-        card = (<JobDescriptionCard cardDetails={cardDetails} />)
-    // else
-    //     setCardDetails(props.searchResults)
+  useEffect(() => {
+    const data = paginate(props.searchResults, currentPage, pageSize);
+    setTotalCount(props.searchResults.length);
+    setData(data);
+  }, [currentPage]);
 
-    console.log("SearchResults: ", props.searchResults)
-    return (
+  let card = null;
+  if (cardDetails) card = <JobDescriptionCard cardDetails={cardDetails} />;
+  // else
+  //     setCardDetails(props.searchResults)
 
-        <div className="container job-search-wrapper" >
-            <div className="cards-wrapper" >
-                {props.searchResults?.map(card => {
-                    return <JobCard card={card} onClick={onCardClick} />
-                })}
-            </div>
-            {props.searchResults.length > 0 && card}
-        </div>
-    )
-}
+  console.log("SearchResults: ", props.searchResults);
+  return (
+    <div className="container job-search-wrapper">
+      <div className="cards-wrapper">
+        {data?.map((card) => {
+          return (
+            <JobCard
+              card={card}
+              onClick={onCardClick}
+              selecetdJobCard={selecetdJobCard}
+            />
+          );
+        })}
+        <Pagination
+          itemsCount={totalCount}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        ></Pagination>
+      </div>
+      {props.searchResults.length > 0 && card}
+    </div>
+  );
+};
 
-export default JobSearchResults
+export default JobSearchResults;

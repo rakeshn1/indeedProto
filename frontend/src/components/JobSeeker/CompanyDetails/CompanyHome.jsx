@@ -13,7 +13,8 @@ class CompanyHome extends React.Component {
     companyDetails: undefined,
   };
   componentWillMount = async () => {
-    let response = await getCompanyDetails("61a3446cbbaf757f9a105d91");
+    let companyId = this.props.match.params.id;
+    let response = await getCompanyDetails(companyId);
     console.log(response.data);
     this.setState({ companyDetails: response.data });
   };
