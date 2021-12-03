@@ -105,7 +105,7 @@ class CompanyHeader extends React.Component {
                     to={`/companydetails/${this.props.companyDetails?._id}/salaries`}
                     className="link"
                     style={{ color: "black" }}
-                    >
+                  >
                     Salaries
                   </NavLink>
                 </span>

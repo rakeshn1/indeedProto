@@ -76,6 +76,11 @@ const updateStatusOfPhoto = async (msg, callback) => {
     const photoUrl = msg.body.photoUrl;
     console.log("STATUS:::: ", status);
 
+    const sqlDelete = "DELETE FROM newPhotos where newPhotoId=?";
+    db.query(sqlDelete, [photoId], (err, result) => {
+      console.log(result);
+    });
+
     if (status === 1) {
       console.log("STATUS: 1");
       const company = await Company.findById(companyId);
@@ -89,10 +94,7 @@ const updateStatusOfPhoto = async (msg, callback) => {
     }
 
     // Delete from SQL
-    const sqlDelete = "DELETE FROM newPhotos where newPhotoId=?";
-    db.query(sqlDelete, [photoId], (err, result) => {
-      console.log(result);
-    });
+
     res.status = 200;
     res.data = "Updated successfully";
 
