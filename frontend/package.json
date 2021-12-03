@@ -39,7 +39,8 @@
     "react-switch": "^6.0.0",
     "reactjs-popup": "^2.0.5",
     "title-case": "^3.0.3",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",

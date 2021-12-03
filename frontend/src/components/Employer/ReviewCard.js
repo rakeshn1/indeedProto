@@ -67,7 +67,7 @@ const ReviewCard = () => {
                                 </svg>
                                 </span>
                             </div>
-                            <div>
+                            <div style={{maxHeight:"80px", overflow:"scroll"}}>
                                 <p>
                                     <span style={{ fontSize: '12px' }}>
                                         {review.review}
