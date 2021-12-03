@@ -118,7 +118,7 @@ class JobsRankedRow extends React.Component {
                   {numberOfReviews} reviews
                 </Link>
                 <Link
-                  to={`/companyDetails/${_id}/review`}
+                  to={`/companyDetails/${_id}/salaries`}
                   style={{
                     color: "#6f6f6f",
                     paddingLeft: "0.5rem",
