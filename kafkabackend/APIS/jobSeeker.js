@@ -330,20 +330,17 @@ async function handleJobSaveUnsave(msg, callback) {
   }
 }
 
-getCompanyrating = async (msg, callback) => {
+getCompanyrating = async (body, callback) => {
   try {
-    // db.orders.aggregate([
-    //   { $match: { status: "A" } },
-    //   { $group: { _id: "$cust_id", total: { $sum: "$amount" } } },
-    //   { $sort: { total: -1 } },
-    // ]);
-    console.log("in ratings", msg.companyId);
-    let rating = await Reviews.aggregate([
-      { $match: { companyId: msg.companyId } },
-      { $group: { _id: "$companyId", rating: { $avg: "$rating" } } },
-    ]);
-    console.log(rating, "rating Avg");
-    callback(null, rating);
+    filterprops = {
+      status: { $in: [1, 2] },
+      companyId: body.companyId,
+    };
+    let reviews = await Reviews.find(filterprops);
+    let sum = 0;
+    reviews.forEach((rev) => (sum += rev.rating));
+    let rating = Math.round(sum / reviews.length);
+    callback(null, rating.toString());
   } catch (err) {
     console.log("error", err);
     callback(err, "Error");
