@@ -7,10 +7,12 @@ const { User } = require("../models/mongo/user");
 const { JobApplication } = require("../models/mongo/jobApplications")
 
 
+const topic = "jobSeeker-topic";
+
 router.post("/addReview", async (req, res) => {
   console.log(req.body);
   req.body.path = "addReview";
-  kafka.make_request("jobSeeker-topic", req.body, function (err, results) {
+  kafka.make_request(topic, req.body, function (err, results) {
     if (err) {
       return res.status(400).send(err);
     }
@@ -24,7 +26,7 @@ router.post("/addSalaryReview/", async (req, res) => {
   msg = {};
   msg.body = req.body;
   msg.path = "addSalaryReview";
-  kafka.make_request("jobSeeker-topic", msg, function (err, results) {
+  kafka.make_request(topic, msg, function (err, results) {
     console.log("Results: ", results);
     res.status(results.status).send(results.data);
   });
@@ -116,7 +118,7 @@ router.put("/handleJobSaveUnsave/:userId", async (req, res) => {
 
   console.log("MSG", msg);
 
-  kafka.make_request("jobSeeker-topic", msg, function (err, results) {
+  kafka.make_request(topic, msg, function (err, results) {
     if (err) {
       console.log("error in backend");
       return res.send(err);
@@ -135,7 +137,7 @@ router.get("/getJobSearchResults/", async (req, res) => {
   req.body.path = "getJobSearchResults";
 
   // res.status(200).send("All done here");
-  // kafka.make_request("jobSeeker-topic", req.body, function (err, results) {
+  // kafka.make_request(topic, req.body, function (err, results) {
   //   if (err) {
   //     return res.status(400).send(err);
   //   }
@@ -149,41 +151,53 @@ router.get("/getJobSearchResults/", async (req, res) => {
   }
   else if (what && where) {
     response = await Jobs.find({
-      $and:
-        [
-          {
-            $or: [
-              { "jobTitle": new RegExp('.*' + req.query.what + '.*', "i") },
-              { "companyName": new RegExp('.*' + req.query.what + '.*', "i") }]
-          },
-          {
-            $or: [
-              { "location.city": new RegExp('.*' + req.query.where + '.*', "i") },
-              { "location.country": new RegExp('.*' + req.query.where + '.*', "i") },
-              { "location.state": new RegExp('.*' + req.query.where + '.*', "i") },
-              { "location.zipcode": new RegExp('.*' + req.query.where + '.*', "i") }
-            ]
-          }
-        ]
-    })
-  }
-  else if (what && !where) {
+      $and: [
+        {
+          $or: [
+            { jobTitle: { $regex: req.query.what, $options: "i" } },
+            { companyName: { $regex: req.query.what, $options: "i" } },
+          ],
+        },
+        {
+          $or: [
+            { "location.city": new RegExp(req.query.where, "i") },
+            {
+              "location.country": new RegExp(
+                req.query.where,
+                "i"
+              ),
+            },
+            {
+              "location.state": new RegExp(req.query.where, "i"),
+            },
+            {
+              "location.zipcode": new RegExp(
+                req.query.where,
+                "i"
+              ),
+            },
+          ],
+        },
+      ],
+    });
+  } else if (what && !where) {
     response = await Jobs.find({
       $or: [
-        { "jobTitle": new RegExp('.*' + req.query.what + '.*', "i") },
-        { "companyName": new RegExp('.*' + req.query.what + '.*', "i") }
-      ]
+        { jobTitle: { $regex: req.query.what, $options: "i" } },
+        { companyName: { $regex: req.query.what, $options: "i" } },
+      ],
     });
   }
   else {
     response = await Jobs.find({
       $or: [
-        { "location.city": new RegExp('.*' + req.query.where + '.*', "i") },
-        { "location.country": new RegExp('.*' + req.query.where + '.*', "i") },
-        { "location.state": new RegExp('.*' + req.query.where + '.*', "i") },
-        { "location.zipcode": new RegExp('.*' + req.query.where + '.*', "i") }
-      ]
-    })
+
+        { "location.city": { $regex: req.query.where, $options: "i" } },
+        { "location.country": new RegExp(req.query.where, "i") },
+        { "location.state": new RegExp(req.query.where, "i") },
+        { "location.zipcode": new RegExp(req.query.where, "i") },
+      ],
+    });
   }
   console.log("response", response);
   res.send(response)
@@ -195,7 +209,7 @@ router.post("/applyJob", async (req, res) => {
   let msg = {};
   msg.body = req.body;
   msg.path = "applyJob";
-  kafka.make_request("jobSeeker-topic", msg, function (err, results) {
+  kafka.make_request(topic, msg, function (err, results) {
     if (err) {
       return res.send(err);
     }
@@ -206,7 +220,7 @@ router.post("/applyJob", async (req, res) => {
 router.put("/updateReview/:id", async (req, res) => {
   req.body.path = "UpdateHelpfulnessScore";
   req.body.reviewId = req.params.id;
-  kafka.make_request("jobSeeker-topic", req.body, function (err, results) {
+  kafka.make_request(topic, req.body, function (err, results) {
     if (err) {
       return res.status(400).send(err);
     }
@@ -220,7 +234,43 @@ router.get("/getReviews/:id", async (req, res) => {
   req.body.params = req.query;
   req.body.path = "getCompanyReviews";
 
-  kafka.make_request("jobSeeker-topic", req.body, function (err, results) {
+  kafka.make_request(topic, req.body, function (err, results) {
+    if (err) {
+      return res.status(400).send(err);
+    }
+
+    return res.status(200).send(results);
+  });
+});
+
+router.get("/getJobSeekerReviews/:id", async (req, res) => {
+  req.body.jobSeekerId = req.params.id;
+  req.body.params = req.query;
+  req.body.path = "getJobSeekerReviews";
+
+  kafka.make_request(topic, req.body, function (err, results) {
+    res.status(results.status).send(results.data);
+  });
+});
+
+router.get("/getRatings/:id", async (req, res) => {
+  console.log("in get ratings");
+  console.log(req.params.id);
+  req.body.companyId = req.params.id;
+  req.body.path = "getCompanyRatings";
+  kafka.make_request(topic, req.body, function (err, results) {
+    if (err) {
+      return res.status(400).send(err);
+    }
+
+    return res.status(200).send(results);
+  });
+});
+
+router.get("/getTotalReviews/:id", async (req, res) => {
+  req.body.companyId = req.params.id;
+  req.body.path = "getTotalReviews";
+  kafka.make_request(topic, req.body, function (err, results) {
     if (err) {
       return res.status(400).send(err);
     }

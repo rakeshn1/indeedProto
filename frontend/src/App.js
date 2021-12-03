@@ -25,11 +25,11 @@ import JobSeekerProfile from "./components/JobSeeker/JobSeekerProfile";
 import SignUpPage from "./components/SignUpPage";
 import SignInPage from "./components/SignInPage";
 
-import EmployerTopNavbar from "./components/common/EmployerTopNavBar";
+
 
 import EmployerReviews from "./components/Employer/EmployerReviews";
 import EmployerReports from "./components/Employer/EmployerReports";
-import EmployerJobPostings from "./components/Employer/EmployerJobPostings";
+import RegisterCompanyToEmployer from "./components/Employer/RegisterCompanyToEmployer";
 import ViewEmployerJobs from "./components/Employer/ViewEmployerJobs";
 import EmployerApplicants from "./components/Employer/EmployerApplicants";
 import CompanyDetails from "./components/Employer/CompanyDetails";
@@ -44,8 +44,10 @@ import CompanyProfilePage from "./components/Admin/CompanyProfilePage";
 import AnalyticsDashboard from "./components/Admin/AnalyticsDashboard";
 import AddJobs from "./components/Employer/AddJobs";
 import ViewJobs from "./components/Employer/ViewEmployerJobs";
-import JobPostingsHeader from "./components/Employer/JobPostingsHeader";
+import AddNewCompany from "./components/Employer/AddNewCompany";
 import MessagesLandingPage from "./components/common/Messages";
+
+import NotFound from "./components/common/NotFound";
 
 function App() {
   const location = useLocation();
@@ -136,46 +138,42 @@ function App() {
           path="/company/addReview"
           component={AddReview}
         ></JobSeekerRoute>
-        {/* <EmployeerRoute
-          exact
-          path="/employer"
-          component={EmployerReviews}
-        ></EmployeerRoute> */}
-        <EmployeerRoute
-          exact
-          path="/employer/reviews"
-          component={EmployerReviews}
-        ></EmployeerRoute>
-        <EmployeerRoute
-          exact
-          path="/employer/jobPostings"
-          component={ViewEmployerJobs}
-        ></EmployeerRoute>
-        <EmployeerRoute
-          exact
-          path="/employer/applicants"
-          component={EmployerApplicants}
-        ></EmployeerRoute>
-        <EmployeerRoute
-          exact
-          path="/employer/reports"
-          component={EmployerReports}
-        ></EmployeerRoute>
-        <EmployeerRoute
-          exact
-          path="/employer/addJobs"
-          component={AddJobs}
-        ></EmployeerRoute>
-        <EmployeerRoute
-          exact
-          path="/employer/viewJobs"
-          component={ViewJobs}
-        ></EmployeerRoute>
-        <EmployeerRoute
-          exact
-          path="/employer"
-          component={CompanyDetails}
-        ></EmployeerRoute>
+
+        {jwt && user.role == 1 && user.companyId != null && (
+          <Route exact path="/employer/reviews" component={EmployerReviews}></Route>
+        )}
+        {jwt && user.role == 1 && user.companyId != null && (
+          <Route exact path="/employer/jobPostings" component={ViewEmployerJobs}></Route>
+        )}
+
+        {jwt && user.role == 1 && user.companyId != null && (
+          <Route exact path="/employer/applicants" component={EmployerApplicants}></Route>
+        )}
+
+        {jwt && user.role == 1 && user.companyId != null && (
+          <Route exact path="/employer/reports" component={EmployerReports}></Route>
+        )}
+
+        {jwt && user.role == 1 && user.companyId != null && (
+          <Route exact path="/employer/addJobs" component={AddJobs}></Route>
+        )}
+        {jwt && user.role == 1 && user.companyId != null && (
+          <Route exact path="/employer/viewJobs" component={ViewJobs}></Route>
+        )}
+
+        {jwt && user.role == 1 && user.companyId != null && (
+          <Route exact path="/employer" component={CompanyDetails}></Route>
+        )}
+
+        {jwt && user.role == 1 && user.companyId == null && (
+          <Route exact path="/employer" component={RegisterCompanyToEmployer}></Route>
+        )}
+
+
+        {jwt && user.role == 1 && user.companyId == null && (
+          <Route exact path="/employer/addNewCompany" component={AddNewCompany}></Route>
+        )}
+
         {!jwt && (
           <Route
             path="/jobSeekerLandingPage"
@@ -195,11 +193,11 @@ function App() {
         ></JobSeekerRoute>
         <JobSeekerRoute
           path="/jobSeeker/myJobs/savedJobs"
-          component={JobSeekerSavedJobs}
+          component={JobSeekerMyJobs}
         ></JobSeekerRoute>
         <JobSeekerRoute
           path="/jobSeeker/myJobs/appliedJobs"
-          component={JobSeekerAppliedJobs}
+          component={JobSeekerMyJobs}
         ></JobSeekerRoute>
         {jwt && (
           <Route exact path="/chat" component={MessagesLandingPage}></Route>
@@ -243,6 +241,7 @@ function App() {
         {/* <Redirect from="/" exact to="/jobSeekerLandingPage" /> */}
         <Redirect from="/" exact to="/home" />
         <Redirect from="/jobSeeker" exact to="/jobSeekerLandingPage" />
+        <Route from="*" exact component={NotFound} />
       </Switch>
     </div>
   );

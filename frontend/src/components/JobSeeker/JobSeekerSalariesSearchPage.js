@@ -20,6 +20,7 @@ class JobSeekerSalariesSearchPage extends React.Component {
     averageSalary: 0,
     companyJobTitleSearchResults: [],
     locationSearchResults: [],
+    rankedJobs: [],
     // rankedJobs: [
     //   {
     //     logo: "https://www.laurel-group.com/wp-content/uploads/amazon-logo-square-300x300.png",
@@ -108,12 +109,15 @@ class JobSeekerSalariesSearchPage extends React.Component {
   }
 
   apiCall = async () => {
+    this.setState({ numberOfReviews: 0, averageSalary: 0, rankedJobs: [] });
     const { jobTitle, location } = this.props.match.params;
     const { data } = await getSalaryReviewsMainData(jobTitle, location);
     console.log("data: ", data);
     this.setState({
-      numberOfReviews: data[0].numberOfReviews,
-      averageSalary: data[0].averageSalary.toFixed(),
+      numberOfReviews: data[0]?.numberOfReviews ? data[0]?.numberOfReviews : 0,
+      averageSalary: data[0]?.averageSalary
+        ? data[0]?.averageSalary.toFixed()
+        : 0,
     });
     const { data: rankedJobs } = await getSalaryReviewsRankedJobs(
       jobTitle,
@@ -276,8 +280,7 @@ class JobSeekerSalariesSearchPage extends React.Component {
             Search
           </Link>
         </div>
-
-        <div>
+        {this.state.numberOfReviews <= 0 && (
           <h1
             style={{
               fontSize: "1.875rem",
@@ -287,52 +290,74 @@ class JobSeekerSalariesSearchPage extends React.Component {
               marginTop: "60px",
             }}
           >
-            {this.state.jobTitle} salary in {this.state.location}
+            No data available for {this.state.jobTitle} in {this.state.location}
           </h1>
-          <h2
-            style={{
-              marginBottom: "1.5rem",
-              color: "#767676",
-              fontSize: "0.875rem",
-              lineHeight: "1.5",
-              fontWeight: "400",
-            }}
-          >
-            How much does a {this.state.jobTitle} make in the{" "}
-            {this.state.location}?
-          </h2>
-        </div>
-        <JobSeekerSalariesCard
-          jobTitle={this.state.jobTitle}
-          location={this.state.location}
-          numberOfReviews={this.state.numberOfReviews}
-          averageSalary={this.state.averageSalary}
-        ></JobSeekerSalariesCard>
-        <h2
-          style={{
-            marginTop: "40px",
-            fontSize: "1.875rem",
-            letterSpacing: "-.12px",
-            fontWeight: "700",
-            lineHeight: "1.14",
-          }}
-        >
-          Top companies for {this.state.jobTitle} in {this.state.location}
-        </h2>
-        <div
-          style={{
-            border: "2px solid #ececec",
-            borderRadius: "8px",
-            overflow: "hidden",
-            marginTop: "30px",
-          }}
-        >
-          {this.state.rankedJobs &&
-            this.state.rankedJobs.map((job) => {
-              return <JobsRankedRow {...job}></JobsRankedRow>;
-            })}
-        </div>
+        )}
+        {this.state.numberOfReviews > 0 && (
+          <div>
+            <div>
+              <h1
+                style={{
+                  fontSize: "1.875rem",
+                  letterSpacing: "-.12px",
+                  fontWeight: "700",
+                  lineHeight: "1.14",
+                  marginTop: "60px",
+                }}
+              >
+                {this.state.jobTitle} salary in {this.state.location}
+              </h1>
+              <h2
+                style={{
+                  marginBottom: "1.5rem",
+                  color: "#767676",
+                  fontSize: "0.875rem",
+                  lineHeight: "1.5",
+                  fontWeight: "400",
+                }}
+              >
+                How much does a {this.state.jobTitle} make in the{" "}
+                {this.state.location}?
+              </h2>
+            </div>
+            <JobSeekerSalariesCard
+              jobTitle={this.state.jobTitle}
+              location={this.state.location}
+              numberOfReviews={this.state.numberOfReviews}
+              averageSalary={this.state.averageSalary}
+            ></JobSeekerSalariesCard>
+          </div>
+        )}
+        {this.state.rankedJobs.length > 0 && (
+          <React.Fragment>
+            <h2
+              style={{
+                marginTop: "40px",
+                fontSize: "1.875rem",
+                letterSpacing: "-.12px",
+                fontWeight: "700",
+                lineHeight: "1.14",
+              }}
+            >
+              Top companies for {this.state.jobTitle} in {this.state.location}
+            </h2>
+            <div
+              style={{
+                border: "2px solid #ececec",
+                borderRadius: "8px",
+                overflow: "hidden",
+                marginTop: "30px",
+              }}
+            >
+              {this.state.rankedJobs &&
+                this.state.rankedJobs.map((job) => {
+                  return <JobsRankedRow {...job}></JobsRankedRow>;
+                })}
+            </div>
+          </React.Fragment>
+        )}
       </div>
+      // </div>
     );
   }
 }

@@ -11,6 +11,7 @@ import Chart from "./Chart";
 const AnalyticsDashboard = () => {
   const [view, setView] = useState();
   const [chartData, setChartData] = useState([]);
+
   const [labels, setLabels] = useState([]);
   const [data, setData] = useState([]);
 
@@ -79,7 +80,7 @@ const AnalyticsDashboard = () => {
   // }
 
   useEffect(() => {
-    console.log("here");
+    // console.log("here");
     reviewsPerDay();
     topFiveMostReviewedCompanies();
     topFiveJobSeekersAcceptedReviews();
@@ -100,6 +101,7 @@ const AnalyticsDashboard = () => {
     });
 
     setLabels1(labels_list);
+    // console.log("LL", labels1)
     setData1(data_list);
   };
 
@@ -129,7 +131,6 @@ const AnalyticsDashboard = () => {
     let labels_list = [];
     let data_list = [];
     response.data.map((i) => {
-      // console.log(i)
       labels_list.push(i.email);
       data_list.push(i.count);
     });
@@ -141,11 +142,9 @@ const AnalyticsDashboard = () => {
   const topFiveCompaniesAverageRating = async () => {
     const response = await topFiveCompaniesBasedOnAverageRating();
     console.log(" top Five Companies Based On Average Rating", response.data);
-    // setChartData(response.data)
     let labels_list = [];
     let data_list = [];
     response.data.map((i) => {
-      // console.log(i)
       labels_list.push(i.name);
       data_list.push(i.avgRating);
     });
@@ -157,7 +156,6 @@ const AnalyticsDashboard = () => {
   const topTenCEOs = async () => {
     const response = await topTenCeosApproved();
     console.log("top Ten Ceos Approved", response.data);
-    // setChartData(response.data)
     let labels_list = [];
     let data_list = [];
     response.data.map((i) => {
@@ -205,29 +203,37 @@ const AnalyticsDashboard = () => {
                     </select>
                 </div> */}
         <div style={{ margin: "20px auto" }}>
-          {data1 && labels1 && (
-            <Chart
-              labels={labels1}
-              data={data1}
-              type="Bar"
-              color={["blue", "red", "orange", "yellow", "green"]}
-            />
-          )}
+          {
+            data1 && labels1 && (
+              <Chart
+                labels={labels1}
+                data={data1}
+                type="Bar"
+                // color={["blue", "red", "orange", "yellow", "green"]}
+                labelValue="The number of reviews per day."
+              />
+            )}
         </div>
         <div style={{ margin: "20px auto" }}>
-          <Chart
-            labels={labels2}
-            data={data2}
-            type="Bar"
-            color={["blue", "red", "orange", "yellow", "green"]}
-          />
+          {data2 && labels2 && (
+
+            <Chart
+              labels={labels2}
+              data={data2}
+              type="Bar"
+              // color={["blue", "red", "orange", "yellow", "green"]}
+              labelValue="Top 5 most reviewed companies"
+
+            />)}
         </div>
         <div style={{ margin: "20px auto" }}>
           <Chart
             labels={labels3}
             data={data3}
             type="Bar"
-            color={["blue", "red", "orange", "yellow", "green"]}
+            // color={["blue", "red", "orange", "yellow", "green"]}
+            labelValue="Top 5 companies based on average rating"
+
           />
         </div>
         <div style={{ margin: "20px auto" }}>
@@ -235,7 +241,9 @@ const AnalyticsDashboard = () => {
             labels={labels4}
             data={data4}
             type="Bar"
-            color={["blue", "red", "orange", "yellow", "green"]}
+            // color={["blue", "red", "orange", "yellow", "green"]}
+            labelValue="Top 5 job seekers based on total accepted reviews made"
+
           />
         </div>
         <div style={{ margin: "20px auto" }}>
@@ -243,18 +251,20 @@ const AnalyticsDashboard = () => {
             labels={labels5}
             data={data5}
             type="Bar"
-            color={[
-              "blue",
-              "red",
-              "orange",
-              "yellow",
-              "green",
-              "lightblue",
-              "grey",
-              "purple",
-              "brown",
-              "silver",
-            ]}
+            // color={[
+            //   "blue",
+            //   "red",
+            //   "orange",
+            //   "yellow",
+            //   "green",
+            //   "lightblue",
+            //   "grey",
+            //   "purple",
+            //   "brown",
+            //   "silver",
+            // ]}
+            labelValue="Top 10 CEOs based on rating"
+
           />
         </div>
         <div style={{ margin: "20px auto" }}>
@@ -262,18 +272,20 @@ const AnalyticsDashboard = () => {
             labels={labels6}
             data={data6}
             type="Bar"
-            color={[
-              "blue",
-              "red",
-              "orange",
-              "yellow",
-              "green",
-              "lightblue",
-              "grey",
-              "purple",
-              "brown",
-              "silver",
-            ]}
+            // color={[
+            //   "blue",
+            //   "red",
+            //   "orange",
+            //   "yellow",
+            //   "green",
+            //   "lightblue",
+            //   "grey",
+            //   "purple",
+            //   "brown",
+            //   "silver",
+            // ]}
+            labelValue="Top 10 companies based on views per day"
+
           />
         </div>
       </div>

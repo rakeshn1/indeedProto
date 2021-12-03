@@ -10,6 +10,8 @@ const JobSeekerSignIn = () => {
   let [emailId, setEmailId] = useState();
   let [password, setPassword] = useState();
   // let [redirect, setRedirect] = useState(null)
+  let [emailIdError, setEmailIdError] = useState("");
+  let [passwordError, setPasswordError] = useState("");
   let [message, setMessage] = useState();
 
   const history = useHistory();
@@ -30,11 +32,25 @@ const JobSeekerSignIn = () => {
   };
 
   const handleEmailIdChange = (e) => {
+    var pattern = new RegExp(
+      /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
+    );
+
+    if (!pattern.test(e.target.value)) {
+      setEmailIdError("Enter Valid Email Address");
+    } else {
+      setEmailIdError("");
+    }
     console.log(e.target.value);
     setEmailId(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
+    if (e.target.value.length === 0) {
+      setPasswordError("Please enter a password");
+    } else {
+      setPasswordError("");
+    }
     console.log(e.target.value);
     setPassword(e.target.value);
   };
@@ -66,8 +82,14 @@ const JobSeekerSignIn = () => {
             marginBottom: "20px",
             color: "black",
           }}
+          className="input-styler"
           onChange={handleEmailIdChange}
         />
+        {emailIdError && (
+          <div className="alert alert-danger" style={{ marginTop: "-20px" }}>
+            {emailIdError}
+          </div>
+        )}
         <Input
           label="Password"
           required
@@ -77,17 +99,34 @@ const JobSeekerSignIn = () => {
             marginBottom: "20px",
             color: "black",
           }}
+          className="input-styler"
           onChange={handlePasswordChange}
           type="password"
         />
+        {passwordError && (
+          <div className="alert alert-danger" style={{ marginTop: "-20px" }}>
+            {passwordError}
+          </div>
+        )}
         <Button
           text="SignIn"
           onClick={authenticate}
+          disabled={
+            !emailIdError && !passwordError && emailId && password
+              ? ""
+              : "disabled"
+          }
           style={{
             width: "100%",
+            marginTop: "10px",
           }}
         />
-        <div style={{ backgroundColor: "yellow" }}>{message}</div>
+        <br />
+        {message && (
+          <p style={{ marginTop: "-20px", fontSize: "15px", color: "red" }}>
+            {message}
+          </p>
+        )}
         <div style={{ marginTop: "20px", color: "#2557a7" }}>
           <NavLink to="/signUp">New user? Sign up </NavLink>
         </div>

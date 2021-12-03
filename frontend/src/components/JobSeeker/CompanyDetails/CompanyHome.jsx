@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import CompanyHeader from "./CompanyHeader";
 import Reviews from "./Reviews";
 import CompanySnapShot from "./CompanySnapShot";
@@ -11,30 +11,49 @@ import { getCompanyDetails } from "../../../services/jobSeeker";
 class CompanyHome extends React.Component {
   state = {
     companyDetails: undefined,
+    id: undefined,
   };
   componentWillMount = async () => {
-    let response = await getCompanyDetails("61a3446cbbaf757f9a105d91");
+    const id = this.props.match.params.id;
+    let response = await getCompanyDetails(id);
     console.log(response.data);
+
     this.setState({ companyDetails: response.data });
   };
 
   render() {
     return (
       <div>
-        <CompanyHeader />
+        <CompanyHeader companyDetails={this.state.companyDetails} />
         <div className="content">
           <Switch>
-            <Route path="/companydetails/review">
+            <Route
+              path={`/companydetails/${this.state.companyDetails?._id}/review`}
+            >
               <Reviews companyDetails={this.state.companyDetails} />
             </Route>
-            <Route path="/companydetails/about">
+            <Route
+              path={`/companydetails/${this.state.companyDetails?._id}/about`}
+            >
               <AboutCompany companyDetails={this.state.companyDetails} />
             </Route>
-            <Route path="/companydetails/jobs">
+            <Route
+              path={`/companydetails/${this.state.companyDetails?._id}/jobs`}
+            >
               <Jobs companyDetails={this.state.companyDetails} />
             </Route>
-            <Route path="/">
+            <Route
+              path={`/companydetails/${this.state.companyDetails?._id}/snapshot`}
+            >
               <CompanySnapShot companyDetails={this.state.companyDetails} />
+            </Route>
+            <Route
+              exact
+              path={`/companydetails/${this.state.companyDetails?._id}`}
+            >
+              <Redirect
+                to={`/companydetails/${this.state.companyDetails?._id}/snapshot`}
+              />
             </Route>
           </Switch>
         </div>

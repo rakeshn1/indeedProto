@@ -30,9 +30,7 @@ const userSchema = new mongoose.Schema({
     maxlength: 255,
   },
   phoneNumber: {
-    type: String,
-    minlength: 10,
-    maxlength: 12,
+    type: String
   },
   savedJobs: {
     type: [mongoose.Schema.Types.ObjectId],

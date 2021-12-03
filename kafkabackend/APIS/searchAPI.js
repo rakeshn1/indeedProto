@@ -26,6 +26,7 @@ const getCompanyNamesAndJobTitles = async (msg, callback) => {
     });
     res.data = _.uniq(res.data);
     res.status = 200;
+    console.log("responding");
     callback(null, res);
   } catch (err) {
     res.status = 400;
@@ -378,7 +379,7 @@ const getSalaryReviewsMainData = async (msg, callback) => {
     const result = await SalaryReview.aggregate([
       {
         $match: {
-          jobTitle: { $regex: msg.jobTitle, $options: "i" },
+          jobTitle: { $regex: "" + msg.jobTitle + "", $options: "i" },
           companyId: { $in: selectedCompanyIds },
         },
       },

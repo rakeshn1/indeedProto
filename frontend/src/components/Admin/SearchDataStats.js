@@ -22,7 +22,6 @@ const SearchDataStats = ({ reviewsList, jobStats }) => {
   const [data, setData] = useState([]);
 
   const handlePageChange = (page) => {
-    // console.log(page);
     setCurrentPage(page);
   };
 
@@ -122,7 +121,6 @@ const SearchDataStats = ({ reviewsList, jobStats }) => {
                 ]}
                 labelValue="Software Engineer"
                 style={{ width: "250px", height: "250px", margin: "20px" }}
-                //   {job.jobTitle}
               />
             );
           })}

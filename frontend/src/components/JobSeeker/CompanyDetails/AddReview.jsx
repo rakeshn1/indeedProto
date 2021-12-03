@@ -2,7 +2,7 @@ import React from "react";
 import QuestionCard from "./QuestionCard";
 import "../../../styles/companyStyles.css";
 import StarRating from "react-svg-star-rating";
-
+import { getCurrentUser } from "../../../services/auth";
 import Input from "../../common/Input";
 import TextArea from "../../common/TextArea";
 import { addReview } from "../../../services/jobSeeker";
@@ -24,6 +24,7 @@ class AddReview extends React.Component {
       cons: undefined,
       jobTitle: undefined,
       jobLocation: undefined,
+      state: undefined,
       ceoApproval: undefined,
       tips: undefined,
     },
@@ -46,6 +47,7 @@ class AddReview extends React.Component {
     ceoApproval: Joi.boolean().allow(""),
     benefits: Joi.number().allow(""),
     tips: Joi.string().allow(""),
+    state: Joi.string().required(),
   };
 
   validateProperty = (input) => {
@@ -139,17 +141,27 @@ class AddReview extends React.Component {
             <Input
               id="jobTitle"
               name="jobTitle"
-              label="Job Title at Amazon.com"
+              label={`Job Title at ${this.props.history.location?.state?.companyDetails?.name}`}
               onChange={this.handleChange}
               className="mb-3 bold-input"
               required
             />
             <Input
-              label="Job Location at Amazon.com"
+              label={`Job Location at ${this.props.history.location?.state?.companyDetails?.name}`}
               id="jobLocation"
               name="jobLocation"
               onChange={this.handleChange}
               className="mb-3 bold-input"
+              placeholder="San Jose"
+              required
+            />
+            <Input
+              label={`Job Location at ${this.props.history.location?.state?.companyDetails?.name}`}
+              id="state"
+              name="state"
+              onChange={this.handleChange}
+              className="mb-3 bold-input"
+              placeholder="CA"
               required
             />
           </div>
@@ -199,7 +211,7 @@ class AddReview extends React.Component {
             }}
             onClick={() => this.handleCeoApproval(false)}
           >
-            No
+            <b>No</b>
           </button>
         </div>
       </div>
@@ -210,7 +222,7 @@ class AddReview extends React.Component {
     return (
       <div className="start">
         <TextArea
-          label="What is the hiring process at Apple?"
+          label={`What is the hiring process at ${this.props.history.location?.state?.companyDetails?.name}?`}
           id="tips"
           name="tips"
           rows={10}
@@ -223,33 +235,47 @@ class AddReview extends React.Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
+    const user = getCurrentUser();
     try {
-      const response = await addReview(this.state.data);
+      const response = await addReview(
+        this.state.data,
+        this.props.history.location?.state?.companyDetails._id,
+        user._id
+      );
       if (response && response.status === 200) {
         console.log("added reviews successfully");
-        // this.props.history.push("/companydetails");
+        this.props.history.push(
+          `/companydetails/${this.props.history.location?.state?.companyDetails._id}`
+        );
       }
     } catch (ex) {
       console.log(ex);
     }
   };
   render() {
+    const companyDetails = this.props.history.location?.state?.companyDetails;
     return (
       <div className="reviews mt-5">
         <form onSubmit={this.handleSubmit}>
-          <section className="section mt-5">
-            <h4>Take a minute to review Amazon.com. </h4>
-            <span>Your anonymous feedback will help fellow jobseekers</span>
-            <ul style={{ fontSize: "13px" }}>
-              <li>
-                Company reviews are <b>NEVER</b> attached to your job
-                applications
-              </li>
-              <li>
-                The reviews <b>ONLY</b> include star ratings, review text, job
-                title, location and review date
-              </li>
-            </ul>
+          <section className="section mt-5 d-flex flex-row">
+            <img
+              src="https://picsum.photos/100/100"
+              style={{ height: "100px", width: "100px" }}
+            />
+            <div className="ps-3">
+              <h4>Take a minute to review {companyDetails.name} </h4>
+              <span>Your anonymous feedback will help fellow jobseekers</span>
+              <ul style={{ fontSize: "13px" }}>
+                <li>
+                  Company reviews are <b>NEVER</b> attached to your job
+                  applications
+                </li>
+                <li>
+                  The reviews <b>ONLY</b> include star ratings, review text, job
+                  title, location and review date
+                </li>
+              </ul>
+            </div>
           </section>
           <section className="section mt-3">
             <QuestionCard
@@ -340,7 +366,7 @@ class AddReview extends React.Component {
 
           <section className="section mt-3">
             <QuestionCard
-              question="Please help answer these questions about Apple?"
+              question={`Please help answer these questions about ${companyDetails.name}?`}
               content={this.getTips()}
             />
           </section>

@@ -24,15 +24,18 @@ const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
         maxlength: 255,
+        default: null
     },
     lastName: {
         type: String,
         maxlength: 255,
+        default: null
     },
     phoneNumber: {
         type: String,
         minlength: 10,
         maxlength: 12,
+        default: null
     },
     savedJobs: {
         type: [mongoose.Schema.Types.ObjectId],
@@ -51,7 +54,12 @@ const userSchema = new mongoose.Schema({
     companyRole: {
         type: String,
         maxlength: 255,
+        default: null
     },
+    companyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: null
+    }
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -62,6 +70,8 @@ userSchema.methods.generateAuthToken = function () {
             role: this.role,
             firstName: this.firstName,
             lastName: this.lastName,
+            resume: this.resume,
+            companyId: this.companyId
         },
         "1234"
         // config.get("jwtPrivateKey")
