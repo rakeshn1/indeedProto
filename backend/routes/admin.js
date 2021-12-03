@@ -187,6 +187,16 @@ router.get('/getAllPhotos', (req, res) => {
 
 });
 
+router.get('/photos/:id', (req, res) => {
+  const companyId = req.params.id;
+  console.log('get company photos!')
+  const sqlSelect = "select * from newPhotos where companyId = ?";
+  db.query(sqlSelect, [companyId], (err, result) => {
+    console.log(result)
+    res.send(result)
+  })
+});
+
 
 router.put('/insertViewCount', (req, res) => {
 

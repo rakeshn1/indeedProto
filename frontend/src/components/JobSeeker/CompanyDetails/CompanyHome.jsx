@@ -6,6 +6,7 @@ import CompanySnapShot from "./CompanySnapShot";
 import AboutCompany from "./AboutCompany";
 import Jobs from "./Jobs";
 import CompanySalaries from "./CompanySalaries";
+import CompanyPhotos from "./CompanyPhotos";
 import "../../../styles/companyStyles.css";
 import { getCompanyDetails } from "../../../services/jobSeeker";
 
@@ -47,6 +48,13 @@ class CompanyHome extends React.Component {
               path={`/companydetails/${this.state.companyDetails?._id}/salaries`}
             >
               <CompanySalaries
+                companyDetails={this.state.companyDetails}
+              />
+            </Route>
+            <Route
+              path={`/companydetails/${this.state.companyDetails?._id}/photos`}
+            >
+              <CompanyPhotos
                 companyDetails={this.state.companyDetails}
               />
             </Route>
