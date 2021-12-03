@@ -6,9 +6,9 @@ const { Jobs } = require("../models/mongo/jobs.js");
 const { User } = require("../models/mongo/user");
 const { JobApplication } = require("../models/mongo/jobApplications");
 const { Company } = require("../models/mongo/company");
+const { Reviews } = require("../models/mongo/review");
 
-
-const topic = "jobSeeker-topic";
+const topic = "jobSeeker-topic1";
 
 router.post("/addReview", async (req, res) => {
   console.log(req.body);
@@ -235,42 +235,71 @@ router.get("/getJobSearchResults/", async (req, res) => {
           $or: [
             { "location.city": new RegExp(req.query.where, "i") },
             {
-              "location.country": new RegExp(
-                req.query.where,
-                "i"
-              ),
+              "location.country": new RegExp(req.query.where, "i"),
             },
             {
               "location.state": new RegExp(req.query.where, "i"),
             },
             {
-              "location.zipcode": new RegExp(
-                req.query.where,
-                "i"
-              ),
+              "location.zipcode": new RegExp(req.query.where, "i"),
             },
           ],
         },
       ],
-    });
+    }).lean();
   } else if (what && !where) {
     response = await Jobs.find({
       $or: [
         { jobTitle: { $regex: req.query.what, $options: "i" } },
         { companyName: { $regex: req.query.what, $options: "i" } },
       ],
-    });
+    }).lean();
   } else {
     response = await Jobs.find({
       $or: [
-
         { "location.city": { $regex: req.query.where, $options: "i" } },
         { "location.country": new RegExp(req.query.where, "i") },
         { "location.state": new RegExp(req.query.where, "i") },
         { "location.zipcode": new RegExp(req.query.where, "i") },
       ],
-    });
+    }).lean();
   }
+
+  await Promise.all(
+    response.map(async (company) => {
+      console.log("Company::::: ", company.companyId);
+      const companyData = await Company.findById(
+        company.companyId.toString()
+      ).select("name");
+      console.log("CompanyData: ", companyData);
+      company.name = companyData.name;
+      // res.data.push(company);
+    })
+  );
+
+  await Promise.all(
+    response.map(async (company) => {
+      console.log("DFDHFJGKHL: ", company.companyId);
+      const d = await Reviews.aggregate([
+        {
+          $match: {
+            companyId: mongoose.Types.ObjectId(company.companyId.toString()),
+          },
+        },
+        {
+          $group: {
+            _id: "$companyId",
+            numberOfReviews: { $sum: 1 },
+            averageRating: { $avg: "$rating" },
+          },
+        },
+      ]);
+
+      company.numberOfReviews = d.numberOfReviews;
+      company.averageRating = d.averageRating;
+    })
+  );
+
   console.log("response", response);
   res.send(response);
 });

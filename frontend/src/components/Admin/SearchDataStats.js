@@ -26,13 +26,17 @@ const SearchDataStats = ({ reviewsList, jobStats }) => {
   };
 
   useEffect(() => {
+    setCurrentPage(1);
+  }, [reviewsList]);
+
+  useEffect(() => {
     console.log("ReviewsList: ", reviewsList);
     const orders = paginate(reviewsList, currentPage, pageSize);
 
     //   return { totalCount: reviewsList.length, data: orders };
     setTotalCount(reviewsList.length);
     setData(orders);
-  }, [currentPage]);
+  }, [currentPage, reviewsList]);
 
   //   const filterData = () => {
   //     console.log("ReviewsList: ", reviewsList);

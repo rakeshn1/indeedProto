@@ -2,6 +2,7 @@ import React from "react";
 import Input from "../../common/Input";
 import JobCard from "./JobCard";
 import { getJobPostings } from "../../../services/jobSeeker";
+import { incrementViewCount } from ".././../../services/admin";
 
 class Jobs extends React.Component {
   pageSize = 10;
@@ -21,6 +22,12 @@ class Jobs extends React.Component {
       filteredJobs: res.data,
       currentJobId: res.data[0]?._id ? res.data[0]?._id : 0,
     });
+    if (this.props.companyDetails) {
+      incrementViewCount({
+        companyId: this.props.companyDetails._id,
+        date: new Date(),
+      });
+    }
   };
 
   getJobsInCurrentPage = () => {
