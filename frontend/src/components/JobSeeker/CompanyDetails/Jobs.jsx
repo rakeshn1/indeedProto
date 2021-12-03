@@ -19,7 +19,7 @@ class Jobs extends React.Component {
     this.setState({
       jobListing: res.data,
       filteredJobs: res.data,
-      currentJobId: res.data[0]._id,
+      currentJobId: res.data[0]?._id ? res.data[0]?._id : 0,
     });
   };
 
@@ -151,62 +151,64 @@ class Jobs extends React.Component {
                 />
               ))}
             </div>
-            <div style={{ width: "100%" }}>
-              <div
-                className="bg-white p-3"
-                style={{
-                  borderBottom: "2px solid #f2f2f2",
-                  borderTop: "4px solid #085ff7",
-                  boxShadow: "0 4px 4px rgb(0 0 0 / 8%)",
-                }}
-              >
-                <div class="job-desc-title">
-                  <img src="https://picsum.photos/50/50" alt="company-logo" />
-                  <div>
-                    <h6 className="ps-3">
-                      <b>{currentJob?.jobTitle}</b>
-                    </h6>
-                    <span className="p-3">
-                      {currentJob?.location.city}, {currentJob?.location.state}
-                    </span>
-                  </div>
-                </div>
-                <button
-                  className="submit-btn ms-2"
+            {this.state.currentJobId !== 0 && (
+              <div style={{ width: "100%" }}>
+                <div
+                  className="bg-white p-3"
                   style={{
-                    background: "#085ff7",
-                    fontSize: "18px",
-                    width: "fit-content",
-                    padding: "0 20px",
+                    borderBottom: "2px solid #f2f2f2",
+                    borderTop: "4px solid #085ff7",
+                    boxShadow: "0 4px 4px rgb(0 0 0 / 8%)",
                   }}
                 >
-                  Apply on company site
-                </button>
-              </div>
+                  <div class="job-desc-title">
+                    <img src="https://picsum.photos/50/50" alt="company-logo" />
+                    <div>
+                      <h6 className="ps-3">
+                        <b>{currentJob?.jobTitle}</b>
+                      </h6>
+                      <span className="p-3">
+                        {currentJob?.location.city},{" "}
+                        {currentJob?.location.state}
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    className="submit-btn ms-2"
+                    style={{
+                      background: "#085ff7",
+                      fontSize: "18px",
+                      width: "fit-content",
+                      padding: "0 20px",
+                    }}
+                  >
+                    Apply on company site
+                  </button>
+                </div>
 
-              <div className="job-desc p-4">
-                <h6 className="mb-3">
-                  <b>Job Overview</b>
-                </h6>
-                <p>
-                  <b>Salary:</b> ${currentJob?.salary}
-                </p>
+                <div className="job-desc p-4">
+                  <h6 className="mb-3">
+                    <b>Job Overview</b>
+                  </h6>
+                  <p>
+                    <b>Salary:</b> ${currentJob?.salary}
+                  </p>
 
-                <p>
-                  <b>JobType: </b>
-                  {currentJob?.jobType === 0 && "Full Time"}
-                  {currentJob?.jobType === 1 && "Part Time"}
-                  {currentJob?.jobType === 2 && "Remote"}
-                </p>
-                <p>
-                  <b>Location:</b> {currentJob?.location.city},{" "}
-                  {currentJob?.location.state}, {currentJob?.location.zipcode}{" "}
-                </p>
-                <h6 className="mb-3">
-                  <b>Duties & Responsibilities</b>
-                </h6>
-                <p>{currentJob?.responsibilities}</p>
-                {/* <ul>
+                  <p>
+                    <b>JobType: </b>
+                    {currentJob?.jobType === 0 && "Full Time"}
+                    {currentJob?.jobType === 1 && "Part Time"}
+                    {currentJob?.jobType === 2 && "Remote"}
+                  </p>
+                  <p>
+                    <b>Location:</b> {currentJob?.location.city},{" "}
+                    {currentJob?.location.state}, {currentJob?.location.zipcode}{" "}
+                  </p>
+                  <h6 className="mb-3">
+                    <b>Duties & Responsibilities</b>
+                  </h6>
+                  <p>{currentJob?.responsibilities}</p>
+                  {/* <ul>
                   <li>Prepare grocery orders for delivery</li>
                   <li>Prepare grocery orders for delivery</li>
                   <li>Prepare grocery orders for delivery</li>
@@ -214,8 +216,9 @@ class Jobs extends React.Component {
                   <li>Prepare grocery orders for delivery</li>
                   <li>Prepare grocery orders for delivery</li>
                 </ul> */}
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <div className="d-flex flex-row justify-content-around">
             <div>

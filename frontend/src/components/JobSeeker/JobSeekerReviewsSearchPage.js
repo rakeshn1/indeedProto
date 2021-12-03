@@ -291,6 +291,7 @@ class JobSeekerReviewsSearchPage extends React.Component {
         <div>
           {this.state.companyData &&
             this.state.companyData.map((row) => {
+              console.log("RRRFDTFJHGKFTY: ", row);
               return <JobSeekerCompanyRow {...row}></JobSeekerCompanyRow>;
             })}
         </div>
