@@ -38,47 +38,6 @@ const AnalyticsDashboard = () => {
     setView(e.target.value);
   };
 
-  // const renderSwitch = async (option) => {
-  //     switch (option) {
-  //         case '1':
-  //             // let result = await reviewsPerDay();
-  //             return (<Chart
-  //                 labels={labels}
-  //                 data={data}
-  //             />);
-
-  //         case '2':
-  //             // let result = topFiveMostReviewedCompanies();
-  //             return (<Chart
-  //                 labels={labels}
-  //                 data={data}
-  //             />);
-  //         case '3':
-  //             await topFiveJobSeekersAcceptedReviews();
-  //             return (<Chart
-  //                 labels={labels}
-  //                 data={data}
-  //             />);
-  //         case '4':
-  //             // await topFiveCompaniesAverageRating();
-  //             return (<Chart
-  //                 labels={labels}
-  //                 data={data}
-  //             />);
-  //         case '5':
-  //             await topTenCEOs();
-  //             return (<Chart
-  //                 labels={labels}
-  //                 data={data}
-  //             />);
-  //         case '6':
-  //             await topTenCompaniesViewsPerDay();
-  //             return (<Chart />);
-  //         default:
-  //             return (<div style={{ textAlign: "center" }}> No Selection </div>);
-  //     }
-  // }
-
   useEffect(() => {
     // console.log("here");
     reviewsPerDay();
@@ -202,94 +161,191 @@ const AnalyticsDashboard = () => {
                         </option>
                     </select>
                 </div> */}
-        <div style={{ margin: "20px auto" }}>
-          {
-            data1 && labels1 && (
+        <div style={{ margin: "20px auto", display: "flex", justifyContent: "space-evenly" }}>
+
+          <div className="graph-detail-display">
+            <h5>Number of reviews per day</h5>
+            <hr />
+            <div style={{ display: "flex" }}>
+              <div>
+
+                {
+                  labels1.map(i => {
+                    return (<pre>Date: {i}    </pre>)
+                  })
+
+                }
+              </div>
+              <div>
+
+                {
+                  data1.map(i => {
+                    return (<pre>Review Count:{i}</pre>)
+                  })
+
+                }
+
+              </div>
+            </div>
+          </div>
+          <div className="graph-disp">
+            {
+              data1 && labels1 && (
+                <Chart
+                  labels={labels1}
+                  data={data1}
+                  type="Bar"
+                  labelValue="The number of reviews per day."
+                  xlabel="Date"
+                  ylabel="Number of Reviews"
+                />
+              )}
+          </div>
+
+        </div>
+
+        <div style={{ margin: "20px auto", display: "flex", justifyContent: "space-evenly" }}>
+          <div className="graph-detail-display">
+            <h5>Top 5 most reviewed companies</h5>
+            <hr />
+
+            <ul>
+              {
+
+                labels2.map((i) => {
+                  return (<pre> {i} </pre>)
+                })
+
+              }
+            </ul>
+          </div>
+          <div className="graph-disp">
+
+            {data2 && labels2 && (
+
               <Chart
-                labels={labels1}
-                data={data1}
+                labels={labels2}
+                data={data2}
+                type="Bar"
+                labelValue="Top 5 most reviewed companies"
+
+              />)}
+
+          </div>
+        </div>
+        <div style={{ margin: "20px auto", display: "flex", justifyContent: "space-evenly" }}>
+          <div className="graph-detail-display">
+            <h5>Top 5 companies based on average rating</h5>
+            <hr />
+
+            <ul>
+              {
+
+                labels3.map((i) => {
+                  return (<li>{i}</li>)
+                })
+
+              }
+            </ul>
+          </div>
+          <div className="graph-disp">
+            {data3 && labels3 && (
+              <Chart
+                labels={labels3}
+                data={data3}
                 type="Bar"
                 // color={["blue", "red", "orange", "yellow", "green"]}
-                labelValue="The number of reviews per day."
+                labelValue="Top 5 companies based on average rating"
+
+              />)}
+          </div>
+        </div>
+        <div style={{ margin: "20px auto", display: "flex", justifyContent: "space-evenly" }}>
+          <div className="graph-detail-display">
+            <h5>Top 5 job seekers based on total accepted reviews made</h5>
+            <hr />
+
+            <ul>
+              {
+
+                labels4.map((i) => {
+                  return (<li>{i}</li>)
+                })
+
+              }
+            </ul>
+          </div>
+          <div className="graph-disp">
+            {data4 && labels4 && (
+              <Chart
+                labels={labels4}
+                data={data4}
+                type="Bar"
+                labelValue="Top 5 job seekers based on total accepted reviews made"
+
               />
             )}
+          </div>
         </div>
-        <div style={{ margin: "20px auto" }}>
-          {data2 && labels2 && (
 
-            <Chart
-              labels={labels2}
-              data={data2}
-              type="Bar"
-              // color={["blue", "red", "orange", "yellow", "green"]}
-              labelValue="Top 5 most reviewed companies"
+        <div style={{ margin: "20px auto", display: "flex", justifyContent: "space-evenly" }}>
+          <div className="graph-detail-display">
+            <h5>Top 10 CEOs based on rating</h5>
+            <hr />
 
-            />)}
+            <ul>
+              {
+
+                labels5.map((i) => {
+                  return (<li>{i}</li>)
+                })
+
+              }
+            </ul>
+          </div>
+          <div className="graph-disp">
+            {data5 && labels5 && (
+              <Chart
+                labels={labels5}
+                data={data5}
+                type="Bar"
+                labelValue="Top 10 CEOs based on rating"
+
+              />
+            )}
+          </div>
+
         </div>
-        <div style={{ margin: "20px auto" }}>
-          <Chart
-            labels={labels3}
-            data={data3}
-            type="Bar"
-            // color={["blue", "red", "orange", "yellow", "green"]}
-            labelValue="Top 5 companies based on average rating"
 
-          />
-        </div>
-        <div style={{ margin: "20px auto" }}>
-          <Chart
-            labels={labels4}
-            data={data4}
-            type="Bar"
-            // color={["blue", "red", "orange", "yellow", "green"]}
-            labelValue="Top 5 job seekers based on total accepted reviews made"
+        <div style={{ margin: "20px auto", display: "flex", justifyContent: "space-evenly" }}>
+          <div className="graph-detail-display">
+            <h5>Top 10 companies based on views per day</h5>
+            <hr />
 
-          />
-        </div>
-        <div style={{ margin: "20px auto" }}>
-          <Chart
-            labels={labels5}
-            data={data5}
-            type="Bar"
-            // color={[
-            //   "blue",
-            //   "red",
-            //   "orange",
-            //   "yellow",
-            //   "green",
-            //   "lightblue",
-            //   "grey",
-            //   "purple",
-            //   "brown",
-            //   "silver",
-            // ]}
-            labelValue="Top 10 CEOs based on rating"
+            <ul>
+              {
 
-          />
-        </div>
-        <div style={{ margin: "20px auto" }}>
-          <Chart
-            labels={labels6}
-            data={data6}
-            type="Bar"
-            // color={[
-            //   "blue",
-            //   "red",
-            //   "orange",
-            //   "yellow",
-            //   "green",
-            //   "lightblue",
-            //   "grey",
-            //   "purple",
-            //   "brown",
-            //   "silver",
-            // ]}
-            labelValue="Top 10 companies based on views per day"
+                labels6.map((i) => {
+                  return (<li>{i}</li>)
+                })
 
-          />
+              }
+            </ul>
+          </div>
+          <div className="graph-disp">
+            {data6 && labels6 && (
+              <Chart
+                labels={labels6}
+                data={data6}
+                type="Bar"
+                labelValue="Top 10 companies based on views per day"
+
+              />
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

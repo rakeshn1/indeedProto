@@ -68,8 +68,18 @@ export async function topFiveCompaniesBasedOnAverageRating() {
   return await http.get(apiEndpoint + `/topFiveCompaniesBasedOnAverageRating`);
 }
 
-export async function updatePhotoStatus() {
-  // console.log(apiURL + "/api/handleJobSaveUnsave/")
-  // console.log("payload")
-  return await http.put(apiEndpoint + `/updateStatusOfPhoto`);
+export async function updatePhotoStatus(payload) {
+  return await http.put(apiEndpoint + `/updateStatusOfPhoto`, payload);
+}
+export async function getAllCompanies() {
+  return await http.get(apiEndpoint + `/getAllCompanies`)
+
+}
+export async function getAllPhotos() {
+  return await http.get(apiEndpoint + `/getAllPhotos`)
+}
+
+
+export async function insertPhoto(payload) {
+  return await http.post(apiEndpoint + `/insertPhoto`, payload)
 }

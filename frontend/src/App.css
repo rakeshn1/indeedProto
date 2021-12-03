@@ -620,3 +620,11 @@ body {
   border: 1px solid #cfcece;
 }
 
+.graph-detail-display{
+  padding:100px;
+  width:40%;
+}
+
+.graph-disp{
+  width: 50%;
+}
