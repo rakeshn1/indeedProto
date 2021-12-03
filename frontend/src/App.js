@@ -54,6 +54,9 @@ function App() {
   const jwt = getJwt();
   const user = getCurrentUser();
   console.log("In app.js: USER: ", user, " --- JWT: ", jwt);
+  console.log("-------------------------------------------");
+  console.log("Pathname: ", location.pathname);
+  console.log("-------------------------------------------");
 
   return (
     <div className="App">
@@ -245,7 +248,7 @@ function App() {
         {/* <Redirect from="/" exact to="/jobSeekerLandingPage" /> */}
         <Redirect from="/" exact to="/home" />
         <Redirect from="/jobSeeker" exact to="/jobSeekerLandingPage" />
-        <Route from="*" exact component={NotFound} />
+        {/* <Route from="*" exact component={NotFound} /> */}
       </Switch>
     </div>
   );

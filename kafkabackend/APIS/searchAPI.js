@@ -26,6 +26,7 @@ const getCompanyNamesAndJobTitles = async (msg, callback) => {
     });
     res.data = _.uniq(res.data);
     res.status = 200;
+    console.log("responding");
     callback(null, res);
   } catch (err) {
     res.status = 400;
