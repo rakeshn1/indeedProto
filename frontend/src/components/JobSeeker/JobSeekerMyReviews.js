@@ -56,7 +56,7 @@ const JobSeekerMyReviews = () => {
                     {review.reviewSummary}
                   </Link>
                   <span style={{ fontSize: ".75rem", color: "#767676" }}>
-                    {review.jobTitle} (Former Employee )
+                    {review.jobTitle} (Former Employee)
                   </span>
                   <span
                     style={{ fontSize: "0.875rem", color: "##595959" }}

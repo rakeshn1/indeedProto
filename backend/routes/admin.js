@@ -176,6 +176,31 @@ router.get("/getAllPhotos", (req, res) => {
   });
 });
 
+router.get("/photos/:id", async (req, res) => {
+  const companyId = req.params.id;
+  console.log("get company photos!");
+
+  const result = await Company.findById(companyId).select("photos");
+  console.log("PHOTOS RESULTTTTT: ", result);
+  const response = [];
+
+  result.photos?.map((photo) => {
+    const temp = {
+      companyId: companyId,
+      S3Url: photo,
+    };
+    response.push(temp);
+  });
+
+  res.send(response);
+
+  // const sqlSelect = "select * from newPhotos where companyId = ?";
+  // db.query(sqlSelect, [companyId], (err, result) => {
+  //   console.log(result);
+  //   res.send(result);
+  // });
+});
+
 router.put("/insertViewCount", (req, res) => {
   console.log("inserting a view Count");
   // const photoId = req.body.userName;

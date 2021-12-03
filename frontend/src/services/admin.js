@@ -82,6 +82,12 @@ export async function insertPhoto(payload) {
   return await http.post(apiEndpoint + `/insertPhoto`, payload);
 }
 
+export async function getCompanyPhotos(companyId) {
+  return await http
+    .get(apiEndpoint + `/photos/${companyId}`)
+    .then((res) => res.data);
+}
+
 export async function getViewCount() {
   return await http.get(apiEndpoint + `/getViewCount`);
 }
