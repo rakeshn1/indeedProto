@@ -11,6 +11,7 @@ import {
 } from "../../../services/jobSeeker";
 
 import { getCurrentUser } from "../../../services/auth";
+import { incrementViewCount } from "../../../services/admin";
 
 const dateOptions = ["This_Week", "Last_Week", "Last_Month", "This_Month"];
 class Reviews extends React.Component {
@@ -50,6 +51,12 @@ class Reviews extends React.Component {
     }
     params.pageNo = 1;
     this.getFilteredResults(params);
+    if (this.props.companyDetails) {
+      incrementViewCount({
+        companyId: this.props.companyDetails._id,
+        date: new Date(),
+      });
+    }
   };
   handleFilter = async (e) => {
     const filter = { ...this.state.filter };

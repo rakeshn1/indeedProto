@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   getNumberOfReviewsPerDay,
   getTopfiveReviewedCompanies,
+  getViewCount,
   topFiveCompaniesBasedOnAverageRating,
   topfiveJobSeekersBasedOnAcceptedReviews,
   topTenCeosApproved,
@@ -45,7 +46,7 @@ const AnalyticsDashboard = () => {
     topFiveJobSeekersAcceptedReviews();
     topFiveCompaniesAverageRating();
     topTenCEOs();
-    // topTenCompaniesViewsPerDay();
+    topTenCompaniesViewsPerDay();
   }, []);
 
   const reviewsPerDay = async () => {
@@ -127,15 +128,15 @@ const AnalyticsDashboard = () => {
   };
 
   const topTenCompaniesViewsPerDay = async () => {
-    // const response = await topTenCompaniesBasedOnViewsPerDay()
-    // console.log("top Ten Companies Based On Views Per Day", response.data)
-    // setChartData(response.data)
+    const response = await getViewCount();
+    console.log("top Ten Companies Based On Views Per Day", response.data);
+    // setChartData(response.data);
 
     let labels_list = [];
     let data_list = [];
-    chartData.map((i) => {
-      labels_list.push(i.companyName);
-      data_list.push(i.views);
+    response.data.map((i) => {
+      labels_list.push(i.name);
+      data_list.push(i.totalCount);
     });
 
     setLabels6(labels_list);
@@ -166,7 +167,7 @@ const AnalyticsDashboard = () => {
           <div className="graph-detail-display">
             <h5>Number of reviews per day</h5>
             <hr />
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div>
 
                 {
@@ -177,31 +178,24 @@ const AnalyticsDashboard = () => {
                 }
               </div>
               <div>
-
-                {
-                  data1.map(i => {
-                    return (<pre>Review Count:{i}</pre>)
-                  })
-
-                }
-
+                {data1.map((i) => {
+                  return <pre>Review Count:{i}</pre>;
+                })}
               </div>
             </div>
           </div>
           <div className="graph-disp">
-            {
-              data1 && labels1 && (
-                <Chart
-                  labels={labels1}
-                  data={data1}
-                  type="Bar"
-                  labelValue="The number of reviews per day."
-                  xlabel="Date"
-                  ylabel="Number of Reviews"
-                />
-              )}
+            {data1 && labels1 && (
+              <Chart
+                labels={labels1}
+                data={data1}
+                type="Bar"
+                labelValue="The number of reviews per day."
+                xlabel="Date"
+                ylabel="Number of Reviews"
+              />
+            )}
           </div>
-
         </div>
 
         <div style={{ margin: "20px auto", display: "flex", justifyContent: "space-between" }}>
@@ -231,22 +225,19 @@ const AnalyticsDashboard = () => {
             </div>
           </div>
           <div className="graph-disp">
-
             {data2 && labels2 && (
-
               <Chart
                 labels={labels2}
                 data={data2}
                 type="Bar"
                 labelValue="Top 5 most reviewed companies"
-
-              />)}
-
+              />
+            )}
           </div>
         </div>
         <div style={{ margin: "20px auto", display: "flex", justifyContent: "space-between" }}>
           <div className="graph-detail-display">
-            <h5>Top 5 companies based on average rating</h5>
+            <h5> Top 5 job seekers based on total accepted reviews made</h5>
             <hr />
             <div style={{ display: "flex" }}>
               <div>
@@ -277,13 +268,13 @@ const AnalyticsDashboard = () => {
                 data={data3}
                 type="Bar"
                 labelValue="Top 5 companies based on average rating"
-
-              />)}
+              />
+            )}
           </div>
         </div>
         <div style={{ margin: "20px auto", display: "flex", justifyContent: "space-between" }}>
           <div className="graph-detail-display">
-            <h5>Top 5 job seekers based on total accepted reviews made</h5>
+            <h5>Top 5 companies based on average rating</h5>
             <hr />
 
             <div style={{ display: "flex" }}>
@@ -315,7 +306,6 @@ const AnalyticsDashboard = () => {
                 data={data4}
                 type="Bar"
                 labelValue="Top 5 job seekers based on total accepted reviews made"
-
               />
             )}
           </div>
@@ -355,11 +345,9 @@ const AnalyticsDashboard = () => {
                 data={data5}
                 type="Bar"
                 labelValue="Top 10 CEOs based on rating"
-
               />
             )}
           </div>
-
         </div>
 
         <div style={{ margin: "20px auto", display: "flex", justifyContent: "space-between" }}>
@@ -396,13 +384,12 @@ const AnalyticsDashboard = () => {
                 data={data6}
                 type="Bar"
                 labelValue="Top 10 companies based on views per day"
-
               />
             )}
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 

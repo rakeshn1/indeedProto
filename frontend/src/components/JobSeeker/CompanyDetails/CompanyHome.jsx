@@ -7,6 +7,7 @@ import AboutCompany from "./AboutCompany";
 import Jobs from "./Jobs";
 import "../../../styles/companyStyles.css";
 import { getCompanyDetails } from "../../../services/jobSeeker";
+import { incrementViewCount } from "../../../services/admin";
 
 class CompanyHome extends React.Component {
   state = {

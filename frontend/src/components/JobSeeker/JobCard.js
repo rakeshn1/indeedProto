@@ -30,9 +30,9 @@ const JobCard = (props) => {
             style={{ textDecoration: "none", color: "black" }}
             to={`/companyDetails/${props.card?.companyId}`}
           >
-            {props.card?.companyName}
+            {props.card?.name}
           </Link>{" "}
-          <b> 4.3 </b>{" "}
+          <b> {props.card?.averageRating} </b>{" "}
           <svg
             width="18"
             height="18"

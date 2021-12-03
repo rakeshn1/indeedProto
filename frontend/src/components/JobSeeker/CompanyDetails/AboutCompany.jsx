@@ -1,6 +1,16 @@
 import React from "react";
+import { incrementViewCount } from "../../../services/admin";
 
 class AboutCompany extends React.Component {
+  componentDidMount() {
+    if (this.props.companyDetails) {
+      incrementViewCount({
+        companyId: this.props.companyDetails._id,
+        date: new Date(),
+      });
+    }
+  }
+
   render() {
     return (
       <div className="mt-3 p-3">

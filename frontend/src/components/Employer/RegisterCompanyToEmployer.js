@@ -6,10 +6,9 @@ import { TextField } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { useHistory, useParams } from 'react-router-dom'
 import { getCurrentUser, getJwt } from "../../services/auth";
-import EmployerProfileHeader from "./EmployerProfileHeader"
 const EmployerDetails = () => {
+
     const [allCompanies, setAllCompanies] = useState([])
-    const [employerData, setEmployerData] = useState(null)
     const history = useHistory()
     const user = getCurrentUser();
     useEffect(() => {
@@ -19,27 +18,12 @@ const EmployerDetails = () => {
                 if (response.status != 200) {
                     alert({ html: response.statusText, classes: "#c62828 red darken-3" });
                 } else {
-                    console.log(response.data)
                     setAllCompanies(response.data);
                 }
             });
-
-        axios.get(`http://localhost:3900/employer/api/getEmployerDetails/${user._id}`)
-            .then((response) => {
-                if (response.status != 200) {
-                    // M.toast({ html: response.statusText, classes: "#c62828 red darken-3" })
-                }
-                else {
-                    // M.toast({ html: "Added Company Successfully", classes: "#43a047 green darken-1" })
-                    console.log(response.data[0])
-                    setEmployerData(response.data[0])
-                }
-            }).catch(err => {
-                console.log(err)
-            })
     }, [])
 
-    return (employerData &&
+    return (
         <div className="container">
             <section className="page-section" id="about">
                 <div style={{ justifyContent: 'center' }}>
@@ -47,11 +31,11 @@ const EmployerDetails = () => {
                         <Formik
                             style={{ width: '40%' }}
                             initialValues={{
-                                firstName: employerData.firstName,
-                                lastName: employerData.lastName,
-                                phoneNumber: employerData.phoneNumber,
-                                companyRole: employerData.companyRole,
-                                companyId: employerData.companyId,
+                                firstName: "",
+                                lastName: "",
+                                phoneNumber: "",
+                                companyRole: "",
+                                companyId: "",
                             }}
                             onSubmit={(values, { setSubmitting, resetForm }) => {
                                 console.log(values)
@@ -59,10 +43,10 @@ const EmployerDetails = () => {
                                     .then(response => {
                                         console.log(response)
                                         if (response.status != 200) {
-                                            alert("Update Failed")
+                                            // M.toast({ html: response.statusText, classes: "#c62828 red darken-3" })
                                         }
                                         else {
-                                            alert("Update Success")
+                                            // M.toast({ html: "Added Company Successfully", classes: "#43a047 green darken-1" })
                                             history.push("/employer")
                                         }
                                     }).catch(err => {
@@ -79,11 +63,9 @@ const EmployerDetails = () => {
                                 touched,
                                 values
                             }) => (
-                                <form id="contactForm" style={{ width: '40%' }} name="sentMessage" onSubmit={handleSubmit}>
-                                    <div style={{ justifyContent: 'center', padding: 40 }}>
-                                        <EmployerProfileHeader />
-                                    </div>
-                                    <h4 className="font-weight-normal" style={{ fontFamily: 'UberMoveText-Medium,Helvetica,sans-serif' }}>Edit Employer Details</h4>
+                                <form id="contactForm" style={{ width: '80%' }} name="sentMessage" onSubmit={handleSubmit}>
+
+                                    <h4 className="font-weight-normal" style={{ fontFamily: 'UberMoveText-Medium,Helvetica,sans-serif' }}> Link Employer to a Company</h4>
                                     <br />
                                     <div className="row">
                                         <div className="col-md-12">
@@ -108,7 +90,6 @@ const EmployerDetails = () => {
 
                                             </div>
                                             <TextField
-                                                disabled
                                                 fullWidth
                                                 name="companyId"
                                                 size="small"
@@ -133,17 +114,24 @@ const EmployerDetails = () => {
                                             </TextField>
                                         </div>
                                     </div>
-                                    <Button type="submit" text="Update Info" size="lg" style={{ width: "100%" }}>
-                                        Update
-                                    </Button>
+                                    <Link to="/logout">
+                                        <Button type="submit" text="Link to company" size="lg" style={{ width: "100%" }}>
+
+                                        </Button>
+                                    </Link>
                                     <br />
                                     <br />
                                 </form>
                             )}
                         </Formik>
                         {" "}
-
-
+                        <Link
+                            to="/employer/addNewCompany"
+                            className="link"
+                            style={{ color: "black" }}
+                        >
+                            <Button text="Add New Company and link" size="lg" style={{ width: "100%" }}></Button>
+                        </Link>
                     </div>
                 </div>
             </section >
