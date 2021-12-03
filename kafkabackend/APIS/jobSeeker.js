@@ -3,7 +3,8 @@ const { User } = require("../models/user");
 const _ = require("lodash");
 const { SalaryReview } = require("../models/salaryReview");
 const { Company } = require("../models/company");
-const { JobApplication } = require("../models/jobApplications")
+const { JobApplication } = require("../models/jobApplications");
+const mongoose = require("mongoose");
 
 async function addReview(body, callback) {
   try {
@@ -82,14 +83,12 @@ async function applyJob(msg, callback) {
     res.status = 200;
     res.data = "Succesfully applied to job";
     callback(null, res);
-  }
-  catch (err) {
-    res.status = 500
-    res.data = err
-    callback(null, res)
+  } catch (err) {
+    res.status = 500;
+    res.data = err;
+    callback(null, res);
   }
 }
-
 
 async function getJobSearchResults(body, callback) {
   try {
@@ -356,36 +355,30 @@ handle_request = (msg, callback) => {
     delete msg.path;
     console.log("Kafka side1");
     addReview(msg, callback);
-  }
-  if (msg.path === "getJobSearchResults") {
+  } else if (msg.path === "getJobSearchResults") {
     delete msg.path;
     console.log("Kafka side1");
     getJobSearchResults(msg, callback);
-  }
-
-  if (msg.path === "UpdateHelpfulnessScore") {
+  } else if (msg.path === "UpdateHelpfulnessScore") {
     delete msg.path;
     updateReview(msg, callback);
-  }
-
-  if (msg.path === "getCompanyReviews") {
+  } else if (msg.path === "getCompanyReviews") {
     delete msg.path;
     getCompanyReviews(msg, callback);
-  }
-  if (msg.path === "jobSaveUnsave") {
+  } else if (msg.path === "jobSaveUnsave") {
     delete msg.path;
     console.log("Kafka side1 - HERE");
     handleJobSaveUnsave(msg, callback);
-  }
-
-  if (msg.path === "addSalaryReview") {
+  } else if (msg.path === "addSalaryReview") {
     delete msg.path;
     console.log("HERE");
     console.log("Kafka side1");
     addSalaryReview(msg, callback);
-  }
-
-  if (msg.path === "applyJob") {
+  } else if (msg.path === "applyJob") {
+    delete msg.path;
+    console.log("apply job -reached kafka");
+    applyJob(msg, callback);
+  } else if (msg.path === "getJobSeekerReviews") {
     delete msg.path;
     console.log("apply job -reached kafka");
     getJobSeekerReviews(msg, callback);

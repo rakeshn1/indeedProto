@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 class JobSeekerCompanyRow extends React.Component {
   render() {
-    let { logo, name, rating, mission } = this.props;
+    let { logo, name, rating, mission, _id } = this.props;
     if (!logo) {
       logo = "https://www.oiltechconnect.com/front-end/img/default-logo.png";
     }
@@ -39,12 +39,12 @@ class JobSeekerCompanyRow extends React.Component {
                 width: "300px",
                 textDecoration: "none",
               }}
-              to="/companyDetails/about"
+              to={`/companyDetails/${_id}`}
             >
               {name}
             </Link>
             <Link
-              to="/jobSeeker/reviews"
+              to={`/companyDetails/${_id}/review`}
               style={{ display: "flex", color: "#2d2d2d" }}
             >
               <div
@@ -101,19 +101,19 @@ class JobSeekerCompanyRow extends React.Component {
           <div style={{ color: "#2557a7", paddingTop: "7px" }}>
             <Link
               style={{ paddingLeft: "50px", color: "#2557a7" }}
-              to="/jobSeeker/reviews"
+              to={`/companyDetails/${_id}/review`}
             >
               Reviews
             </Link>
             <Link
               style={{ paddingLeft: "50px", color: "#2557a7" }}
-              to="/jobSeeker/reviews"
+              to={`/companyDetails/${_id}/review`}
             >
               Salaries
             </Link>
             <Link
               style={{ paddingLeft: "50px", color: "#2557a7" }}
-              to="/jobSeeker/reviews"
+              to={`/companyDetails/${_id}/jobs`}
             >
               Jobs
             </Link>

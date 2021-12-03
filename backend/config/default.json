@@ -1,11 +1,11 @@
 {
     "mongoDB": "mongodb+srv://admin:root@cluster0.uvvol.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
     "sqlDB": {
-        "host": "ubereats-db-1.co8sej36u7tf.us-east-2.rds.amazonaws.com",
+        "host": "indeed-proto-1.co8sej36u7tf.us-east-2.rds.amazonaws.com",
         "port": "3306",
         "username": "admin",
-        "password": "dbPa$$#123",
-        "database": "uberEats"
+        "password": "root1234",
+        "database": "IndeedProtoSchema"
     },
     "jwtPrivateKey": "privateKey",
     "port": 3900

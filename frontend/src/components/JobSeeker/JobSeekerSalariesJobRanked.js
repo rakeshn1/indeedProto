@@ -68,7 +68,7 @@ class JobsRankedRow extends React.Component {
             <div style={{ marginLeft: "20px" }}>
               <div>
                 <Link
-                  to="/companydetails/about"
+                  to={`/companyDetails/${_id}`}
                   style={{
                     textDecoration: "none",
                     color: "black",
@@ -83,7 +83,7 @@ class JobsRankedRow extends React.Component {
               </div>
               <div style={{ display: "flex" }}>
                 <Link
-                  to="/companydetails/about"
+                  to={`/companyDetails/${_id}/review`}
                   style={{
                     textDecoration: "none",
                     color: "black",
@@ -101,7 +101,7 @@ class JobsRankedRow extends React.Component {
                   {unFilledStars.map((star) => star)}
                 </div>
                 <Link
-                  to="/companydetails/about"
+                  to={`/companyDetails/${_id}/review`}
                   style={{
                     width: "100px",
                     color: "#6f6f6f",
@@ -118,7 +118,7 @@ class JobsRankedRow extends React.Component {
                   {numberOfReviews} reviews
                 </Link>
                 <Link
-                  to="/companydetails/about"
+                  to={`/companyDetails/${_id}/review`}
                   style={{
                     color: "#6f6f6f",
                     paddingLeft: "0.5rem",
@@ -140,7 +140,7 @@ class JobsRankedRow extends React.Component {
             <div style={{ justifyContent: "end" }}>
               <Link
                 style={{ textDecoration: "none" }}
-                to="/companydetails/about"
+                to={`/companyDetails/${_id}/review`}
               >
                 <div
                   style={{
@@ -168,7 +168,7 @@ class JobsRankedRow extends React.Component {
               </Link>
             </div>
             <Link
-              to="/companydetails/about"
+              to={`/companyDetails/${_id}/review`}
               style={{
                 marginTop: "auto",
                 marginBottom: "auto",

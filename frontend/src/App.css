@@ -70,6 +70,9 @@ body {
   }
 }
 
+.job-card-wrapper:active {
+  border: 1px solid #085ff7;
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -617,3 +620,11 @@ body {
   border: 1px solid #cfcece;
 }
 
+.graph-detail-display{
+  padding:100px;
+  width:40%;
+}
+
+.graph-disp{
+  width: 50%;
+}

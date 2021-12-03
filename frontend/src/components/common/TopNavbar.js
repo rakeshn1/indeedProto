@@ -97,7 +97,7 @@ const TopNavbar = () => {
                 <a className="dropdown-item" href="/jobSeekerProfile">
                   Profile
                 </a>
-                <a className="dropdown-item" href="/jobSeeker/myJobs">
+                <a className="dropdown-item" href="/jobSeeker/myJobs/savedJobs">
                   My Jobs
                 </a>
                 <a className="dropdown-item" href="/jobSeeker/myReviews">
@@ -234,7 +234,6 @@ const TopNavbar = () => {
                 Analytics
               </NavLink>
             </React.Fragment>
-
           )}
         </div>
       </div>

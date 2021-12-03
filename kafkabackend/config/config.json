@@ -19,5 +19,12 @@
     "database": "database_production",
     "host": "127.0.0.1",
     "dialect": "mysql"
+  },
+  "sqlDB": {
+    "host": "indeed-proto-1.co8sej36u7tf.us-east-2.rds.amazonaws.com",
+    "port": "3306",
+    "username": "admin",
+    "password": "root1234",
+    "database": "IndeedProtoSchema"
   }
 }

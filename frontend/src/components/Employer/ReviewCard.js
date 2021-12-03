@@ -7,7 +7,7 @@ const ReviewCard = () => {
     var [refresh, setRefresh] = useState([false])
     const user = getCurrentUser();
     const toggleIsFeatured = (reviewId, status) => {
-
+        console.log(reviewId, status)
         if (status == 1) {
             status = 2
         }
@@ -79,7 +79,7 @@ const ReviewCard = () => {
                                 <span>{review.reviewSummary}</span>
 
                             </div>
-                            
+
                             <div className="job-card-role-summary">
                                 <ul>
 

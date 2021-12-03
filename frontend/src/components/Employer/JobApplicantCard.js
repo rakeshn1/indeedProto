@@ -18,7 +18,7 @@ const JobApplicantCard = () => {
     const [perPage, setPerPage] = useState(4);
     const [currentPage, setCurrentPage] = useState(-1);
     const [applicants, setApplicants] = useState([]);
-    const [applicationsStatus, setApplicationsStatus] = useState([]);
+    const [applicationsStatus, setApplicationsStatus] = useState(null);
     const [open, setOpen] = useState(false);
     const [modalStyle] = useState(getModalStyle);
     const user = getCurrentUser();
@@ -174,7 +174,7 @@ const JobApplicantCard = () => {
                     console.log("yyyy")
                     // M.toast({ html: response.data.statusText, classes: "#c62828 red darken-3" })
                 } else {
-                    console.log("hhhhh", response.data);
+                    console.log("hhhhh", response.data[0]);
                     setApplicationsStatus(response.data[0]);
                     //setApplicantStatus(vals)
                     setApplicants(response.data[1]);
@@ -203,6 +203,7 @@ const JobApplicantCard = () => {
     const handleClose = () => {
         setOpen(false);
         setTotal(0);
+        setApplicationsStatus(null);
     };
 
     const handlePageClick = (e) => {
@@ -267,7 +268,7 @@ const JobApplicantCard = () => {
                                         <h5>Start a Conversation</h5>
                                     </Grid>
                                 </Grid>
-                                {applicationsStatus && applicants.map((applicant, index) => {
+                                {applicationsStatus && applicationsStatus.length != 0 && applicants.map((applicant, index) => {
                                     return (
                                         <div
                                             style={{ padding: "20px", backgroundColor: "#f6f6f6" }}

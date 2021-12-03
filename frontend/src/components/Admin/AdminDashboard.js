@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getAllUnapprovedReviews, updatePhotoStatus, updateReviewStatus } from '../../services/admin'
+import { getAllPhotos, getAllUnapprovedReviews, updatePhotoStatus, updateReviewStatus } from '../../services/admin'
 import SingleReview from './SingleReview'
 
 
@@ -19,6 +19,7 @@ const AdminDashboard = () => {
 
     useEffect(() => {
         fetchReviews();
+        fetchPictures();
     }, [])
 
     const fetchReviews = async () => {
@@ -33,9 +34,9 @@ const AdminDashboard = () => {
 
         //api call to get all 0 status
 
-        // const reviews= await getAllReviews()
-        // setReviewData(reviews.data) 
-
+        const photos = await getAllPhotos()
+        console.log("photos", photos.data)
+        setPicturesData(photos.data)
     }
 
     const handleReviewFilter = async (e) => {
@@ -110,10 +111,13 @@ const AdminDashboard = () => {
 
     const handleApprovePhotoStatus = async (e) => {
         const payload = {
-            photoId: e._id,
+            photoId: e.newPhotoId,
+            companyId: e.companyId,
+            photoUrl: e.S3Url,
             status: 1
         }
 
+        console.log("approving photo for", payload)
         try {
             const response = await updatePhotoStatus(payload)
             console.log("updated status:", response.data)
@@ -126,9 +130,12 @@ const AdminDashboard = () => {
 
     const handleDisapprovePhotoStatus = async (e) => {
         const payload = {
-            photoId: e._id,
+            photoId: e.newPhotoId,
+            companyId: e.companyId,
+            photoUrl: e.S3Url,
             status: 2
         }
+        console.log("disapproving photo for", payload)
 
         try {
             const response = await updatePhotoStatus(payload)
@@ -199,21 +206,21 @@ const AdminDashboard = () => {
 
                             }) :
                             picturesData?.map(item => {
-                                console.log("ITEM", item.data)
+                                console.log("ITEM", item)
                                 return (
                                     <div className="container"  >
                                         <li class="list-group-item" style={{ border: "none", display: 'flex', justifyContent: 'space-evenly' }}>
                                             <div style={{ height: "100%", width: "50%" }} >
 
-                                                <img style={{ height: "200px", width: "50%" }} src={item.url} alt="" ></img>
+                                                <img style={{ height: "200px", width: "50%" }} src={item.S3Url} alt="" ></img>
 
                                             </div>
 
 
                                             <div style={{ width: "25%", textAlign: "center", padding: "20px" }} >
 
-                                                <button type="button" style={{ padding: "10px", margin: "10px" }} className="btn btn-success" onClick={handleApprovePhotoStatus}>Approve</button>
-                                                <button type="button" style={{ padding: "10px", margin: "10px" }} className="btn btn-danger" onClick={handleDisapprovePhotoStatus}>Disapprove</button>
+                                                <button type="button" style={{ padding: "10px", margin: "10px" }} className="btn btn-success" onClick={() => handleApprovePhotoStatus(item)}>Approve</button>
+                                                <button type="button" style={{ padding: "10px", margin: "10px" }} className="btn btn-danger" onClick={() => handleDisapprovePhotoStatus(item)}>Disapprove</button>
                                             </div>
 
                                         </li>
