@@ -5,8 +5,6 @@ const mysql = require('mysql')
 const config = require("config");
 const DB = config.get("sqlDB")
 
-
-
 const db = mysql.createPool({
   host: DB.host,
   port: DB.port,
@@ -22,10 +20,7 @@ db.getConnection((err) => {
     console.log("Connected to SQL database...")
 })
 
-
-
-
-const topic = "admin1";
+const topic = "admin";
 
 router.get("/getUnapprovedReviews", async (req, res) => {
   const msg = {};

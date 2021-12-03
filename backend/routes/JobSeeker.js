@@ -7,7 +7,7 @@ const { User } = require("../models/mongo/user");
 const { JobApplication } = require("../models/mongo/jobApplications");
 const { Company } = require("../models/mongo/company");
 
-const topic = "jobSeeker-topic1";
+const topic = "jobSeeker-topic";
 
 router.post("/addReview", async (req, res) => {
   console.log(req.body);
@@ -217,6 +217,14 @@ router.get("/getJobSearchResults/", async (req, res) => {
   //   console.log("BACKEND", results)
   //   return res.status(200).send(results);
   // });
+
+  let companies = []
+  let rr = await Company.find({ name: { $regex: req.query.what, $options: "i" } }, { _id: 1 })
+
+
+  // response.map()
+  // console.log("CC", companies)
+
 
   let response;
   if (!what && !where) {

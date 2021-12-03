@@ -23,9 +23,37 @@ const Chart = ({ data, labels, color, type, options, xlabel, ylabel, labelValue,
           'rgba(75, 192, 124, 0.4)',
 
         ],
+
       },
     ],
   });
+
+  const [optionsData, setOptionsData] = useState({
+    responsive: true,
+
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        display: true,
+        text: labelValue
+      }
+    },
+    scales: {
+      yAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: ylabel
+        }
+      }], xAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: xlabel
+        }
+      }]
+    }
+
+  })
+
 
   useEffect(() => {
 
@@ -35,12 +63,53 @@ const Chart = ({ data, labels, color, type, options, xlabel, ylabel, labelValue,
       labels: labels,
       datasets: [
         {
-
+          label: labels,
           data: data,
+          backgroundColor: [
+
+            'rgba(255, 99, 132, 0.4)',
+            'rgba(255, 159, 64, 0.4)',
+            'rgba(255, 205, 86, 0.4)',
+            'rgba(75, 192, 192, 0.4)',
+            'rgba(54, 162, 235, 0.4)',
+            'rgba(153, 102, 255, 0.4)',
+            'rgba(201, 203, 207, 0.4)',
+            'rgba(255, 19, 14, 0.4)',
+            'rgba(255, 205, 216, 0.4)',
+            'rgba(75, 192, 124, 0.4)',
+
+          ],
         },
       ],
     };
 
+    const optionsIn = {
+      responsive: true,
+
+      maintainAspectRatio: false,
+      plugins: {
+        title: {
+          display: true,
+          text: labelValue
+        }
+      },
+      scales: {
+        yAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: ylabel
+          }
+        }], xAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: xlabel
+          }
+        }]
+      }
+
+    }
+
+    setOptionsData(optionsIn)
     setChartData(chartDataIn);
   }, [data]);
   return (
@@ -50,30 +119,7 @@ const Chart = ({ data, labels, color, type, options, xlabel, ylabel, labelValue,
           <Bar
             data={chartData}
 
-            options={{
-              responsive: true,
-
-              maintainAspectRatio: false,
-              plugins: {
-                title: {
-                  display: true,
-                  text: labelValue
-                }
-              },
-              scales: {
-                yAxes: [{
-                  scaleLabel: {
-                    display: true,
-                    labelString: ylabel
-                  }
-                }], xAxes: [{
-                  scaleLabel: {
-                    display: true,
-                    labelString: xlabel
-                  }
-                }]
-              }
-            }}
+            options={optionsData}
           />
         </div>
       )}
