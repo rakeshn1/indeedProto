@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Chart as ReactChart, Doughnut, Bar, Line, Pie } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 
-const Chart = ({ data, labels, color, type, options, labelValue, style }) => {
+const Chart = ({ data, labels, color, type, options, xlabel, ylabel, labelValue, style }) => {
   // const [labels, setLabels] = useState([])
   const [chartData, setChartData] = useState({
     labels: labels,
@@ -10,13 +10,18 @@ const Chart = ({ data, labels, color, type, options, labelValue, style }) => {
       {
         data: data,
         backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-          'rgba(255, 205, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(201, 203, 207, 0.2)'
+
+          'rgba(255, 99, 132, 0.4)',
+          'rgba(255, 159, 64, 0.4)',
+          'rgba(255, 205, 86, 0.4)',
+          'rgba(75, 192, 192, 0.4)',
+          'rgba(54, 162, 235, 0.4)',
+          'rgba(153, 102, 255, 0.4)',
+          'rgba(201, 203, 207, 0.4)',
+          'rgba(255, 19, 14, 0.4)',
+          'rgba(255, 205, 216, 0.4)',
+          'rgba(75, 192, 124, 0.4)',
+
         ],
       },
     ],
@@ -32,7 +37,6 @@ const Chart = ({ data, labels, color, type, options, labelValue, style }) => {
         {
 
           data: data,
-          // backgroundColor: color,
         },
       ],
     };
@@ -42,7 +46,7 @@ const Chart = ({ data, labels, color, type, options, labelValue, style }) => {
   return (
     <div>
       {type === "Bar" && (
-        <div style={{ height: "500px", width: "600px", margin: "0px auto" }}>
+        <div style={{ height: "400px", width: "100%", }}>
           <Bar
             data={chartData}
 
@@ -55,6 +59,19 @@ const Chart = ({ data, labels, color, type, options, labelValue, style }) => {
                   display: true,
                   text: labelValue
                 }
+              },
+              scales: {
+                yAxes: [{
+                  scaleLabel: {
+                    display: true,
+                    labelString: ylabel
+                  }
+                }], xAxes: [{
+                  scaleLabel: {
+                    display: true,
+                    labelString: xlabel
+                  }
+                }]
               }
             }}
           />

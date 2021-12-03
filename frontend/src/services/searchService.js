@@ -62,3 +62,5 @@ export async function getSalaryReviewsRankedJobs(jobTitle, location) {
     params: payload,
   });
 }
+
+
