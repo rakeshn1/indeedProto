@@ -51,7 +51,7 @@ const JobSeekerMyReviews = () => {
                       color: "black",
                       letterSpacing: "-0.1px",
                     }}
-                    to="/companyDetails/about"
+                    to={`/companyDetails/${review.companyId}/review`}
                   >
                     {review.reviewSummary}
                   </Link>
