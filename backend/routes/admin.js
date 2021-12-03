@@ -25,7 +25,7 @@ db.getConnection((err) => {
 
 
 
-const topic = "admin1";
+const topic = "admin";
 
 router.get("/getUnapprovedReviews", async (req, res) => {
   const msg = {};

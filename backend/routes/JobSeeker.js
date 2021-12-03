@@ -7,7 +7,8 @@ const { User } = require("../models/mongo/user");
 const { JobApplication } = require("../models/mongo/jobApplications");
 const { Company } = require("../models/mongo/company");
 
-const topic = "jobSeeker-topic1";
+
+const topic = "jobSeeker-topic";
 
 router.post("/addReview", async (req, res) => {
   console.log(req.body);

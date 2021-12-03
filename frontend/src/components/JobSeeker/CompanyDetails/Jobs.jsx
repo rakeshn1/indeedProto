@@ -248,6 +248,34 @@ class Jobs extends React.Component {
               </button>
             </div>
           </div>
+          <div className="d-flex flex-row justify-content-around">
+            <div>
+              <button
+                className="invisibleButton"
+                onClick={this.goToPrevPage}
+                disabled={this.state.currentPage === 1}
+              >
+                <i
+                  className="fa fa-arrow-circle-left fa-lg"
+                  aria-hidden="true"
+                ></i>
+              </button>
+              {this.state.currentPage}
+              <button
+                className="invisibleButton"
+                onClick={this.goToNextPage}
+                disabled={
+                  this.state.currentPage ===
+                  Math.ceil(this.state.filteredJobs.length / this.pageSize)
+                }
+              >
+                <i
+                  className="fa fa-arrow-circle-right fa-lg"
+                  aria-hidden="true"
+                ></i>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
