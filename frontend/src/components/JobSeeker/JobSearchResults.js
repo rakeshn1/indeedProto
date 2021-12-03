@@ -39,6 +39,10 @@ const JobSearchResults = (props) => {
   };
 
   useEffect(() => {
+    setCurrentPage(1);
+  }, [props.searchResults]);
+
+  useEffect(() => {
     const data = paginate(props.searchResults, currentPage, pageSize);
     setTotalCount(props.searchResults.length);
     setData(data);
