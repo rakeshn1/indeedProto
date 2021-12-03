@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const kafka = require("../kafka/client");
-const Review = require("../models/review");
+// const Review = require("../models/review");
 
 const topic = "companytopic1";
 
