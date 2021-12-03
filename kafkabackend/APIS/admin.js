@@ -7,6 +7,33 @@ const { User } = require("../models/user");
 const mongoose = require("mongoose");
 const _ = require("lodash");
 
+
+//SQL connect
+
+const mysql = require('mysql')
+const config = require("../config/config.json");
+const DB = config.sqlDB;
+
+
+const db = mysql.createPool({
+  host: DB.host,
+  port: DB.port,
+  user: DB.username,
+  password: DB.password,
+  database: DB.database
+})
+
+db.getConnection((err) => {
+  if (err)
+    console.log(err)
+  else
+    console.log("Connected to SQL database...")
+})
+
+
+
+
+//Mongo Routes
 const getUnapprovedReviews = async (msg, callback) => {
   const res = {};
 
@@ -51,6 +78,7 @@ const updateStatusOfPhoto = async (msg, callback) => {
   const res = {};
   try {
     const companyId = msg.body.companyId;
+    const photoId = msg.body.photoId
     const status = msg.body.status;
     const photoUrl = msg.body.photoUrl;
     console.log("STATUS:::: ", status);
@@ -68,6 +96,10 @@ const updateStatusOfPhoto = async (msg, callback) => {
     }
 
     // Delete from SQL
+    const sqlDelete = "DELETE FROM newPhotos where newPhotoId=?"
+    db.query(sqlDelete, [photoId], (err, result) => {
+      console.log(result)
+    })
     res.status = 200;
     res.data = "Updated successfully";
 
@@ -317,6 +349,30 @@ const topFiveCompaniesBasedOnAverageRating = async (msg, callback) => {
   }
 };
 
+const getAllCompanies = async (msg, callback) => {
+  const res = {};
+  try {
+    res.data = [];
+    const companyResults = await Company.find({}).select("name");
+
+    // console.log("companies============================================", companyResults)
+    companyResults.forEach((company) => {
+      res.data.push(company.name);
+    });
+
+    res.data = _.uniq(res.data);
+    // res.data = companies;
+    res.status = 200;
+    callback(null, res);
+  }
+  catch (err) {
+    res.status = 500;
+    res.data = err;
+    callback(null, res);
+  }
+
+}
+
 handle_request = (msg, callback) => {
   if (msg.path === "getUnapprovedReviews") {
     // delete msg.path;
@@ -358,6 +414,11 @@ handle_request = (msg, callback) => {
     // delete msg.path;
     console.log("Kafka side1");
     topFiveCompaniesBasedOnAverageRating(msg, callback);
+  }
+  else if (msg.path === "getAllCompanies") {
+    // delete msg.path;
+    console.log("Kafka side1");
+    getAllCompanies(msg, callback);
   }
 };
 
