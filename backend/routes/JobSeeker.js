@@ -349,4 +349,44 @@ router.get("/getTotalReviews/:id", async (req, res) => {
   });
 });
 
+router.post("/addSalaryReview/:id", async (req, res) => {
+  req.body.companyId = req.params.id;
+  kafka.make_request(topic, {body: req.body, path: 'addSalaryReview'}, function (err, results) {
+    if (err) {
+      return res.status(400).send(err);
+    }
+    return res.status(200).send(results);
+  });
+});
+
+router.get("/getSalaryReviews/:id", async (req, res) => {
+  const kafkaPayload = {companyId: req.params.id, query: req.query, path: 'getSalaryReviews'};
+  kafka.make_request(topic, kafkaPayload, function (err, results) {
+    if (err) {
+      return res.status(400).send(err);
+    }
+    return res.status(200).send(results);
+  });
+});
+
+router.get("/getSalaryReviews/jobTitles/:id", async (req, res) => {
+  const kafkaPayload = {companyId: req.params.id, query: req.query, path: 'getSalaryReviews-JobTitles'};
+  kafka.make_request(topic, kafkaPayload, function (err, results) {
+    if (err) {
+      return res.status(400).send(err);
+    }
+    return res.status(200).send(results);
+  });
+});
+
+router.get("/getSalaryReviews/jobLocations/:id", async (req, res) => {
+  const kafkaPayload = {companyId: req.params.id, query: req.query, path: 'getSalaryReviews-JobLocations'};
+  kafka.make_request(topic, kafkaPayload, function (err, results) {
+    if (err) {
+      return res.status(400).send(err);
+    }
+    return res.status(200).send(results);
+  });
+});
+
 module.exports = router;
