@@ -140,12 +140,12 @@ const JobDescriptionCard = (props) => {
         <div className="job-card-company-details">
           <span>
             <Link
-              style={{ textDecoration: "none", color: "black" }}
+              style={{ textDecoration: "none", color: "#2557a7" }}
               to={`/companyDetails/${props.cardDetails?.companyId}`}
             >
-              {props.cardDetails?.companyName}
+              {props.cardDetails?.name}
             </Link>{" "}
-            <b> 4.3 </b>{" "}
+            <b> {props.cardDetails?.averageRating} </b>{" "}
             <svg
               width="18"
               height="18"
@@ -155,6 +155,12 @@ const JobDescriptionCard = (props) => {
             >
               <path d="M8.805 4.134a.206.206 0 01.385 0l1.312 3.203 3.307.317c.184.018.258.257.12.385l-2.498 2.298.732 3.394c.04.188-.154.336-.312.238l-2.854-1.777-2.853 1.776c-.158.099-.352-.05-.311-.238l.736-3.393-2.497-2.298c-.139-.128-.065-.367.119-.385l3.307-.317 1.307-3.203z" />
             </svg>
+            <Link
+              style={{ textDecoration: "none", color: "#2557a7" }}
+              to={`/companyDetails/${props.cardDetails?.companyId}/review`}
+            >
+              <span>{props.cardDetails?.numberOfReviews} reviews</span>
+            </Link>
           </span>
         </div>
         <div>
