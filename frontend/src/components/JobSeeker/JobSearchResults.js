@@ -29,9 +29,9 @@ const JobSearchResults = (props) => {
     }
   };
 
-  useEffect(() => {
-    setFirst();
-  });
+  // useEffect(() => {
+  //   setFirst();
+  // });
 
   const handlePageChange = (page) => {
     // console.log(page);
@@ -42,6 +42,10 @@ const JobSearchResults = (props) => {
     const data = paginate(props.searchResults, currentPage, pageSize);
     setTotalCount(props.searchResults.length);
     setData(data);
+    if (data.length > 0) {
+      setCardDetails(data[0]);
+      setSelectedJobCard(data[0]._id);
+    }
   }, [currentPage, props.searchResults]);
 
   let card = null;
