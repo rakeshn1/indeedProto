@@ -46,7 +46,7 @@ import AddJobs from "./components/Employer/AddJobs";
 import ViewJobs from "./components/Employer/ViewEmployerJobs";
 import AddNewCompany from "./components/Employer/AddNewCompany";
 import MessagesLandingPage from "./components/common/Messages";
-
+import JobSeekerMessagesLandingPage from "./components/common/JobSeekerMessages";
 import NotFound from "./components/common/NotFound";
 
 function App() {
@@ -202,8 +202,11 @@ function App() {
           path="/jobSeeker/myJobs/appliedJobs"
           component={JobSeekerMyJobs}
         ></JobSeekerRoute>
-        {jwt && (
+        {jwt && user.role == 1 && (
           <Route exact path="/chat" component={MessagesLandingPage}></Route>
+        )}
+        {jwt && user.role == 2 && (
+          <Route exact path="/chat" component={JobSeekerMessagesLandingPage}></Route>
         )}
         <JobSeekerRoute
           path="/jobSeeker/myReviews"

@@ -444,6 +444,30 @@ router.get(`/api/getAllConversations/:id`, async (req, res) => {
   }
 });
 
+router.get(`/api/getAllConversationsJobSeeker/:id`, async (req, res) => {
+  try {
+    req.body.jobSeekerId = req.params.id;
+    req.body.path = "getAllConversationsJobSeeker";
+    kafka.make_request(topic, req.body, (err, result) => {
+      if (err) {
+        throw new Error(err);
+      }
+      console.log("Response received for getAllConversationsJobSeeker", result);
+      if (result?.status == 200) {
+        const getCompanyJobs = result.data;
+        return res.status(200).send(getCompanyJobs);
+      } else if (result?.status == 404) {
+        return res.status(404).send("Company Not Found");
+      } else if (result?.status == 400) {
+        return res.status(400).send("Server Error");
+      }
+    });
+  } catch (err) {
+    console.log(`Error: ${err}`);
+    return res.status(500).send("Server Error");
+  }
+});
+
 router.get(`/api/getConversation/:id`, async (req, res) => {
   try {
     req.body.id = req.params.id;

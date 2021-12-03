@@ -5,7 +5,7 @@ import { TextField, ListItemText, Grid, MenuItem } from "@material-ui/core"
 import { getCurrentUser, getJwt } from "../../services/auth";;
 import axios from "axios";
 import Button from "../common/Button";
-const RecipientsCard = (props) => {
+const RecipientsJobSeekerCard = (props) => {
     const [open, setOpen] = useState(false);
     const [messageText, setMessageText] = useState([]);
     const [recipientData, setRecipientData] = useState([]);
@@ -41,7 +41,7 @@ const RecipientsCard = (props) => {
         e.preventDefault();
         console.log(messageText);
         const message = {
-            from: recipientData.companyId,
+            from: user._id,
             details: messageText,
             timestamp: new Date().toISOString(),
         };
@@ -97,7 +97,7 @@ const RecipientsCard = (props) => {
                                 <div className="job-title">
                                     <div>
                                         <span>
-                                            {recipient.firstName + " " + recipient.lastName}
+                                            {recipient.name}
                                         </span>
                                     </div>
                                 </div>
@@ -112,7 +112,7 @@ const RecipientsCard = (props) => {
                     })}
                 </Grid>
                 <Grid item lg={8} md={8} xs={12}>
-                    <div style={{ height: "600px", overflow: "scroll", scrollTop: 0 }} >
+                    <div style={{ height: "600px", overflow: "scroll" }} >
                         <div className="recipient-description-card-wrapper" style={{ padding: 40 }}>
                             {open &&
                                 recipientData.length != 0 ?
@@ -121,7 +121,7 @@ const RecipientsCard = (props) => {
                                         <div
                                             style={{
                                                 textAlign:
-                                                    message.from == user.companyId
+                                                    message.from == user._id
                                                         ? "right"
                                                         : "left",
                                             }}
@@ -130,10 +130,9 @@ const RecipientsCard = (props) => {
                                                 <div>
                                                     <br />
                                                     <b>
-                                                        {message.from == user.companyId
+                                                        {message.from == user._id
                                                             ? ""
-                                                            : recipientData.firstName +
-                                                            recipientData.lastName}
+                                                            : recipientData.name}
                                                     </b>{" "}
 
                                                     <label style={{ fontSize: 12 }}>
@@ -150,7 +149,7 @@ const RecipientsCard = (props) => {
 
                                         </div>
                                     );
-                                }) : "No Messages Initiated So Far"}
+                                }) : "No messages So Far"}
                         </div>
                     </div>
                     {open &&
@@ -184,4 +183,4 @@ const RecipientsCard = (props) => {
     );
 };
 
-export default RecipientsCard;
+export default RecipientsJobSeekerCard;
