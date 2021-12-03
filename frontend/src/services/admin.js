@@ -72,14 +72,36 @@ export async function updatePhotoStatus(payload) {
   return await http.put(apiEndpoint + `/updateStatusOfPhoto`, payload);
 }
 export async function getAllCompanies() {
-  return await http.get(apiEndpoint + `/getAllCompanies`)
-
+  return await http.get(apiEndpoint + `/getAllCompanies`);
 }
 export async function getAllPhotos() {
-  return await http.get(apiEndpoint + `/getAllPhotos`)
+  return await http.get(apiEndpoint + `/getAllPhotos`);
 }
-
 
 export async function insertPhoto(payload) {
-  return await http.post(apiEndpoint + `/insertPhoto`, payload)
+  return await http.post(apiEndpoint + `/insertPhoto`, payload);
 }
+
+export async function getViewCount() {
+  return await http.get(apiEndpoint + `/getViewCount`);
+}
+export async function incrementViewCount(payload) {
+  console.log("payloaddddgegh: ", payload);
+  payload.date = getDateInFormat(payload.date);
+  console.log("Formated date: ", payload.date);
+  return await http.post(apiEndpoint + "/incrementViewCount", payload);
+}
+
+const getDateInFormat = (date) => {
+  let year = date.getFullYear().toString();
+  let month = date.getMonth().toString();
+  let day = date.getDate().toString();
+  if (month.length == 1) {
+    month = "0" + month;
+  }
+  if (day.length == 1) {
+    day = "0" + day;
+  }
+
+  return year + "-" + month + "-" + day;
+};
