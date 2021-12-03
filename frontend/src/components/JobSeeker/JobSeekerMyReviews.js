@@ -25,7 +25,7 @@ const JobSeekerMyReviews = () => {
       >
         My reviews and contributions
       </div>
-      {reviewsData.length > 0 ? (
+      {reviewsData?.length > 0 ? (
         reviewsData.map((review) => {
           return (
             <div className="card" style={{ margin: "10px" }}>
