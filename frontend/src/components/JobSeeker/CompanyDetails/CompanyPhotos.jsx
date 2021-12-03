@@ -22,12 +22,13 @@ const CompanyPhotos = (props) => {
 
   const updateCompanyPhotos = useCallback(() => {
     getCompanyPhotos(companyId).then((photos) => {
+      console.log("----uvfheuiwefb: ", photos);
       updatePhotoList(photos);
       const chunks = _.chunk(photos, FIXED_PHOTO_BATCH_SIZE);
       updateCurrentPhotosBatch(chunks[0]);
       setLoadingState(false);
     });
-  }, [companyId])
+  }, [companyId]);
 
   const uploadProps = {
     multiple: false,
@@ -59,7 +60,9 @@ const CompanyPhotos = (props) => {
           console.log(err.message);
         } else {
           onSuccess(data, file);
-          await insertPhoto({ companyId, imageURL: data.Location }).then(updateCompanyPhotos);
+          await insertPhoto({ companyId, imageURL: data.Location }).then(
+            updateCompanyPhotos
+          );
           console.log("SEND FINISHED", data);
         }
       });
@@ -83,12 +86,11 @@ const CompanyPhotos = (props) => {
 
   useEffect(() => {
     const chunks = _.chunk(completePhotos, FIXED_PHOTO_BATCH_SIZE);
-    updateCurrentPhotosBatch(chunks[currentPhotosPage-1]);
+    updateCurrentPhotosBatch(chunks[currentPhotosPage - 1]);
   }, [completePhotos, currentPhotosPage]);
 
-  
   useEffect(() => {
-    updateCompanyPhotos()
+    updateCompanyPhotos();
   }, [updateCompanyPhotos]);
 
   if (isLoading) {
@@ -97,10 +99,10 @@ const CompanyPhotos = (props) => {
 
   return (
     <div>
-      <div>
+      <div style={{ marginTop: "15px" }}>
         <span
           style={{
-            fontFamily: "Noto Sans",
+            // fontFamily: "Noto Sans",
             fontSize: "24px",
             fontWeight: 700,
           }}
@@ -118,29 +120,30 @@ const CompanyPhotos = (props) => {
             margin: "20px 0",
           }}
         >
-          <div>
-          </div>
+          <div></div>
           <div>
             <Upload {...uploadProps} listType="picture">
               <Button icon={<UploadOutlined />}>Upload</Button>
             </Upload>
           </div>
         </div>
-        <Gallery
-          photos={currentPhotosBatch.map((photo) => ({
-            src: photo.S3Url,
-            width: 1,
-            height: 1,
-          }))}
-          onClick={openLightbox}
-        />
+        {currentPhotosBatch && (
+          <Gallery
+            photos={currentPhotosBatch.map((photo) => ({
+              src: photo.S3Url,
+              width: 1,
+              height: 1,
+            }))}
+            onClick={openLightbox}
+          />
+        )}
         <ModalGateway>
           {viewerIsOpen ? (
             <Modal onClose={closeLightbox}>
               <Carousel
                 currentIndex={currentImage}
                 views={currentPhotosBatch.map((image) => ({
-                  source: image.S3Url
+                  source: image.S3Url,
                 }))}
               />
             </Modal>

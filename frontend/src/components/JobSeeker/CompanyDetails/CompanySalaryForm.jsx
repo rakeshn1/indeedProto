@@ -4,7 +4,7 @@ import Button from "../../common/Button";
 import Switch from "react-switch";
 import { Formik, Field, Form } from "formik";
 import "../../../styles/companyStyles.css";
-import _ from 'lodash'
+import _ from "lodash";
 import { getCurrentUser } from "../../../services/auth";
 import { addSalaryReview } from "../../../services/jobSeeker";
 
@@ -21,7 +21,7 @@ const CompanySalaryForm = (props) => {
       } else {
         payload.jobSeekerId = null;
       }
-      payload = _.omit(payload, ['otherBenefit', 'hasOtherBenefits'])
+      payload = _.omit(payload, ["otherBenefit", "hasOtherBenefits"]);
       await addSalaryReview(payload, props.companyDetails._id).then(() => {
         props.closeModal();
       });
@@ -88,12 +88,22 @@ const CompanySalaryForm = (props) => {
                     </h4>
                     <div className="form-group">
                       <label style={{ width: "100%" }}>Job Title</label>
-                      <Field name="jobTitle" type="text" />
+                      <Field
+                        className="input-styler"
+                        style={{ width: "400px" }}
+                        name="jobTitle"
+                        type="text"
+                      />
                       <p className="help-block text-danger"></p>
                     </div>
                     <div className="form-group">
                       <label style={{ width: "100%" }}>Job Location</label>
-                      <Field name="jobLocation" type="text" />
+                      <Field
+                        className="input-styler"
+                        style={{ width: "400px" }}
+                        name="jobLocation"
+                        type="text"
+                      />
                       <p className="help-block text-danger"></p>
                     </div>
                     <div className="form-group">
@@ -153,17 +163,33 @@ const CompanySalaryForm = (props) => {
                       <h6>Your anonymous pay will help other job seekers.</h6>
                     </h4>
                     <div className="form-group">
-                      <label style={{ width: "100%" }}>What’s your pay at {props.companyDetails.name}?</label>
-                      <Field name="salary" type="number" />
+                      <label style={{ width: "100%" }}>
+                        What’s your pay at {props.companyDetails.name}?
+                      </label>
+                      <Field
+                        className="input-styler"
+                        style={{ width: "400px" }}
+                        name="salary"
+                        type="number"
+                      />
                       <p className="help-block text-danger"></p>
                     </div>
                     <div className="form-group">
-                      <label style={{ width: "100%" }}>How many years of relevant experience do you have?</label>
-                      <Field name="yearsOfRelevantExperience" type="number" />
+                      <label style={{ width: "100%" }}>
+                        How many years of relevant experience do you have?
+                      </label>
+                      <Field
+                        className="input-styler"
+                        style={{ width: "400px" }}
+                        name="yearsOfRelevantExperience"
+                        type="number"
+                      />
                       <p className="help-block text-danger"></p>
                     </div>
                     <div className="form-group">
-                      <label style={{ width: "100%" }}>Which benefits did you receive at Starbucks?</label>
+                      <label style={{ width: "100%" }}>
+                        Which benefits did you receive at Starbucks?
+                      </label>
                       <div role="group" aria-labelledby="checkbox-group">
                         <div
                           style={{

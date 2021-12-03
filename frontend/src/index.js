@@ -5,7 +5,7 @@ import "./index.css";
 import App from "./App";
 import "font-awesome/css/font-awesome.css";
 import "bootstrap/dist/css/bootstrap.css";
-import 'antd/dist/antd.css';
+import "antd/dist/antd.css";
 
 ReactDOM.render(
   <React.StrictMode>
