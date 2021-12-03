@@ -18,6 +18,8 @@ class CompanyHeader extends React.Component {
   componentDidUpdate = async (prevProps) => {
     if (prevProps.companyDetails != this.props.companyDetails) {
       const res = await getCompanyratings(this.props.companyDetails?._id);
+      console.log(res.data);
+      if (isNaN(res.data)) res.data = 0;
       this.setState({ rating: res.data });
     }
   };
@@ -34,9 +36,15 @@ class CompanyHeader extends React.Component {
               >
                 <div className="d-flex flex-row">
                   <img
-                    src="https://picsum.photos/65/65"
+                    src={
+                      this.props.companyDetails?.logo
+                        ? this.props.companyDetails?.logo
+                        : "https://picsum.photos/65/65"
+                    }
                     alt="company-logo"
                     style={{ borderRadius: "8px" }}
+                    width="65px"
+                    height="100%"
                   />
                   <div className="ps-3" style={{ fontWeight: "700" }}>
                     <span style={{ fontSize: "20px" }}>

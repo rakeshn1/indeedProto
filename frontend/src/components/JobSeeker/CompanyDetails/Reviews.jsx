@@ -34,9 +34,11 @@ class Reviews extends React.Component {
     );
     const { reviews, totalDocs } = data;
     this.setState({ reviews });
-    if (totalDocs) {
+
+    if (totalDocs >= 0) {
       const totalPages = Math.ceil(totalDocs / 5);
-      this.setState({ totalPages });
+
+      this.setState({ totalPages: totalPages });
     }
   };
   componentDidMount = async () => {
@@ -237,31 +239,34 @@ class Reviews extends React.Component {
               />
             );
           })}
-        <div className="d-flex flex-row justify-content-around">
-          <div>
-            <button
-              className="invisibleButton"
-              onClick={this.goToPrevPage}
-              disabled={this.state.pageNo == 1}
-            >
-              <i
-                className="fa fa-arrow-circle-left fa-lg"
-                aria-hidden="true"
-              ></i>
-            </button>
-            {this.state.pageNo}
-            <button
-              className="invisibleButton"
-              onClick={this.goToNextPage}
-              disabled={this.state.pageNo === this.state.totalPages}
-            >
-              <i
-                className="fa fa-arrow-circle-right fa-lg"
-                aria-hidden="true"
-              ></i>
-            </button>
+
+        {this.state.totalPages > 1 && (
+          <div className="d-flex flex-row justify-content-around">
+            <div>
+              <button
+                className="invisibleButton"
+                onClick={this.goToPrevPage}
+                disabled={this.state.pageNo == 1}
+              >
+                <i
+                  className="fa fa-arrow-circle-left fa-lg"
+                  aria-hidden="true"
+                ></i>
+              </button>
+              {this.state.pageNo}
+              <button
+                className="invisibleButton"
+                onClick={this.goToNextPage}
+                disabled={this.state.pageNo >= this.state.totalPages}
+              >
+                <i
+                  className="fa fa-arrow-circle-right fa-lg"
+                  aria-hidden="true"
+                ></i>
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }
