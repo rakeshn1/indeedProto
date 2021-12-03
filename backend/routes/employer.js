@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const kafka = require("../kafka/client");
 // const Review = require("../models/review");
 
-const topic = "companytopic1";
+const topic = "companytopic";
 
 router.get(`/api/getCompanyDetails/:id`, (req, res) => {
   try {
