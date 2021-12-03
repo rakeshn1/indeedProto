@@ -150,18 +150,7 @@ const JobSeekerLandingPage = () => {
           It only takes a few seconds
         </p>
       </div>
-      <div>
-        <p className="link-connector">
-          <NavLink
-            style={{ textDecoration: "none", color: "#2557a7" }}
-            to="/employer/jobPostings"
-          >
-            {" "}
-            Employers: Post a job{" "}
-          </NavLink>{" "}
-          - yout next hire is here
-        </p>
-      </div>
+
       <div
         style={{ marginTop: "10px", borderBottom: "1px solid silver" }}
       ></div>

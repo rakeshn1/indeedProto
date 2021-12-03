@@ -224,25 +224,25 @@ router.get("/getJobSearchResults/", async (req, res) => {
       $and: [
         {
           $or: [
-            { jobTitle: new RegExp(".*" + req.query.what + ".*", "i") },
-            { companyName: new RegExp(".*" + req.query.what + ".*", "i") },
+            { jobTitle: { $regex: req.query.what, $options: "i" } },
+            { companyName: { $regex: req.query.what, $options: "i" } },
           ],
         },
         {
           $or: [
-            { "location.city": new RegExp(".*" + req.query.where + ".*", "i") },
+            { "location.city": new RegExp(req.query.where, "i") },
             {
               "location.country": new RegExp(
-                ".*" + req.query.where + ".*",
+                req.query.where,
                 "i"
               ),
             },
             {
-              "location.state": new RegExp(".*" + req.query.where + ".*", "i"),
+              "location.state": new RegExp(req.query.where, "i"),
             },
             {
               "location.zipcode": new RegExp(
-                ".*" + req.query.where + ".*",
+                req.query.where,
                 "i"
               ),
             },
@@ -253,17 +253,18 @@ router.get("/getJobSearchResults/", async (req, res) => {
   } else if (what && !where) {
     response = await Jobs.find({
       $or: [
-        { jobTitle: new RegExp(".*" + req.query.what + ".*", "i") },
-        { companyName: new RegExp(".*" + req.query.what + ".*", "i") },
+        { jobTitle: { $regex: req.query.what, $options: "i" } },
+        { companyName: { $regex: req.query.what, $options: "i" } },
       ],
     });
   } else {
     response = await Jobs.find({
       $or: [
-        { "location.city": new RegExp(".*" + req.query.where + ".*", "i") },
-        { "location.country": new RegExp(".*" + req.query.where + ".*", "i") },
-        { "location.state": new RegExp(".*" + req.query.where + ".*", "i") },
-        { "location.zipcode": new RegExp(".*" + req.query.where + ".*", "i") },
+
+        { "location.city": { $regex: req.query.where, $options: "i" } },
+        { "location.country": new RegExp(req.query.where, "i") },
+        { "location.state": new RegExp(req.query.where, "i") },
+        { "location.zipcode": new RegExp(req.query.where, "i") },
       ],
     });
   }
