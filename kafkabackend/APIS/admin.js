@@ -211,6 +211,8 @@ const topfiveReviewedCompanies = async (msg, callback) => {
       })
     );
 
+    res.data = _.orderBy(res.data, ["count"], ["desc"]);
+
     res.status = 200;
 
     callback(null, res);
@@ -259,6 +261,8 @@ const topfiveJobSeekersBasedOnAcceptedReviews = async (msg, callback) => {
         }
       })
     );
+    // console.log("SORTIGHJHGJ", res.data);
+    res.data = _.orderBy(res.data, ["count"], ["desc"]);
 
     res.status = 200;
 
@@ -298,6 +302,8 @@ const topTenCeosApproved = async (msg, callback) => {
       })
     );
 
+    res.data = _.orderBy(res.data, ["approval"], ["desc"]);
+
     res.status = 200;
     callback(null, res);
   } catch (err) {
@@ -332,6 +338,8 @@ const topFiveCompaniesBasedOnAverageRating = async (msg, callback) => {
         res.data.push(company);
       })
     );
+
+    res.data = _.orderBy(res.data, ["avgRating"], ["desc"]);
 
     res.status = 200;
     callback(null, res);

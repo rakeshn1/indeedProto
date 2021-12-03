@@ -130,13 +130,13 @@ const AnalyticsDashboard = () => {
   const topTenCompaniesViewsPerDay = async () => {
     const response = await getViewCount();
     console.log("top Ten Companies Based On Views Per Day", response.data);
-    setChartData(response.data);
+    // setChartData(response.data);
 
     let labels_list = [];
     let data_list = [];
-    chartData.map((i) => {
-      labels_list.push(i.companyId);
-      data_list.push(i.viewCount);
+    response.data.map((i) => {
+      labels_list.push(i.name);
+      data_list.push(i.totalCount);
     });
 
     setLabels6(labels_list);
@@ -172,7 +172,7 @@ const AnalyticsDashboard = () => {
           <div className="graph-detail-display">
             <h5>Number of reviews per day</h5>
             <hr />
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div>
                 {labels1.map((i) => {
                   return <pre>Date: {i} </pre>;
@@ -209,12 +209,18 @@ const AnalyticsDashboard = () => {
           <div className="graph-detail-display">
             <h5>Top 5 most reviewed companies</h5>
             <hr />
-
-            <ul>
-              {labels2.map((i) => {
-                return <pre> {i} </pre>;
-              })}
-            </ul>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>
+                {labels2.map((i) => {
+                  return <pre> {i} </pre>;
+                })}
+              </div>
+              <div>
+                {data2.map((i) => {
+                  return <pre>Reviews :{i}</pre>;
+                })}
+              </div>
+            </div>
           </div>
           <div className="graph-disp">
             {data2 && labels2 && (
@@ -235,14 +241,21 @@ const AnalyticsDashboard = () => {
           }}
         >
           <div className="graph-detail-display">
-            <h5>Top 5 companies based on average rating</h5>
+            <h5> Top 5 job seekers based on total accepted reviews made</h5>
             <hr />
 
-            <ul>
-              {labels3.map((i) => {
-                return <li>{i}</li>;
-              })}
-            </ul>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>
+                {labels3.map((i) => {
+                  return <pre> {i} </pre>;
+                })}
+              </div>
+              <div>
+                {data3.map((i) => {
+                  return <pre>Rating:{i}</pre>;
+                })}
+              </div>
+            </div>
           </div>
           <div className="graph-disp">
             {data3 && labels3 && (
@@ -264,14 +277,21 @@ const AnalyticsDashboard = () => {
           }}
         >
           <div className="graph-detail-display">
-            <h5>Top 5 job seekers based on total accepted reviews made</h5>
+            <h5>Top 5 companies based on average rating</h5>
             <hr />
 
-            <ul>
-              {labels4.map((i) => {
-                return <li>{i}</li>;
-              })}
-            </ul>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>
+                {labels4.map((i) => {
+                  return <pre> {i} </pre>;
+                })}
+              </div>
+              <div>
+                {data4.map((i) => {
+                  return <pre>Reviews:{i}</pre>;
+                })}
+              </div>
+            </div>
           </div>
           <div className="graph-disp">
             {data4 && labels4 && (
@@ -296,11 +316,18 @@ const AnalyticsDashboard = () => {
             <h5>Top 10 CEOs based on rating</h5>
             <hr />
 
-            <ul>
-              {labels5.map((i) => {
-                return <li>{i}</li>;
-              })}
-            </ul>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>
+                {labels5.map((i) => {
+                  return <pre> {i} </pre>;
+                })}
+              </div>
+              <div>
+                {data5.map((i) => {
+                  return <pre>Rating:{i}</pre>;
+                })}
+              </div>
+            </div>
           </div>
           <div className="graph-disp">
             {data5 && labels5 && (
@@ -325,11 +352,18 @@ const AnalyticsDashboard = () => {
             <h5>Top 10 companies based on views per day</h5>
             <hr />
 
-            <ul>
-              {labels6.map((i) => {
-                return <li>{i}</li>;
-              })}
-            </ul>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>
+                {labels6.map((i) => {
+                  return <pre> {i} </pre>;
+                })}
+              </div>
+              <div>
+                {data6.map((i) => {
+                  return <pre>Views:{i}</pre>;
+                })}
+              </div>
+            </div>
           </div>
           <div className="graph-disp">
             {data6 && labels6 && (
