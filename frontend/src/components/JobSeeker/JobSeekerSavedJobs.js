@@ -10,6 +10,8 @@ import {
 import Button from "../common/Button";
 import _ from "lodash";
 import { useHistory } from "react-router";
+import { Modal, Button as BT } from 'react-bootstrap'
+
 
 const JobSeekerSavedJobs = ({
   savedJobs,
@@ -19,6 +21,8 @@ const JobSeekerSavedJobs = ({
 }) => {
   const history = useHistory();
   const user = getCurrentUser();
+  const [show, setShow] = useState(false)
+
 
   const handleApplyNow = async (jobId, companyId) => {
     console.log("Applied: ", jobId, companyId);
@@ -30,8 +34,9 @@ const JobSeekerSavedJobs = ({
     console.log("applying job for user with details", userDetails.data);
     console.log("U:", user);
     if (userDetails.data && !userDetails.data.resume) {
-      alert("please add resume");
-      history.push("/jobSeekerProfile");
+      setShow(true)
+      // alert("please add resume");
+      // history.push("/jobSeekerProfile");
     } else {
       const payload = {
         jobId: jobId,
@@ -85,6 +90,28 @@ const JobSeekerSavedJobs = ({
               </div>
             </div>
 
+            {show && (
+              <Modal show={show} onHide={() => setShow(false)}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Add Resume </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>You do not have an uploaded resume. Please add a resume from the profile page.</Modal.Body>
+                <Modal.Footer>
+                  <BT variant="secondary" onClick={() => setShow(false)}>
+                    Close
+                  </BT>
+                  <BT variant="primary" onClick={() => {
+                    history.push('/jobSeekerProfile')
+                    setShow(false)
+                  }
+
+                  }>
+                    Add Resume
+                  </BT>
+                </Modal.Footer>
+              </Modal>
+            )}
+
             {console.log(
               "Hywejbfn biue: ",
               item._id,
@@ -98,29 +125,29 @@ const JobSeekerSavedJobs = ({
               {_.find(appliedJobs, (job) => {
                 return job._id.toString() === item._id.toString();
               }) && (
-                <Button
-                  text="Applied"
-                  style={{
-                    width: "200px",
-                    backgroundColor: "green",
-                  }}
-                  disabled
+                  <Button
+                    text="Applied"
+                    style={{
+                      width: "200px",
+                      backgroundColor: "green",
+                    }}
+                    disabled
                   // onClick={()=>handleApplyNow()}
-                />
-              )}
+                  />
+                )}
               {!_.find(appliedJobs, (job) => {
                 return job._id.toString() === item._id.toString();
               }) && (
-                <Button
-                  text="Apply Now"
-                  style={{
-                    width: "200px",
-                    // backgroundColor: "green",
-                  }}
-                  // disabled
-                  onClick={() => handleApplyNow(item._id, item.companyId)}
-                />
-              )}
+                  <Button
+                    text="Apply Now"
+                    style={{
+                      width: "200px",
+                      // backgroundColor: "green",
+                    }}
+                    // disabled
+                    onClick={() => handleApplyNow(item._id, item.companyId)}
+                  />
+                )}
               <div onClick={() => handleRemoveSavedJob(item._id)}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

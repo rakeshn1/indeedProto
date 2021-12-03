@@ -11,6 +11,10 @@ import _ from "lodash";
 import { useHistory } from "react-router";
 import { getCurrentUser } from "../../services/auth";
 import { Link } from "react-router-dom";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import AddResumeModal from "./AddResumeModal";
+import { Modal, Button as BT } from 'react-bootstrap'
 
 const JobDescriptionCard = (props) => {
   const [auth, setAuth] = useState(true);
@@ -21,6 +25,7 @@ const JobDescriptionCard = (props) => {
   const history = useHistory();
   const [savedJobs, setSavedJobs] = useState([]);
   const [appliedJobs, setAppliedJobs] = useState([]);
+  const [show, setShow] = useState(false)
   const [heart_Icon, setHeartIcon] = useState(
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -83,10 +88,9 @@ const JobDescriptionCard = (props) => {
     const userDetails = await getJobSeekerDetails(p);
     console.log("applying job for user with details", userDetails.data);
 
+    // let mod = null
     if (userDetails && !userDetails.data.resume) {
-
-      alert("please add resume");
-      history.push("/jobSeekerProfile");
+      setShow(true)
     } else {
       const payload = {
         jobId: props.cardDetails._id,
@@ -109,6 +113,29 @@ const JobDescriptionCard = (props) => {
             <span>{props.cardDetails?.jobTitle} </span>
           </div>
         </div>
+
+        {show && (
+          <Modal show={show} onHide={() => setShow(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Add Resume </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>You do not have an uploaded resume. Please add a resume from the profile page.</Modal.Body>
+            <Modal.Footer>
+              <BT variant="secondary" onClick={() => setShow(false)}>
+                Close
+              </BT>
+              <BT variant="primary" onClick={() => {
+                history.push('/jobSeekerProfile')
+                setShow(false)
+              }
+
+              }>
+                Add Resume
+              </BT>
+            </Modal.Footer>
+          </Modal>
+        )}
+
 
         <div className="job-card-company-details">
           <span>
