@@ -4,12 +4,14 @@ const mongoose = require("mongoose");
 const kafka = require("../kafka/client");
 // const { Jobs } = require("../models/mongo/jobs.js");
 
+const topic = "newUser-topic1";
+
 router.post("/addAccount", async (req, res) => {
   console.log(req.body);
   let msg = {};
   msg.body = req.body;
   msg.path = "addAccount";
-  kafka.make_request("newUser-topic", msg, function (err, results) {
+  kafka.make_request(topic, msg, function (err, results) {
     if (err) {
       return res.send(err);
     }
@@ -23,7 +25,7 @@ router.post("/login", async (req, res) => {
   msg.body = req.body;
   msg.path = "login";
   console.log("MSG = IN SEARCH: ", msg);
-  kafka.make_request("newUser-topic", msg, function (err, results) {
+  kafka.make_request(topic, msg, function (err, results) {
     console.log("Results: ", results);
     res.status(results.status).send(results.data);
   });
