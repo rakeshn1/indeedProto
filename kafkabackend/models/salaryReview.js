@@ -13,10 +13,15 @@ const salaryReviewSchema = new mongoose.Schema({
   },
 
   endDate: {
-    type: Date,
+    type: String,
   },
 
   jobTitle: {
+    type: String,
+    required: true,
+    maxlength: 255,
+  },
+  jobLocation: {
     type: String,
     required: true,
     maxlength: 255,
@@ -32,7 +37,7 @@ const salaryReviewSchema = new mongoose.Schema({
     min: 0,
   },
 
-  benifits: {
+  benefits: {
     type: [String],
   },
 });
