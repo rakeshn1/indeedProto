@@ -1,5 +1,6 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
+
 import StarRating from "react-svg-star-rating";
 import { getCompanyratings } from "../../../services/jobSeeker";
 
@@ -10,12 +11,14 @@ class CompanyHeader extends React.Component {
   componentDidMount = async () => {
     if (this.props.companyDetails) {
       const res = await getCompanyratings(this.props.companyDetails?._id);
+      this.setState({ rating: res.data });
     }
   };
 
   componentDidUpdate = async (prevProps) => {
     if (prevProps.companyDetails != this.props.companyDetails) {
       const res = await getCompanyratings(this.props.companyDetails?._id);
+      this.setState({ rating: res.data });
     }
   };
   render() {
@@ -54,8 +57,18 @@ class CompanyHeader extends React.Component {
                   </div>
                 </div>
                 <div>
-                  <button className="primary-rounded-button">
-                    Write a review
+                  <button className="primary-rounded-button link">
+                    <Link
+                      className="link"
+                      style={{ color: "white" }}
+                      params={{ companyDetails: this.props.companyDetails }}
+                      to={{
+                        pathname: `/company/${this.props.companyDetails?._id}/addReview`,
+                        state: { companyDetails: this.props.companyDetails },
+                      }}
+                    >
+                      Write a review
+                    </Link>
                   </button>
                 </div>
               </div>

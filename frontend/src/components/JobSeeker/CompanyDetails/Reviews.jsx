@@ -119,7 +119,7 @@ class Reviews extends React.Component {
               className="link"
               params={{ companyDetails: this.props.companyDetails }}
               to={{
-                pathname: `/company/${this.props.companyDetails._id}/addReview`,
+                pathname: `/company/${this.props.companyDetails?._id}/addReview`,
                 state: { companyDetails: this.props.companyDetails },
               }}
               // to={`/company/${this.props.companyDetails._id}/addReview`}

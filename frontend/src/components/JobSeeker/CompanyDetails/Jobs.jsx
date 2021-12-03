@@ -1,7 +1,16 @@
 import React from "react";
 import Input from "../../common/Input";
 import JobCard from "./JobCard";
-import { getJobPostings } from "../../../services/jobSeeker";
+import { withRouter } from "react-router-dom";
+
+import {
+  getJobPostings,
+  getAppliedJobs,
+  getJobSeekerDetails,
+  applyJob,
+} from "../../../services/jobSeeker";
+import _ from "lodash";
+import { getCurrentUser } from "../../../services/auth";
 
 class Jobs extends React.Component {
   pageSize = 10;
@@ -12,6 +21,7 @@ class Jobs extends React.Component {
     currentJobId: 0,
     filteredJobs: [],
     currentPage: 1,
+    appliedJobs: [],
   };
 
   componentDidMount = async () => {
@@ -21,6 +31,15 @@ class Jobs extends React.Component {
       filteredJobs: res.data,
       currentJobId: res.data[0]._id,
     });
+    this.getUserAppliedJobs();
+  };
+
+  getUserAppliedJobs = async () => {
+    const user = getCurrentUser();
+    if (user) {
+      const { data } = await getAppliedJobs({ userId: user._id });
+      this.setState({ appliedJobs: data });
+    }
   };
 
   getJobsInCurrentPage = () => {
@@ -84,6 +103,33 @@ class Jobs extends React.Component {
       currentJobId: filteredJobs.length > 0 ? filteredJobs[0]._id : undefined,
       currentPage: 1,
     });
+  };
+
+  handleApplyJob = async (jobId) => {
+    const user = getCurrentUser();
+    if (!user) {
+      this.props.history.push("/login");
+      return;
+    }
+    console.log(user._id);
+    const payload = { userId: user._id };
+    const userDetails = await getJobSeekerDetails(payload);
+
+    if (userDetails && !userDetails.data.resume) {
+      alert("please add resume");
+      this.props.history.push("/jobSeekerProfile");
+    } else {
+      const payload = {
+        jobId: jobId,
+        userId: user._id,
+        companyId: this.props.companyDetails._id,
+        resumeURL: userDetails.data.resume,
+        coverLetterURL: userDetails.data.coverLetter,
+      };
+      const result = await applyJob(payload);
+      this.getUserAppliedJobs();
+      console.log("after call", result.data.status);
+    }
   };
 
   render() {
@@ -171,17 +217,35 @@ class Jobs extends React.Component {
                     </span>
                   </div>
                 </div>
-                <button
-                  className="submit-btn ms-2"
-                  style={{
-                    background: "#085ff7",
-                    fontSize: "18px",
-                    width: "fit-content",
-                    padding: "0 20px",
-                  }}
-                >
-                  Apply on company site
-                </button>
+
+                {!this.state.appliedJobs.includes(currentJob?._id) && (
+                  <button
+                    className="submit-btn ms-2"
+                    style={{
+                      background: "#085ff7",
+                      fontSize: "18px",
+                      width: "fit-content",
+                      padding: "0 20px",
+                    }}
+                    onClick={() => this.handleApplyJob(currentJob?._id)}
+                  >
+                    Apply Now
+                  </button>
+                )}
+
+                {this.state.appliedJobs.includes(currentJob?._id) && (
+                  <button
+                    className="submit-btn ms-2"
+                    style={{
+                      background: "#085ff7",
+                      fontSize: "18px",
+                      width: "fit-content",
+                      padding: "0 20px",
+                    }}
+                  >
+                    Applied
+                  </button>
+                )}
               </div>
 
               <div className="job-desc p-4">
@@ -206,14 +270,6 @@ class Jobs extends React.Component {
                   <b>Duties & Responsibilities</b>
                 </h6>
                 <p>{currentJob?.responsibilities}</p>
-                {/* <ul>
-                  <li>Prepare grocery orders for delivery</li>
-                  <li>Prepare grocery orders for delivery</li>
-                  <li>Prepare grocery orders for delivery</li>
-                  <li>Prepare grocery orders for delivery</li>
-                  <li>Prepare grocery orders for delivery</li>
-                  <li>Prepare grocery orders for delivery</li>
-                </ul> */}
               </div>
             </div>
           </div>
@@ -250,4 +306,4 @@ class Jobs extends React.Component {
     );
   }
 }
-export default Jobs;
+export default withRouter(Jobs);
