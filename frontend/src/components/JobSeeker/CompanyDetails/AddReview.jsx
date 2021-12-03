@@ -259,8 +259,14 @@ class AddReview extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <section className="section mt-5 d-flex flex-row">
             <img
-              src="https://picsum.photos/100/100"
+              src={
+                this.props.history.location?.state?.companyDetails?.logo
+                  ? this.props.history.location?.state?.companyDetails?.logo
+                  : "https://picsum.photos/65/65"
+              }
+              // src="https://picsum.photos/100/100"
               style={{ height: "100px", width: "100px" }}
+              alt="company-logo"
             />
             <div className="ps-3">
               <h4>Take a minute to review {companyDetails.name} </h4>
