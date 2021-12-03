@@ -1,18 +1,9 @@
 import React from "react";
-import _ from "lodash";
+
 const CompanySalaryCard = (props) => {
-  // const {salaryDetails: {
-  //  benifits,
-  //  companyId,
-  //  endDate,
-  //  isJobSeekerCurrentCompany,
-  //  jobSeekerId,
-  //  jobLocation,
-  //  jobTitle,
-  //  salary,
-  //  yearsOfRelevantExperience
-  // }} = props
-  //  ·
+  const {
+    salaryDetails: { benefits, jobTitle, salary },
+  } = props;
 
   return (
     <div
@@ -20,6 +11,7 @@ const CompanySalaryCard = (props) => {
       style={{
         marginTop: "1rem",
         marginRight: "1rem",
+        minWidth: '400px',
         maxWidth: "600px",
       }}
     >
@@ -31,26 +23,22 @@ const CompanySalaryCard = (props) => {
             justifyContent: "space-between",
           }}
         >
-          <div>Job Title</div>
-          <div>
+          <div>{jobTitle}</div>
+          <div style={{marginLeft: 40}}>
             <div>Average Salary</div>
-            <div style={{ fontWeight: "bold" }}>$12000</div>
+            <div style={{ fontWeight: "bold" }}>${salary}</div>
             <div style={{ textAlign: "right" }}>per year</div>
           </div>
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{fontWeight: 'bold'}}>Perks</div>
-          <ul style={{ columns: 2 }}>
-            {[
-              "Paid time off",
-              "Health insurance",
-              "Life insurance",
-              "Dental/ vision insurance",
-              "Retirement/ 401(k)",
-            ].map((perk) => (
-              <li>{perk}</li>
-            ))}
-          </ul>
+          {benefits.length !== 0 && (
+            <>
+              <div style={{ fontWeight: "bold" }}>Perks</div>
+              <ul style={{ columns: 2 }}>
+                {benefits && benefits.map((perk) => <li key={perk}>{perk}</li>)}
+              </ul>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -1,12 +1,34 @@
-import React, { useCallback, useEffect, useState, useMemo } from "react";
+import React, { useCallback, useState, useMemo } from "react";
 import Select from "../../common/Select";
 import Button from "../../common/Button";
 import Switch from "react-switch";
 import { Formik, Field, Form } from "formik";
 import "../../../styles/companyStyles.css";
+import _ from 'lodash'
+import { getCurrentUser } from "../../../services/auth";
+import { addSalaryReview } from "../../../services/jobSeeker";
 
 const CompanySalaryForm = (props) => {
-  const submitFormHandler = useCallback(() => {}, []);
+  const submitFormHandler = useCallback(
+    async (values) => {
+      let payload = { ...values };
+      if (payload.hasOtherBenefits) payload.benefits.push(payload.otherBenefit);
+      delete payload.hasOtherBenefits;
+      delete payload.otherBenefit;
+      const user = getCurrentUser();
+      if (user) {
+        payload.jobSeekerId = user._id;
+      } else {
+        payload.jobSeekerId = null;
+      }
+      payload = _.omit(payload, ['otherBenefit', 'hasOtherBenefits'])
+      await addSalaryReview(payload, props.companyDetails._id).then(() => {
+        props.closeModal();
+      });
+    },
+    [props]
+  );
+
   const [currentPage, setPage] = useState(0);
 
   const endDateOptions = useMemo(() => {
@@ -23,10 +45,8 @@ const CompanySalaryForm = (props) => {
       style={{ width: "40%" }}
       initialValues={{
         benefits: [],
-        companyId: "companyId",
         endDate: endDateOptions[0],
         isJobSeekerCurrentCompany: true,
-        jobSeekerId: "jobSeekerId",
         jobTitle: "",
         jobLocation: "",
         hasOtherBenefits: false,
@@ -34,9 +54,8 @@ const CompanySalaryForm = (props) => {
         salary: 0,
         yearsOfRelevantExperience: 0,
       }}
-      onSubmit={(values) => {
-        console.log(values);
-      }}
+      enableReinitialize
+      onSubmit={submitFormHandler}
     >
       {({ errors, handleBlur, handleChange, handleSubmit, values }) => (
         <div
@@ -134,6 +153,17 @@ const CompanySalaryForm = (props) => {
                       <h6>Your anonymous pay will help other job seekers.</h6>
                     </h4>
                     <div className="form-group">
+                      <label style={{ width: "100%" }}>What’s your pay at {props.companyDetails.name}?</label>
+                      <Field name="salary" type="number" />
+                      <p className="help-block text-danger"></p>
+                    </div>
+                    <div className="form-group">
+                      <label style={{ width: "100%" }}>How many years of relevant experience do you have?</label>
+                      <Field name="yearsOfRelevantExperience" type="number" />
+                      <p className="help-block text-danger"></p>
+                    </div>
+                    <div className="form-group">
+                      <label style={{ width: "100%" }}>Which benefits did you receive at Starbucks?</label>
                       <div role="group" aria-labelledby="checkbox-group">
                         <div
                           style={{

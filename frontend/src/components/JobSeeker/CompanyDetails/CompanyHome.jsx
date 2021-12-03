@@ -44,7 +44,6 @@ class CompanyHome extends React.Component {
               <Jobs companyDetails={this.state.companyDetails} />
             </Route>
             <Route
-              exact
               path={`/companydetails/${this.state.companyDetails?._id}/salaries`}
             >
               <CompanySalaries

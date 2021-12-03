@@ -30,6 +30,10 @@ export async function addReview(review, companyId, jobSeekerId) {
   return await http.post(apiEndpoint + "/addReview", result);
 }
 
+export async function addSalaryReview(salary, companyId) {
+  return await http.post(apiEndpoint + `/addSalaryReview/${companyId}`, salary);
+}
+
 export async function getCompanyReviews(id, params) {
   return await http.get(apiEndpoint + `/getReviews/${id}`, { params: params });
 }
@@ -49,6 +53,22 @@ export async function getJobPostings(id) {
 export async function updateReview(reviewid, isHelpful) {
   return await http.put(apiEndpoint + `/updateReview/${reviewid}`, {
     isHelpful,
+  });
+}
+
+export async function getSalaryReviews(companyId, jobTitle, jobLocation) {
+  return await http.get(apiEndpoint + `/getSalaryReviews/${companyId}`, {
+    params: { jobTitle, jobLocation },
+  });
+}
+export async function getSalaryJobTitles(companyId, jobLocation) {
+  return await http.get(apiEndpoint + `/getSalaryReviews/jobTitles/${companyId}`, {
+    params: { jobLocation },
+  });
+}
+export async function getSalaryJobLocations(companyId, jobTitle) {
+  return await http.get(apiEndpoint + `/getSalaryReviews/jobLocations/${companyId}`, {
+    params: { jobTitle },
   });
 }
 

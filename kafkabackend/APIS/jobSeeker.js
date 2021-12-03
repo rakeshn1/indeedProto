@@ -52,12 +52,13 @@ async function addSalaryReview(msg, callback) {
       jobTitle: msg.body.jobTitle,
       salary: msg.body.salary,
       yearsOfReleventexperience: msg.body.yearsOfReleventexperience,
-      banefits: msg.body.benefits,
+      benefits: msg.body.benefits,
+      jobLocation: msg.body.jobLocation,
     });
 
     await salaryReview.save();
     res.status = 200;
-    res.data = "Succesfullt added salaries review";
+    res.data = "Succesfully added salaries review";
     callback(null, res);
   } catch (ex) {
     res.status = 500;
@@ -350,6 +351,46 @@ getCompanyrating = async (msg, callback) => {
   }
 };
 
+getSalaryReview = async (msg, callback) => {
+  try {
+    const queryObject = { companyId: msg.companyId };
+    if (msg.query.jobTitle) queryObject.jobTitle = msg.query.jobTitle;
+    if (msg.query.jobLocation) queryObject.jobLocation = msg.query.jobLocation;
+    console.log("in get salary review", queryObject);
+    const salaryReviews = await SalaryReview.find(queryObject);
+    callback([], salaryReviews);
+  } catch (err) {
+    console.log("error", err);
+    callback(err, "Error");
+  }
+};
+
+getSalaryReviewJobLocations = async (msg, callback) => {
+  try {
+    const queryObject = { companyId: msg.companyId };
+    if (msg.query.jobTitle) queryObject.jobTitle = msg.query.jobTitle;
+    console.log("in get salary review - jobLocations", queryObject);
+    const jobLocations = await SalaryReview.distinct('jobLocation', queryObject)
+    callback([], jobLocations);
+  } catch (err) {
+    console.log("error", err);
+    callback(err, "Error");
+  }
+};
+
+getSalaryReviewJobTitles = async (msg, callback) => {
+  try {
+    const queryObject = { companyId: msg.companyId };
+    if (msg.query.jobLocation) queryObject.jobLocation = msg.query.jobLocation;
+    console.log("in get salary review - job titles", queryObject);
+    const jobTitles = await SalaryReview.distinct('jobTitle', queryObject)
+    callback([], jobTitles);
+  } catch (err) {
+    console.log("error", err);
+    callback(err, "Error");
+  }
+};
+
 handle_request = (msg, callback) => {
   if (msg.path === "addReview") {
     delete msg.path;
@@ -388,6 +429,15 @@ handle_request = (msg, callback) => {
   } else if (msg.path === "getTotalReviews") {
     delete msg.path;
     getTotalNumberOfReviews(msg, callback);
+  } else if (msg.path === "getSalaryReviews") {
+    delete msg.path;
+    getSalaryReview(msg, callback);
+  } else if (msg.path === "getSalaryReviews-JobTitles") {
+    delete msg.path;
+    getSalaryReviewJobTitles(msg, callback);
+  } else if (msg.path === "getSalaryReviews-JobLocations") {
+    delete msg.path;
+    getSalaryReviewJobLocations(msg, callback);
   }
 };
 

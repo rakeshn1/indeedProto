@@ -107,7 +107,7 @@ class JobSeekerCompanyRow extends React.Component {
             </Link>
             <Link
               style={{ paddingLeft: "50px", color: "#2557a7" }}
-              to={`/companyDetails/${_id}/review`}
+              to={`/companyDetails/${_id}/salaries`}
             >
               Salaries
             </Link>
