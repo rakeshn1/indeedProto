@@ -5,6 +5,7 @@ import EmployerProfileHeader from "./EmployerProfileHeader";
 import { getCurrentUser, getJwt } from "../../services/auth";
 import axios from "axios";
 import * as Yup from "yup";
+import { apiURL } from '../../config'
 const CompanyDetails = () => {
   const user = getCurrentUser();
   // var employerData = {
@@ -87,7 +88,7 @@ const CompanyDetails = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:3900/employer/api/getCompanyDetails/${user.companyId}`
+        `${apiURL}/employer/api/getCompanyDetails/${user.companyId}`
       )
       .then((response) => {
         console.log(response);
@@ -129,7 +130,7 @@ const CompanyDetails = () => {
 
                   axios
                     .put(
-                      `http://localhost:3900/employer/api/updateCompanyDetails/${user.companyId}`,
+                      `${apiURL}/employer/api/updateCompanyDetails/${user.companyId}`,
                       { values }
                     )
                     .then((response) => {
@@ -266,9 +267,9 @@ const CompanyDetails = () => {
                           </label>
                           <p className="help-block text-danger">
                             {errors.headQuarters &&
-                            errors.headQuarters.streetName &&
-                            touched.headQuarters &&
-                            touched.headQuarters.streetName ? (
+                              errors.headQuarters.streetName &&
+                              touched.headQuarters &&
+                              touched.headQuarters.streetName ? (
                               <>{errors.headQuarters.streetName}</>
                             ) : null}
                           </p>
@@ -288,9 +289,9 @@ const CompanyDetails = () => {
                           </label>
                           <p className="help-block text-danger">
                             {errors.headQuarters &&
-                            errors.headQuarters.city &&
-                            touched.headQuarters &&
-                            touched.headQuarters.city ? (
+                              errors.headQuarters.city &&
+                              touched.headQuarters &&
+                              touched.headQuarters.city ? (
                               <>{errors.headQuarters.city}</>
                             ) : null}
                           </p>
@@ -310,9 +311,9 @@ const CompanyDetails = () => {
                           </label>
                           <p className="help-block text-danger">
                             {errors.headQuarters &&
-                            errors.headQuarters.state &&
-                            touched.headQuarters &&
-                            touched.headQuarters.state ? (
+                              errors.headQuarters.state &&
+                              touched.headQuarters &&
+                              touched.headQuarters.state ? (
                               <>{errors.headQuarters.state}</>
                             ) : null}
                           </p>
@@ -332,9 +333,9 @@ const CompanyDetails = () => {
                           </label>
                           <p className="help-block text-danger">
                             {errors.headQuarters &&
-                            errors.headQuarters.country &&
-                            touched.headQuarters &&
-                            touched.headQuarters.country ? (
+                              errors.headQuarters.country &&
+                              touched.headQuarters &&
+                              touched.headQuarters.country ? (
                               <>{errors.headQuarters.country}</>
                             ) : null}
                           </p>
@@ -354,9 +355,9 @@ const CompanyDetails = () => {
                           </label>
                           <p className="help-block text-danger">
                             {errors.headQuarters &&
-                            errors.headQuarters.zipcode &&
-                            touched.headQuarters &&
-                            touched.headQuarters.zipcode ? (
+                              errors.headQuarters.zipcode &&
+                              touched.headQuarters &&
+                              touched.headQuarters.zipcode ? (
                               <>{errors.headQuarters.zipcode}</>
                             ) : null}
                           </p>

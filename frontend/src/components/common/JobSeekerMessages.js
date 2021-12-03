@@ -1,19 +1,23 @@
 import React from "react";
-import RecipientsCard from "./RecipientsCard";
+import RecipientsJobSeekerCard from "./RecipientsJobSeekerCard";
 import { useEffect, useState } from "react";
 import { getCurrentUser, getJwt } from "../../services/auth";
 import axios from "axios";
-const MessagesLandingPage = () => {
+import { apiURL } from "../../config";
+
+
+const JobSeekerMessagesLandingPage = () => {
     const user = getCurrentUser();
     const [recipients, setRecipients] = useState([
         {
-            userName: "Vineeth",
+            name: "NCR",
         },
     ]);
     useEffect(() => {
+        console.log("--*--", user)
         axios
             .get(
-                `${apiURL}/employer/api/getAllConversations/${user.companyId}`,
+                `${apiURL}/employer/api/getAllConversationsJobSeeker/${user._id}`,
                 {}
             )
             .then((response) => {
@@ -28,9 +32,9 @@ const MessagesLandingPage = () => {
     }, []);
     return (
         <div className="container job-search-wrapper">
-            <RecipientsCard data={recipients} />
+            <RecipientsJobSeekerCard data={recipients} />
         </div>
     );
 };
 
-export default MessagesLandingPage;
+export default JobSeekerMessagesLandingPage;

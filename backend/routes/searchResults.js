@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const kafka = require("../kafka/client");
 
-const topic = "search-topic1";
+const topic = "search-topic";
 
 router.get("/getCompanyNamesAndJobTitles/:term", async (req, res) => {
   const msg = {};

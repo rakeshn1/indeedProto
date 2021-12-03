@@ -10,7 +10,7 @@ const { Reviews } = require("../models/mongo/review");
 const { response } = require("express");
 const _ = require("lodash");
 
-const topic = "jobSeeker-topic1";
+const topic = "jobSeeker-topic";
 
 router.post("/addReview", async (req, res) => {
   console.log(req.body);

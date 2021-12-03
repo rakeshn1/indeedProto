@@ -20,7 +20,7 @@ db.getConnection((err) => {
   else console.log("Connected to SQL database...");
 });
 
-const topic = "admin1";
+const topic = "admin";
 
 router.get("/getUnapprovedReviews", async (req, res) => {
   const msg = {};

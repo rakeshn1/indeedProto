@@ -559,6 +559,53 @@ const handleGetAllConversations = async (msg, callback) => {
     }
 };
 
+const handleGetAllConversationsJobSeeker = async (msg, callback) => {
+    console.log("--*--", msg)
+    const res = {};
+    try {
+        const result = await Messages.aggregate([
+            {
+                $match: {
+                    $and: [{ userId: ObjectId(msg.jobSeekerId) }],
+                },
+            },
+            // { $set: { useObjID: { $toObjectId: 'userId' } } },
+            {
+                $lookup: {
+                    from: "companies",
+                    localField: "companyId",
+                    foreignField: "_id",
+                    as: "companyRow",
+                },
+            },
+            { $unwind: "$companyRow" },
+            {
+                $project: {
+                    _id: 1,
+                    userId: 1,
+                    companyId: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
+                    name: "$companyRow.name",
+                    description: "$companyRow.description",
+                },
+            },
+        ]);
+        // const result = await Messages.aggregate( [
+        //     { $match: { companyId: ObjectId(msg.companyId) } },
+        //     { $group: { _id: "$jobId" , count:{$sum:1}} }
+        // ] )
+        console.log("Results for get all conversation details", result);
+        res.status = 200;
+        res.data = result;
+        callback(null, res);
+    } catch (err) {
+        console.log(err);
+        res.status = 400;
+        callback(null, res);
+    }
+};
+
 const handleGetConversation = async (msg, callback) => {
     const res = {};
     try {
@@ -731,6 +778,12 @@ handle_request = (msg, callback) => {
         delete msg.path;
         console.log("handling getAllConversations");
         handleGetAllConversations(msg, callback);
+    }
+
+    if (msg.path === "getAllConversationsJobSeeker") {
+        delete msg.path;
+        console.log("handling getAllConversationsJobSeeker");
+        handleGetAllConversationsJobSeeker(msg, callback);
     }
 
     if (msg.path === "getConversation") {

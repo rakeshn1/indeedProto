@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import JobPostingsHeader from './JobPostingsHeader';
 import axios from 'axios';
 import { getCurrentUser, getJwt } from "../../services/auth";
-
+import {apiURL} from '../../config'
 import { TextField } from "@material-ui/core";
 import * as Yup from "yup";
 
@@ -94,7 +94,7 @@ const AddJobs = () => {
                             onSubmit={(values, { setSubmitting, resetForm }) => {
                                 console.log(values)
                                 console.log(user)
-                                axios.post(`http://localhost:3900/employer/api/addJob/${user.companyId}`, { values })
+                                axios.post(`${apiURL}/employer/api/addJob/${user.companyId}`, { values })
                                     .then(response => {
                                         console.log(response)
                                         if (response.status != 200) {

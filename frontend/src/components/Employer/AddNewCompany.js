@@ -8,7 +8,7 @@ import { useHistory, useParams } from "react-router-dom";
 import S3FileUpload from "react-s3";
 import { companyLogoConfig } from "../../config";
 import * as Yup from "yup";
-
+import {apiURL} from '../../config'
 const AddNewCompany = () => {
   const history = useHistory();
   const [logo, setLogo] = useState([]);
@@ -146,7 +146,7 @@ const AddNewCompany = () => {
                     console.log(data.location);
                     axios
                       .post(
-                        "http://localhost:3900/employer/api/addCompanyDetails",
+                        `${apiURL}/employer/api/addCompanyDetails`,
                         { values }
                       )
                       .then((response) => {
@@ -348,7 +348,7 @@ const AddNewCompany = () => {
                         </label>
                         <p className="help-block text-danger">
                           {errors.appreciationScore &&
-                          touched.appreciationScore ? (
+                            touched.appreciationScore ? (
                             <div>{errors.appreciationScore}</div>
                           ) : null}
                         </p>
@@ -550,9 +550,9 @@ const AddNewCompany = () => {
                         </label>
                         <p className="help-block text-danger">
                           {errors.headQuarters &&
-                          errors.headQuarters.streetName &&
-                          touched.headQuarters &&
-                          touched.headQuarters.streetName ? (
+                            errors.headQuarters.streetName &&
+                            touched.headQuarters &&
+                            touched.headQuarters.streetName ? (
                             <>{errors.headQuarters.streetName}</>
                           ) : null}
                         </p>
@@ -573,9 +573,9 @@ const AddNewCompany = () => {
                         </label>
                         <p className="help-block text-danger">
                           {errors.headQuarters &&
-                          errors.headQuarters.city &&
-                          touched.headQuarters &&
-                          touched.headQuarters.city ? (
+                            errors.headQuarters.city &&
+                            touched.headQuarters &&
+                            touched.headQuarters.city ? (
                             <>{errors.headQuarters.city}</>
                           ) : null}
                         </p>
@@ -596,9 +596,9 @@ const AddNewCompany = () => {
                         </label>
                         <p className="help-block text-danger">
                           {errors.headQuarters &&
-                          errors.headQuarters.state &&
-                          touched.headQuarters &&
-                          touched.headQuarters.state ? (
+                            errors.headQuarters.state &&
+                            touched.headQuarters &&
+                            touched.headQuarters.state ? (
                             <>{errors.headQuarters.state}</>
                           ) : null}
                         </p>
@@ -619,9 +619,9 @@ const AddNewCompany = () => {
                         </label>
                         <p className="help-block text-danger">
                           {errors.headQuarters &&
-                          errors.headQuarters.country &&
-                          touched.headQuarters &&
-                          touched.headQuarters.country ? (
+                            errors.headQuarters.country &&
+                            touched.headQuarters &&
+                            touched.headQuarters.country ? (
                             <>{errors.headQuarters.country}</>
                           ) : null}
                         </p>
@@ -642,9 +642,9 @@ const AddNewCompany = () => {
                         </label>
                         <p className="help-block text-danger">
                           {errors.headQuarters &&
-                          errors.headQuarters.zipcode &&
-                          touched.headQuarters &&
-                          touched.headQuarters.zipcode ? (
+                            errors.headQuarters.zipcode &&
+                            touched.headQuarters &&
+                            touched.headQuarters.zipcode ? (
                             <>{errors.headQuarters.zipcode}</>
                           ) : null}
                         </p>

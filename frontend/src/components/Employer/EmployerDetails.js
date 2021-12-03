@@ -8,6 +8,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { getCurrentUser, getJwt } from "../../services/auth";
 import EmployerProfileHeader from "./EmployerProfileHeader"
 import * as Yup from "yup";
+import {apiURL} from '../../config'
 const EmployerDetails = () => {
     const [allCompanies, setAllCompanies] = useState([])
     const [employerData, setEmployerData] = useState(null)
@@ -36,7 +37,7 @@ const EmployerDetails = () => {
     });
 
     useEffect(() => {
-        axios.get("http://localhost:3900/employer/api/getAllCompanies")
+        axios.get(`${apiURL}/employer/api/getAllCompanies`)
             .then((response) => {
                 console.log(response);
                 if (response.status != 200) {
@@ -47,7 +48,7 @@ const EmployerDetails = () => {
                 }
             });
 
-        axios.get(`http://localhost:3900/employer/api/getEmployerDetails/${user._id}`)
+        axios.get(`${apiURL}/employer/api/getEmployerDetails/${user._id}`)
             .then((response) => {
                 if (response.status != 200) {
                     // M.toast({ html: response.statusText, classes: "#c62828 red darken-3" })
@@ -79,7 +80,7 @@ const EmployerDetails = () => {
                             validationSchema={SignupSchema}
                             onSubmit={(values, { setSubmitting, resetForm }) => {
                                 console.log(values)
-                                axios.put(`http://localhost:3900/employer/api/updateEmployerDetails/${user._id}`, { values })
+                                axios.put(`${apiURL}/employer/api/updateEmployerDetails/${user._id}`, { values })
                                     .then(response => {
                                         console.log(response)
                                         if (response.status != 200) {

@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { useHistory, useParams } from 'react-router-dom'
 import * as Yup from 'yup';
 import { getCurrentUser, getJwt } from "../../services/auth";
-
+import {apiURL} from '../../config'
 const EmployerDetails = () => {
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -38,7 +38,7 @@ const EmployerDetails = () => {
     const history = useHistory()
     const user = getCurrentUser();
     useEffect(() => {
-        axios.get("http://localhost:3900/employer/api/getAllCompanies")
+        axios.get(`${apiURL}/employer/api/getAllCompanies`)
             .then((response) => {
                 console.log(response);
                 if (response.status != 200) {
@@ -66,7 +66,7 @@ const EmployerDetails = () => {
                             validationSchema={SignupSchema}
                             onSubmit={(values, { setSubmitting, resetForm }) => {
                                 console.log(values)
-                                axios.put(`http://localhost:3900/employer/api/updateEmployerDetails/${user._id}`, { values })
+                                axios.put(`${apiURL}/employer/api/updateEmployerDetails/${user._id}`, { values })
                                     .then(response => {
                                         console.log(response)
                                         if (response.status != 200) {

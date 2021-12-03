@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
-import { TextField, ListItemText, Grid, MenuItem } from "@material-ui/core";
-import { getCurrentUser, getJwt } from "../../services/auth";
+import { TextField, ListItemText, Grid, MenuItem } from "@material-ui/core"
+import { getCurrentUser, getJwt } from "../../services/auth";;
 import axios from "axios";
 import Button from "../common/Button";
-import { apiURL } from '../../config'
-const RecipientsCard = (props) => {
+import {apiURL} from '../../config'
+const RecipientsJobSeekerCard = (props) => {
     const [open, setOpen] = useState(false);
     const [messageText, setMessageText] = useState([]);
     const [recipientData, setRecipientData] = useState([]);
@@ -29,20 +29,20 @@ const RecipientsCard = (props) => {
             paddingBottom: 8,
             paddingLeft: 16,
             paddingRight: 16,
-            outline: "none",
+            outline: "none"
         },
         selected: {
             color: "#fff",
             backgroundColor: "#0084FF",
-            borderColor: "#0084FF",
-        },
+            borderColor: "#0084FF"
+        }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(messageText);
         const message = {
-            from: recipientData.companyId,
+            from: user._id,
             details: messageText,
             timestamp: new Date().toISOString(),
         };
@@ -98,7 +98,7 @@ const RecipientsCard = (props) => {
                                 <div className="job-title">
                                     <div>
                                         <span>
-                                            {recipient.firstName + " " + recipient.lastName}
+                                            {recipient.name}
                                         </span>
                                     </div>
                                 </div>
@@ -113,46 +113,47 @@ const RecipientsCard = (props) => {
                     })}
                 </Grid>
                 <Grid item lg={8} md={8} xs={12}>
-                    <div style={{ height: "600px", overflow: "scroll", scrollTop: 0 }}>
-                        <div
-                            className="recipient-description-card-wrapper"
-                            style={{ padding: 40 }}
-                        >
-                            {open && (recipientData.length != 0) ?
+                    <div style={{ height: "600px", overflow: "scroll" }} >
+                        <div className="recipient-description-card-wrapper" style={{ padding: 40 }}>
+                            {open &&
+                                recipientData.length != 0 ?
                                 recipientData.messages.map((message) => {
                                     return (
                                         <div
                                             style={{
                                                 textAlign:
-                                                    message.from == user.companyId ? "right" : "left",
+                                                    message.from == user._id
+                                                        ? "right"
+                                                        : "left",
                                             }}
                                         >
                                             <div>
                                                 <div>
                                                     <br />
                                                     <b>
-                                                        {message.from == user.companyId
+                                                        {message.from == user._id
                                                             ? ""
-                                                            : recipientData.firstName +
-                                                            recipientData.lastName}
+                                                            : recipientData.name}
                                                     </b>{" "}
+
                                                     <label style={{ fontSize: 12 }}>
-                                                        {new Date(message.timestamp)
-                                                            .toTimeString()
-                                                            .substr(0, 9) + "  "}
+                                                        {new Date(message.timestamp).toTimeString().substr(0, 9) + "  "}
                                                     </label>
                                                     <br />
                                                     <label style={stylesIn.button}>
+
                                                         <span>{message.details}</span>
                                                     </label>
                                                 </div>
+
                                             </div>
+
                                         </div>
                                     );
-                                }) : "No Messages Yet"}
+                                }) : "No messages So Far"}
                         </div>
                     </div>
-                    {open && (
+                    {open &&
                         <table>
                             <tr style={{ maxWidth: "100" }}>
                                 <td>
@@ -176,11 +177,11 @@ const RecipientsCard = (props) => {
                                 </td>
                             </tr>
                         </table>
-                    )}
+                    }
                 </Grid>
             </Grid>
-        </div>
+        </div >
     );
 };
 
-export default RecipientsCard;
+export default RecipientsJobSeekerCard;

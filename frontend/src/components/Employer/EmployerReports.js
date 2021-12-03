@@ -70,12 +70,13 @@ import { useEffect, useState } from "react";
 import { TextField, ListItemText, Grid, MenuItem } from "@material-ui/core";
 import axios from "axios";
 import { getCurrentUser, getJwt } from "../../services/auth";
+import { apiURL } from '../../config'
 const EmployerReports = () => {
     const [jobs, setJobs] = useState([])
     const user = getCurrentUser();
     useEffect(() => {
         axios.get(
-            `http://localhost:3900/employer/api/getCompanyJobs/${user.companyId}`,
+            `${apiURL}/employer/api/getCompanyJobs/${user.companyId}`,
             {}
         )
             .then((response) => {

@@ -5,6 +5,7 @@ import ReactPaginate from 'react-paginate';
 import { makeStyles } from '@material-ui/core/styles';
 import JobPostingsHeader from './JobPostingsHeader';
 import { getCurrentUser, getJwt } from "../../services/auth";
+import { apiURL } from '../../config'
 const JobCard = () => {
     var [jobs, setJobs] = useState([])
     const [offset, setOffset] = useState(0);
@@ -14,7 +15,7 @@ const JobCard = () => {
     const user = getCurrentUser();
     const jobType = ["Full Time", "Part Time", "Remote"]
     useEffect(() => {
-        axios.get(`http://localhost:3900/employer/api/getCompanyJobs/${user.companyId}`, {
+        axios.get(`${apiURL}/employer/api/getCompanyJobs/${user.companyId}`, {
         }).then(response => {
             if (response.status != 200) {
                 alert({ html: response.statusText, classes: "#c62828 red darken-3" })
