@@ -25,7 +25,18 @@ const companyPhotosConfig = {
     secretAccessKey: "VCF15W2dk3Uxjdw0rTMHnDEbKPHjU6zJM4PKRr0H",
 };
 
+const companyLogoConfig = {
+    bucketName: "uber-eats-proto",
+    dirName: "companyLogoUpload/" /* optional */,
+    region: "us-east-2",
+    accessKeyId: "AKIAUR4W3HRGHUKUAVWI",
+    secretAccessKey: "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",
+};
+
+
+
 module.exports.apiURL = apiURL;
 module.exports.resumeConfig = resumeConfig;
 module.exports.coverConfig = coverConfig;
 module.exports.companyPhotosConfig = companyPhotosConfig;
+module.exports.companyLogoConfig = companyLogoConfig;

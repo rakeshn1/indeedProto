@@ -1,62 +1,82 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../common/Button'
 import { Formik } from 'formik';
 import EmployerProfileHeader from "./EmployerProfileHeader"
+import { getCurrentUser, getJwt } from "../../services/auth";
+import axios from 'axios'
 const CompanyDetails = () => {
-    var employerData = {
-        website: "employerData.name",
-        companySize: "0",
-        companyType: "employerData.companyType",
-        revenue: "0",
-        headquarters: {
-            streetName: "employerData.headquarters.streetName",
-            city: "employerData.headquarters.city",
-            state: "employerData.headquarters.state",
-            country: "employerData.headquarters.country",
-            zipcode: "employerData.headquarters.zipcode",
-        },
-        industry: "employerData.industry",
-        founded: "employerData.founded",
-        missionAndVision: "employerData.missionAndVision",
-        ceoName: "employerData.ceoName",
-    }
-    return (employerData.website ?
+    const user = getCurrentUser();
+    // var employerData = {
+    //     website: "employerData.name",
+    //     companySize: "0",
+    //     companyType: "employerData.companyType",
+    //     revenue: "0",
+    //     headquarters: {
+    //         streetName: "employerData.headquarters.streetName",
+    //         city: "employerData.headquarters.city",
+    //         state: "employerData.headquarters.state",
+    //         country: "employerData.headquarters.country",
+    //         zipcode: "employerData.headquarters.zipcode",
+    //     },
+    //     industry: "employerData.industry",
+    //     founded: "employerData.founded",
+    //     missionAndVision: "employerData.missionAndVision",
+    //     ceoName: "employerData.ceoName",
+    //}
+
+    const [companyData, setCompanyData] = useState(null)
+    useEffect(() => {
+        axios.get(`http://localhost:3900/employer/api/getCompanyDetails/${user.companyId}`)
+            .then((response) => {
+                console.log(response)
+                if (response.status != 200) {
+                    // M.toast({ html: response.statusText, classes: "#c62828 red darken-3" })
+                }
+                else {
+                    // M.toast({ html: "Added Company Successfully", classes: "#43a047 green darken-1" })
+                    console.log(response.data)
+                    setCompanyData(response.data)
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+    }, [])
+    return (companyData &&
         <div className="container">
             <section className="page-section" id="about">
                 <div style={{ justifyContent: 'center' }}>
-
-
-
                     <div className="row" style={{ justifyContent: 'center' }}>
                         <Formik
                             style={{ width: '40%' }}
                             initialValues={{
-                                website: employerData.website,
-                                companySize: employerData.companySize,
-                                companyType: employerData.companyType,
-                                revenue: employerData.revenue,
-                                headquarters: employerData.headquarters,
-                                industry: employerData.industry,
-                                founded: employerData.founded,
-                                missionAndVision: employerData.missionAndVision,
-                                ceoName: employerData.ceoName,
+                                websiteURL: companyData.websiteURL,
+                                companySize: companyData.companySize,
+                                companyType: companyData.companyType,
+                                revenue: companyData.revenue,
+                                headQuarters: companyData.headQuarters,
+                                industry: companyData.industry,
+                                founded: companyData.founded,
+                                mission: companyData.mission,
+                                vision: companyData.vision,
+                                ceo: companyData.ceo,
                             }}
                             onSubmit={(values, { setSubmitting, resetForm }) => {
                                 console.log(values)
 
-                                //const companyId = JSON.parse(localStorage.getItem("company"))[0]._id
-                                // axios.post(`employer/api/updateCompanyDetails/${companyId}`, { values })
-                                //     .then(response => {
-                                //         console.log(response)
-                                //         if (response.status != 200) {
-                                //             M.toast({ html: response.statusText, classes: "#c62828 red darken-3" })
-                                //         }
-                                //         else {
-                                //             M.toast({ html: "Updated Customer details successfully", classes: "#43a047 green darken-1" })
-                                //         }
-                                //     }).catch(err => {
-                                //         console.log(err)
-                                //     })
+
+                                axios.put(`http://localhost:3900/employer/api/updateCompanyDetails/${user.companyId}`, { values })
+                                    .then(response => {
+                                        console.log(response)
+                                        if (response.status != 200) {
+                                            alert("Update Failed")
+                                        }
+                                        else {
+                                            alert("Update Success")
+
+                                        }
+                                    }).catch(err => {
+                                        console.log(err)
+                                    })
 
                             }}>
                             {({
@@ -77,7 +97,7 @@ const CompanyDetails = () => {
                                     <div className="row">
                                         <div className="col-md-12">
                                             <div className="form-group">
-                                                <label style={{ width: "100%" }}>Website<input style={{ width: "100%", borderRadius: 10 }} className="form-control" id="website" type="text" onBlur={handleBlur} onChange={handleChange} value={values.website} /></label>
+                                                <label style={{ width: "100%" }}>Website<input style={{ width: "100%", borderRadius: 10 }} className="form-control" id="websiteURL" type="text" onBlur={handleBlur} onChange={handleChange} value={values.websiteURL} /></label>
                                                 <p className="help-block text-danger"></p>
                                             </div>
                                             <div className="form-group" >
@@ -93,23 +113,23 @@ const CompanyDetails = () => {
                                                 <p className="help-block text-danger"></p>
                                             </div>
                                             <div className="form-group" >
-                                                <label style={{ width: "100%" }}>Street Name<input type="text" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="headquarters.streetName" onBlur={handleBlur} onChange={handleChange} value={values.headquarters.streetName} /></label>
+                                                <label style={{ width: "100%" }}>Street Name<input type="text" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="headQuarters.streetName" onBlur={handleBlur} onChange={handleChange} value={values.headQuarters.streetName} /></label>
                                                 <p className="help-block text-danger"></p>
                                             </div>
                                             <div className="form-group" >
-                                                <label style={{ width: "100%" }}>City<input type="text" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="headquarters.city" onBlur={handleBlur} onChange={handleChange} value={values.headquarters.city} /></label>
+                                                <label style={{ width: "100%" }}>City<input type="text" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="headQuarters.city" onBlur={handleBlur} onChange={handleChange} value={values.headQuarters.city} /></label>
                                                 <p className="help-block text-danger"></p>
                                             </div>
                                             <div className="form-group" >
-                                                <label style={{ width: "100%" }}>State<input type="text" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="headquarters.state" onBlur={handleBlur} onChange={handleChange} value={values.headquarters.state} /></label>
+                                                <label style={{ width: "100%" }}>State<input type="text" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="headQuarters.state" onBlur={handleBlur} onChange={handleChange} value={values.headQuarters.state} /></label>
                                                 <p className="help-block text-danger"></p>
                                             </div>
                                             <div className="form-group" >
-                                                <label style={{ width: "100%" }}>Country<input type="text" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="headquarters.country" onBlur={handleBlur} onChange={handleChange} value={values.headquarters.country} /></label>
+                                                <label style={{ width: "100%" }}>Country<input type="text" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="headQuarters.country" onBlur={handleBlur} onChange={handleChange} value={values.headQuarters.country} /></label>
                                                 <p className="help-block text-danger"></p>
                                             </div>
                                             <div className="form-group" >
-                                                <label style={{ width: "100%" }}>Zip Code<input type="text" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="headquarters.zipcode" onBlur={handleBlur} onChange={handleChange} value={values.headquarters.zipcode} /></label>
+                                                <label style={{ width: "100%" }}>Zip Code<input type="text" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="headQuarters.zipcode" onBlur={handleBlur} onChange={handleChange} value={values.headQuarters.zipcode} /></label>
                                                 <p className="help-block text-danger"></p>
                                             </div>
                                             {" "}
@@ -118,15 +138,19 @@ const CompanyDetails = () => {
                                                 <p className="help-block text-danger"></p>
                                             </div>
                                             <div className="form-group" >
-                                                <label style={{ width: "100%" }}>Founded <input type="date" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="founded" onBlur={handleBlur} onChange={handleChange} value={values.founded} /></label>
+                                                <label style={{ width: "100%" }}>Founded <input type="text" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="founded" onBlur={handleBlur} onChange={handleChange} value={values.founded} /></label>
                                                 <p className="help-block text-danger"></p>
                                             </div>
                                             <div className="form-group" >
-                                                <label style={{ width: "100%" }}>Mission And Vision<input type="text" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="missionAndVision" onBlur={handleBlur} onChange={handleChange} value={values.missionAndVision} /></label>
+                                                <label style={{ width: "100%" }}>Mission<input type="text" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="mission" onBlur={handleBlur} onChange={handleChange} value={values.mission} /></label>
                                                 <p className="help-block text-danger"></p>
                                             </div>
                                             <div className="form-group" >
-                                                <label style={{ width: "100%" }}>CEO Name<input type="text" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="ceoName" onBlur={handleBlur} onChange={handleChange} value={values.ceoName} /></label>
+                                                <label style={{ width: "100%" }}>Vision<input type="text" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="vision" onBlur={handleBlur} onChange={handleChange} value={values.vision} /></label>
+                                                <p className="help-block text-danger"></p>
+                                            </div>
+                                            <div className="form-group" >
+                                                <label style={{ width: "100%" }}>CEO Name<input type="text" style={{ width: "100%", borderRadius: 10 }} className="form-control" id="ceo" onBlur={handleBlur} onChange={handleChange} value={values.ceo} /></label>
                                                 <p className="help-block text-danger"></p>
                                             </div>
                                         </div>
@@ -142,7 +166,7 @@ const CompanyDetails = () => {
                     </div>
                 </div>
             </section>
-        </div > : <h1></h1>
+        </div >
     )
 }
 

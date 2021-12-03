@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const kafka = require("../kafka/client");
 // const { Jobs } = require("../models/mongo/jobs.js");
 
-const topic = "newUser-topic1";
+const topic = "newUser-topic";
 
 router.post("/addAccount", async (req, res) => {
   console.log(req.body);

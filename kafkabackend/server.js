@@ -36,8 +36,8 @@ function handleTopicRequest(topic_name, fname) {
   });
 }
 
-handleTopicRequest("companytopic1", companyAPI);
-handleTopicRequest("jobSeeker-topic1", jobSeeker);
-handleTopicRequest("newUser-topic1", createUser);
-handleTopicRequest("search-topic1", searchAPI);
-handleTopicRequest("admin1", admin);
+handleTopicRequest("companytopic", companyAPI);
+handleTopicRequest("jobSeeker-topic", jobSeeker);
+handleTopicRequest("newUser-topic", createUser);
+handleTopicRequest("search-topic", searchAPI);
+handleTopicRequest("admin", admin);
