@@ -11,6 +11,7 @@ import {
 } from "../../../services/jobSeeker";
 
 import { getCurrentUser } from "../../../services/auth";
+import { incrementViewCount } from "../../../services/admin";
 
 const dateOptions = ["This_Week", "Last_Week", "Last_Month", "This_Month"];
 class Reviews extends React.Component {
@@ -33,9 +34,11 @@ class Reviews extends React.Component {
     );
     const { reviews, totalDocs } = data;
     this.setState({ reviews });
-    if (totalDocs) {
+
+    if (totalDocs >= 0) {
       const totalPages = Math.ceil(totalDocs / 5);
-      this.setState({ totalPages });
+
+      this.setState({ totalPages: totalPages });
     }
   };
   componentDidMount = async () => {
@@ -50,6 +53,12 @@ class Reviews extends React.Component {
     }
     params.pageNo = 1;
     this.getFilteredResults(params);
+    if (this.props.companyDetails) {
+      incrementViewCount({
+        companyId: this.props.companyDetails._id,
+        date: new Date(),
+      });
+    }
   };
   handleFilter = async (e) => {
     const filter = { ...this.state.filter };
@@ -119,7 +128,7 @@ class Reviews extends React.Component {
               className="link"
               params={{ companyDetails: this.props.companyDetails }}
               to={{
-                pathname: `/company/${this.props.companyDetails._id}/addReview`,
+                pathname: `/company/${this.props.companyDetails?._id}/addReview`,
                 state: { companyDetails: this.props.companyDetails },
               }}
               // to={`/company/${this.props.companyDetails._id}/addReview`}
@@ -230,31 +239,34 @@ class Reviews extends React.Component {
               />
             );
           })}
-        <div className="d-flex flex-row justify-content-around">
-          <div>
-            <button
-              className="invisibleButton"
-              onClick={this.goToPrevPage}
-              disabled={this.state.pageNo == 1}
-            >
-              <i
-                className="fa fa-arrow-circle-left fa-lg"
-                aria-hidden="true"
-              ></i>
-            </button>
-            {this.state.pageNo}
-            <button
-              className="invisibleButton"
-              onClick={this.goToNextPage}
-              disabled={this.state.pageNo === this.state.totalPages}
-            >
-              <i
-                className="fa fa-arrow-circle-right fa-lg"
-                aria-hidden="true"
-              ></i>
-            </button>
+
+        {this.state.totalPages > 1 && (
+          <div className="d-flex flex-row justify-content-around">
+            <div>
+              <button
+                className="invisibleButton"
+                onClick={this.goToPrevPage}
+                disabled={this.state.pageNo == 1}
+              >
+                <i
+                  className="fa fa-arrow-circle-left fa-lg"
+                  aria-hidden="true"
+                ></i>
+              </button>
+              {this.state.pageNo}
+              <button
+                className="invisibleButton"
+                onClick={this.goToNextPage}
+                disabled={this.state.pageNo >= this.state.totalPages}
+              >
+                <i
+                  className="fa fa-arrow-circle-right fa-lg"
+                  aria-hidden="true"
+                ></i>
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }

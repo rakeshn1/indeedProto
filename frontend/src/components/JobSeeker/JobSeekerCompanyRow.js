@@ -61,7 +61,7 @@ class JobSeekerCompanyRow extends React.Component {
                     fontWeight: "700",
                   }}
                 >
-                  {parseInt(rating)}
+                  {parseInt(rating).toFixed(2)}
                 </span>
               </div>
               <div
@@ -107,7 +107,7 @@ class JobSeekerCompanyRow extends React.Component {
             </Link>
             <Link
               style={{ paddingLeft: "50px", color: "#2557a7" }}
-              to={`/companyDetails/${_id}/review`}
+              to={`/companyDetails/${_id}/salaries`}
             >
               Salaries
             </Link>

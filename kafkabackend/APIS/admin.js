@@ -7,31 +7,24 @@ const { User } = require("../models/user");
 const mongoose = require("mongoose");
 const _ = require("lodash");
 
-
 //SQL connect
 
-const mysql = require('mysql')
+const mysql = require("mysql");
 const config = require("../config/config.json");
 const DB = config.sqlDB;
-
 
 const db = mysql.createPool({
   host: DB.host,
   port: DB.port,
   user: DB.username,
   password: DB.password,
-  database: DB.database
-})
+  database: DB.database,
+});
 
 db.getConnection((err) => {
-  if (err)
-    console.log(err)
-  else
-    console.log("Connected to SQL database...")
-})
-
-
-
+  if (err) console.log(err);
+  else console.log("Connected to SQL database...");
+});
 
 //Mongo Routes
 const getUnapprovedReviews = async (msg, callback) => {
@@ -78,10 +71,15 @@ const updateStatusOfPhoto = async (msg, callback) => {
   const res = {};
   try {
     const companyId = msg.body.companyId;
-    const photoId = msg.body.photoId
+    const photoId = msg.body.photoId;
     const status = msg.body.status;
     const photoUrl = msg.body.photoUrl;
     console.log("STATUS:::: ", status);
+
+    const sqlDelete = "DELETE FROM newPhotos where newPhotoId=?";
+    db.query(sqlDelete, [photoId], (err, result) => {
+      console.log(result);
+    });
 
     if (status === 1) {
       console.log("STATUS: 1");
@@ -96,10 +94,7 @@ const updateStatusOfPhoto = async (msg, callback) => {
     }
 
     // Delete from SQL
-    const sqlDelete = "DELETE FROM newPhotos where newPhotoId=?"
-    db.query(sqlDelete, [photoId], (err, result) => {
-      console.log(result)
-    })
+
     res.status = 200;
     res.data = "Updated successfully";
 
@@ -218,6 +213,8 @@ const topfiveReviewedCompanies = async (msg, callback) => {
       })
     );
 
+    res.data = _.orderBy(res.data, ["count"], ["desc"]);
+
     res.status = 200;
 
     callback(null, res);
@@ -266,6 +263,8 @@ const topfiveJobSeekersBasedOnAcceptedReviews = async (msg, callback) => {
         }
       })
     );
+    // console.log("SORTIGHJHGJ", res.data);
+    res.data = _.orderBy(res.data, ["count"], ["desc"]);
 
     res.status = 200;
 
@@ -305,6 +304,8 @@ const topTenCeosApproved = async (msg, callback) => {
       })
     );
 
+    res.data = _.orderBy(res.data, ["approval"], ["desc"]);
+
     res.status = 200;
     callback(null, res);
   } catch (err) {
@@ -340,6 +341,8 @@ const topFiveCompaniesBasedOnAverageRating = async (msg, callback) => {
       })
     );
 
+    res.data = _.orderBy(res.data, ["avgRating"], ["desc"]);
+
     res.status = 200;
     callback(null, res);
   } catch (err) {
@@ -355,7 +358,10 @@ const getAllCompanies = async (msg, callback) => {
     res.data = [];
     const companyResults = await Company.find({}).select("name");
 
-    // console.log("companies============================================", companyResults)
+    console.log(
+      "companies============================================",
+      companyResults
+    );
     companyResults.forEach((company) => {
       res.data.push(company.name);
     });
@@ -364,14 +370,12 @@ const getAllCompanies = async (msg, callback) => {
     // res.data = companies;
     res.status = 200;
     callback(null, res);
-  }
-  catch (err) {
+  } catch (err) {
     res.status = 500;
     res.data = err;
     callback(null, res);
   }
-
-}
+};
 
 handle_request = (msg, callback) => {
   if (msg.path === "getUnapprovedReviews") {
@@ -414,8 +418,7 @@ handle_request = (msg, callback) => {
     // delete msg.path;
     console.log("Kafka side1");
     topFiveCompaniesBasedOnAverageRating(msg, callback);
-  }
-  else if (msg.path === "getAllCompanies") {
+  } else if (msg.path === "getAllCompanies") {
     // delete msg.path;
     console.log("Kafka side1");
     getAllCompanies(msg, callback);

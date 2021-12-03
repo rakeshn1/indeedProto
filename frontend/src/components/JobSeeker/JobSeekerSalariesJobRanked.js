@@ -24,7 +24,7 @@ class JobsRankedRow extends React.Component {
       numberOfReviews = 0;
     }
     const filledStars = [];
-    for (let i = 0; i < rating.toFixed(); i++) {
+    for (let i = 0; i < Math.floor(rating); i++) {
       filledStars.push(
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +94,7 @@ class JobsRankedRow extends React.Component {
                     width: "30px",
                   }}
                 >
-                  {rating}
+                  {rating.toFixed(2)}
                 </Link>
                 <div style={{ marginLeft: "10px", marginTop: "-3px" }}>
                   {filledStars.map((star) => star)}
@@ -118,7 +118,7 @@ class JobsRankedRow extends React.Component {
                   {numberOfReviews} reviews
                 </Link>
                 <Link
-                  to={`/companyDetails/${_id}/review`}
+                  to={`/companyDetails/${_id}/salaries`}
                   style={{
                     color: "#6f6f6f",
                     paddingLeft: "0.5rem",

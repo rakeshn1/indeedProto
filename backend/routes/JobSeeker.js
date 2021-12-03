@@ -6,7 +6,9 @@ const { Jobs } = require("../models/mongo/jobs.js");
 const { User } = require("../models/mongo/user");
 const { JobApplication } = require("../models/mongo/jobApplications");
 const { Company } = require("../models/mongo/company");
-
+const { Reviews } = require("../models/mongo/review");
+const { response } = require("express");
+const _ = require("lodash");
 
 const topic = "jobSeeker-topic";
 
@@ -219,7 +221,29 @@ router.get("/getJobSearchResults/", async (req, res) => {
   //   return res.status(200).send(results);
   // });
 
-  let response;
+  let companies = [];
+  let rr = [];
+  if (what) {
+    rr = await Company.find(
+      { name: { $regex: req.query.what, $options: "i" } },
+      { _id: 1 }
+    );
+  }
+
+  // response.map()
+  console.log("CC", rr);
+
+  rr?.map((r) => {
+    companies.push(r._id);
+  });
+
+  let companyResponse = [];
+
+  companyResponse = await Jobs.find({ companyId: { $in: companies } }).lean();
+  // console.log("JOBS OF COMPANIES: ", companyResponse)
+
+  let response = [];
+
   if (!what && !where) {
     response = [];
   } else if (what && where) {
@@ -233,46 +257,118 @@ router.get("/getJobSearchResults/", async (req, res) => {
         },
         {
           $or: [
-            { "location.city": new RegExp(req.query.where, "i") },
             {
-              "location.country": new RegExp(
-                req.query.where,
-                "i"
-              ),
+              "location.city": { $regex: req.query.where, $options: "i" },
             },
             {
-              "location.state": new RegExp(req.query.where, "i"),
+              "location.country": { $regex: req.query.where, $options: "i" },
             },
             {
-              "location.zipcode": new RegExp(
-                req.query.where,
-                "i"
-              ),
+              "location.state": { $regex: req.query.where, $options: "i" },
+            },
+            {
+              "location.zipcode": { $regex: req.query.where, $options: "i" },
             },
           ],
         },
       ],
-    });
+    }).lean();
   } else if (what && !where) {
     response = await Jobs.find({
       $or: [
         { jobTitle: { $regex: req.query.what, $options: "i" } },
         { companyName: { $regex: req.query.what, $options: "i" } },
       ],
-    });
+    }).lean();
   } else {
     response = await Jobs.find({
       $or: [
-
         { "location.city": { $regex: req.query.where, $options: "i" } },
-        { "location.country": new RegExp(req.query.where, "i") },
-        { "location.state": new RegExp(req.query.where, "i") },
-        { "location.zipcode": new RegExp(req.query.where, "i") },
+        { "location.country": { $regex: req.query.where, $options: "i" } },
+        { "location.state": { $regex: req.query.where, $options: "i" } },
+        { "location.zipcode": { $regex: req.query.where, $options: "i" } },
       ],
-    });
+    }).lean();
   }
-  console.log("response", response);
-  res.send(response);
+
+  await Promise.all(
+    response.map(async (company) => {
+      console.log("Company::::: ", company.companyId);
+      const companyData = await Company.findById(
+        company.companyId.toString()
+      ).select("name");
+      console.log("CompanyData: ", companyData);
+      company.name = companyData.name;
+      // res.data.push(company);
+    })
+  );
+
+  await Promise.all(
+    companyResponse.map(async (company) => {
+      console.log("Company::::: ", company.companyId);
+      const companyData = await Company.findById(
+        company.companyId.toString()
+      ).select("name");
+      console.log("CompanyData: ", companyData);
+      company.name = companyData.name;
+
+      // res.data.push(company);
+    })
+  );
+
+  await Promise.all(
+    response.map(async (company) => {
+      console.log("DFDHFJGKHL: ", company.companyId);
+      const d = await Reviews.aggregate([
+        {
+          $match: {
+            companyId: mongoose.Types.ObjectId(company.companyId.toString()),
+          },
+        },
+        {
+          $group: {
+            _id: "$companyId",
+            numberOfReviews: { $sum: 1 },
+            averageRating: { $avg: "$rating" },
+          },
+        },
+      ]);
+
+      company.numberOfReviews = d.numberOfReviews ? d.numberOfReviews : 0;
+      company.averageRating = d.averageRating ? d.averageRating : 0;
+    })
+  );
+
+  await Promise.all(
+    companyResponse.map(async (company) => {
+      console.log("DFDHFJGKHL: ", company.companyId);
+      const d = await Reviews.aggregate([
+        {
+          $match: {
+            companyId: mongoose.Types.ObjectId(company.companyId.toString()),
+          },
+        },
+        {
+          $group: {
+            _id: "$companyId",
+            numberOfReviews: { $sum: 1 },
+            averageRating: { $avg: "$rating" },
+          },
+        },
+      ]);
+
+      company.numberOfReviews = d.numberOfReviews ? d.numberOfReviews : 0;
+      company.averageRating = d.averageRating ? d.averageRating : 0;
+    })
+  );
+
+  let finalRes = [...response, ...companyResponse];
+
+  finalRes = _.uniq(finalRes, (item) => {
+    return item._id.toString();
+  });
+  // console.log("response", response, companyResponse);
+  res.send(finalRes);
 });
 
 router.post("/applyJob", async (req, res) => {
@@ -346,6 +442,62 @@ router.get("/getTotalReviews/:id", async (req, res) => {
       return res.status(400).send(err);
     }
 
+    return res.status(200).send(results);
+  });
+});
+
+router.post("/addSalaryReview/:id", async (req, res) => {
+  req.body.companyId = req.params.id;
+  kafka.make_request(
+    topic,
+    { body: req.body, path: "addSalaryReview" },
+    function (err, results) {
+      if (err) {
+        return res.status(400).send(err);
+      }
+      return res.status(200).send(results);
+    }
+  );
+});
+
+router.get("/getSalaryReviews/:id", async (req, res) => {
+  const kafkaPayload = {
+    companyId: req.params.id,
+    query: req.query,
+    path: "getSalaryReviews",
+  };
+  kafka.make_request(topic, kafkaPayload, function (err, results) {
+    if (err) {
+      return res.status(400).send(err);
+    }
+    return res.status(200).send(results);
+  });
+});
+
+router.get("/getSalaryReviews/jobTitles/:id", async (req, res) => {
+  const kafkaPayload = {
+    companyId: req.params.id,
+    query: req.query,
+    path: "getSalaryReviews-JobTitles",
+  };
+  kafka.make_request(topic, kafkaPayload, function (err, results) {
+    if (err) {
+      return res.status(400).send(err);
+    }
+    return res.status(200).send(results);
+  });
+});
+
+router.get("/getSalaryReviews/jobLocations/:id", async (req, res) => {
+  const kafkaPayload = {
+    companyId: req.params.id,
+    query: req.query,
+    path: "getSalaryReviews-JobLocations",
+  };
+  kafka.make_request(topic, kafkaPayload, function (err, results) {
+    if (err) {
+      return res.status(400).send(err);
+    }
     return res.status(200).send(results);
   });
 });

@@ -1,4 +1,4 @@
-const apiURL = "http://localhost:3900";
+const apiURL = "http://18.220.131.170:3900";
 
 
 const resumeConfig = {

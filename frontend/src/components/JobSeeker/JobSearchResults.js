@@ -23,7 +23,7 @@ const JobSearchResults = (props) => {
 
   const setFirst = async () => {
     console.log("here");
-    if (props.searchResults.length > 0 && !cardDetails) {
+    if (props.searchResults?.length > 0 && !cardDetails) {
       setCardDetails(props.searchResults[0]);
       setSelectedJobCard(props.searchResults[0]._id);
     }
@@ -39,10 +39,14 @@ const JobSearchResults = (props) => {
   };
 
   useEffect(() => {
+    setCurrentPage(1);
+  }, [props.searchResults]);
+
+  useEffect(() => {
     const data = paginate(props.searchResults, currentPage, pageSize);
-    setTotalCount(props.searchResults.length);
+    setTotalCount(props.searchResults?.length);
     setData(data);
-    if (data.length > 0) {
+    if (data?.length > 0) {
       setCardDetails(data[0]);
       setSelectedJobCard(data[0]._id);
     }
@@ -53,7 +57,7 @@ const JobSearchResults = (props) => {
   // else
   //     setCardDetails(props.searchResults)
 
-  console.log("SearchResults: ", props.searchResults);
+  // console.log("SearchResults: ", props.searchResults);
   return (
     <div className="container job-search-wrapper">
       <div className="cards-wrapper">
@@ -73,7 +77,7 @@ const JobSearchResults = (props) => {
           onPageChange={handlePageChange}
         ></Pagination>
       </div>
-      {props.searchResults.length > 0 && card}
+      {props.searchResults?.length > 0 && card}
     </div>
   );
 };

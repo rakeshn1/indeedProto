@@ -6,6 +6,7 @@ import ReviewCard from "./ReviewCard";
 import { titleCase } from "title-case";
 import { format } from "date-fns";
 import { getCompanyReviews } from "../../../services/jobSeeker";
+import { incrementViewCount } from "../../../services/admin";
 
 class CompanySnapShot extends React.Component {
   state = {
@@ -15,6 +16,12 @@ class CompanySnapShot extends React.Component {
     let params = { isFeatured: true };
     const res = await getCompanyReviews(this.props.companyDetails?._id, params);
     this.setState({ reviews: res.data.reviews });
+    if (this.props.companyDetails) {
+      incrementViewCount({
+        companyId: this.props.companyDetails._id,
+        date: new Date(),
+      });
+    }
   }
   render() {
     console.log(this.props);

@@ -13,7 +13,7 @@ const MessagesLandingPage = () => {
     useEffect(() => {
         axios
             .get(
-                `http://localhost:3900/employer/api/getAllConversations/${user.companyId}`,
+                `${apiURL}/employer/api/getAllConversations/${user.companyId}`,
                 {}
             )
             .then((response) => {

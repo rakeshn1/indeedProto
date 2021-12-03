@@ -6,7 +6,7 @@ import axios from "axios";
 import Button from "../common/Button";
 import EmployerReport from "../common/EmployerReport"
 import Chart from "../Admin/Chart";
-
+import {apiURL} from '../../config'
 const JobsReportCard = (props) => {
     const [open, setOpen] = useState(false);
     const [reportData, setReportData] = useState([]);
@@ -17,7 +17,7 @@ const JobsReportCard = (props) => {
 
 
     const handleOpen = (job) => {
-        axios.get(`http://localhost:3900/employer/api/getApplicationDetails/${job._id}`)
+        axios.get(`${apiURL}/employer/api/getApplicationDetails/${job._id}`)
             .then((response) => {
                 if (response.status != 200) {
                     console.log("yyyy")

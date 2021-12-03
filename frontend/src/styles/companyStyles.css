@@ -185,6 +185,10 @@ button {
   border-radius: 8px;
 }
 
+.bordered {
+  border: 1px solid;
+}
+
 .label {
   font-weight: bolder;
   text-align: left;

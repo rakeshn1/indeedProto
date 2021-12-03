@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { getCurrentUser, getJwt } from "../../services/auth";
+import {apiURL} from '../../config'
 const ReviewCard = () => {
     var [reviews, setReviews] = useState([])
     var [refresh, setRefresh] = useState([false])
@@ -14,7 +15,7 @@ const ReviewCard = () => {
         else if (status == 2) {
             status = 1
         }
-        axios.put(`http://localhost:3900/employer/api/updateCompanyReviews/${reviewId}`, { status }, {
+        axios.put(`${apiURL}/employer/api/updateCompanyReviews/${reviewId}`, { status }, {
         }).then(response => {
             if (response.status != 200) {
                 alert({ html: response.statusText, classes: "#c62828 red darken-3" })
@@ -29,7 +30,7 @@ const ReviewCard = () => {
 
 
     useEffect(() => {
-        axios.get(`http://localhost:3900/employer/api/getCompanyReviews/${user.companyId}`, {
+        axios.get(`${apiURL}/employer/api/getCompanyReviews/${user.companyId}`, {
         }).then(response => {
             console.log(response)
             if (response.status != 200) {
@@ -67,7 +68,7 @@ const ReviewCard = () => {
                                 </svg>
                                 </span>
                             </div>
-                            <div>
+                            <div style={{maxHeight:"80px", overflow:"scroll"}}>
                                 <p>
                                     <span style={{ fontSize: '12px' }}>
                                         {review.review}

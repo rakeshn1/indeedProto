@@ -1,7 +1,17 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
+import _ from "lodash";
+
 import Input from "../../common/Input";
 import JobCard from "./JobCard";
-import { getJobPostings } from "../../../services/jobSeeker";
+import { incrementViewCount } from ".././../../services/admin";
+import {
+  getJobPostings,
+  getAppliedJobs,
+  getJobSeekerDetails,
+  applyJob,
+} from "../../../services/jobSeeker";
+import { getCurrentUser } from "../../../services/auth";
 
 class Jobs extends React.Component {
   pageSize = 10;
@@ -12,6 +22,7 @@ class Jobs extends React.Component {
     currentJobId: 0,
     filteredJobs: [],
     currentPage: 1,
+    appliedJobs: [],
   };
 
   componentDidMount = async () => {
@@ -21,6 +32,20 @@ class Jobs extends React.Component {
       filteredJobs: res.data,
       currentJobId: res.data[0]?._id ? res.data[0]?._id : 0,
     });
+    if (this.props.companyDetails) {
+      incrementViewCount({
+        companyId: this.props.companyDetails._id,
+        date: new Date(),
+      });
+    }
+    this.getUserAppliedJobs();
+  };
+  getUserAppliedJobs = async () => {
+    const user = getCurrentUser();
+    if (user) {
+      const { data } = await getAppliedJobs({ userId: user._id });
+      this.setState({ appliedJobs: data });
+    }
   };
 
   getJobsInCurrentPage = () => {
@@ -86,6 +111,33 @@ class Jobs extends React.Component {
     });
   };
 
+  handleApplyJob = async (jobId) => {
+    const user = getCurrentUser();
+    if (!user) {
+      this.props.history.push("/login");
+      return;
+    }
+    console.log(user._id);
+    const payload = { userId: user._id };
+    const userDetails = await getJobSeekerDetails(payload);
+
+    if (userDetails && !userDetails.data.resume) {
+      alert("please add resume");
+      this.props.history.push("/jobSeekerProfile");
+    } else {
+      const payload = {
+        jobId: jobId,
+        userId: user._id,
+        companyId: this.props.companyDetails._id,
+        resumeURL: userDetails.data.resume,
+        coverLetterURL: userDetails.data.coverLetter,
+      };
+      const result = await applyJob(payload);
+      this.getUserAppliedJobs();
+      console.log("after call", result.data.status);
+    }
+  };
+
   render() {
     const currentJob = this.getJobsInCurrentPage().find(
       (job) => job._id === this.state.currentJobId
@@ -140,18 +192,18 @@ class Jobs extends React.Component {
             </button>
           </div>
         </div>
-        <div className="p-3" style={{ backgroundColor: "#f3f2f1" }}>
-          <div className="d-flex flex-row">
-            <div className="jobListItem me-2">
-              {this.getJobsInCurrentPage().map((job) => (
-                <JobCard
-                  jobDetails={job}
-                  setCurrentJob={this.setCurrentJob}
-                  isActive={job._id == this.state.currentJobId}
-                />
-              ))}
-            </div>
-            {this.state.currentJobId !== 0 && (
+        {this.state.filteredJobs.length > 0 && (
+          <div className="p-3" style={{ backgroundColor: "#f3f2f1" }}>
+            <div className="d-flex flex-row">
+              <div className="jobListItem me-2">
+                {this.getJobsInCurrentPage().map((job) => (
+                  <JobCard
+                    jobDetails={job}
+                    setCurrentJob={this.setCurrentJob}
+                    isActive={job._id == this.state.currentJobId}
+                  />
+                ))}
+              </div>
               <div style={{ width: "100%" }}>
                 <div
                   className="bg-white p-3"
@@ -173,17 +225,35 @@ class Jobs extends React.Component {
                       </span>
                     </div>
                   </div>
-                  <button
-                    className="submit-btn ms-2"
-                    style={{
-                      background: "#085ff7",
-                      fontSize: "18px",
-                      width: "fit-content",
-                      padding: "0 20px",
-                    }}
-                  >
-                    Apply on company site
-                  </button>
+
+                  {!this.state.appliedJobs.includes(currentJob?._id) && (
+                    <button
+                      className="submit-btn ms-2"
+                      style={{
+                        background: "#085ff7",
+                        fontSize: "18px",
+                        width: "fit-content",
+                        padding: "0 20px",
+                      }}
+                      onClick={() => this.handleApplyJob(currentJob?._id)}
+                    >
+                      Apply Now
+                    </button>
+                  )}
+
+                  {this.state.appliedJobs.includes(currentJob?._id) && (
+                    <button
+                      className="submit-btn ms-2"
+                      style={{
+                        background: "#085ff7",
+                        fontSize: "18px",
+                        width: "fit-content",
+                        padding: "0 20px",
+                      }}
+                    >
+                      Applied
+                    </button>
+                  )}
                 </div>
 
                 <div className="job-desc p-4">
@@ -208,77 +278,42 @@ class Jobs extends React.Component {
                     <b>Duties & Responsibilities</b>
                   </h6>
                   <p>{currentJob?.responsibilities}</p>
-                  {/* <ul>
-                  <li>Prepare grocery orders for delivery</li>
-                  <li>Prepare grocery orders for delivery</li>
-                  <li>Prepare grocery orders for delivery</li>
-                  <li>Prepare grocery orders for delivery</li>
-                  <li>Prepare grocery orders for delivery</li>
-                  <li>Prepare grocery orders for delivery</li>
-                </ul> */}
                 </div>
               </div>
-            )}
-          </div>
-          <div className="d-flex flex-row justify-content-around">
-            <div>
-              <button
-                className="invisibleButton"
-                onClick={this.goToPrevPage}
-                disabled={this.state.currentPage === 1}
-              >
-                <i
-                  className="fa fa-arrow-circle-left fa-lg"
-                  aria-hidden="true"
-                ></i>
-              </button>
-              {this.state.currentPage}
-              <button
-                className="invisibleButton"
-                onClick={this.goToNextPage}
-                disabled={
-                  this.state.currentPage ===
-                  Math.ceil(this.state.filteredJobs.length / this.pageSize)
-                }
-              >
-                <i
-                  className="fa fa-arrow-circle-right fa-lg"
-                  aria-hidden="true"
-                ></i>
-              </button>
+            </div>
+            <div className="d-flex flex-row justify-content-around">
+              <div>
+                <button
+                  className="invisibleButton"
+                  onClick={this.goToPrevPage}
+                  disabled={this.state.currentPage === 1}
+                >
+                  <i
+                    className="fa fa-arrow-circle-left fa-lg"
+                    aria-hidden="true"
+                  ></i>
+                </button>
+                {this.state.currentPage}
+                <button
+                  className="invisibleButton"
+                  onClick={this.goToNextPage}
+                  disabled={
+                    this.state.currentPage ===
+                    Math.ceil(this.state.filteredJobs.length / this.pageSize)
+                  }
+                >
+                  <i
+                    className="fa fa-arrow-circle-right fa-lg"
+                    aria-hidden="true"
+                  ></i>
+                </button>
+              </div>
             </div>
           </div>
-          <div className="d-flex flex-row justify-content-around">
-            <div>
-              <button
-                className="invisibleButton"
-                onClick={this.goToPrevPage}
-                disabled={this.state.currentPage === 1}
-              >
-                <i
-                  className="fa fa-arrow-circle-left fa-lg"
-                  aria-hidden="true"
-                ></i>
-              </button>
-              {this.state.currentPage}
-              <button
-                className="invisibleButton"
-                onClick={this.goToNextPage}
-                disabled={
-                  this.state.currentPage ===
-                  Math.ceil(this.state.filteredJobs.length / this.pageSize)
-                }
-              >
-                <i
-                  className="fa fa-arrow-circle-right fa-lg"
-                  aria-hidden="true"
-                ></i>
-              </button>
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     );
   }
 }
-export default Jobs;
+
+export default withRouter(Jobs);

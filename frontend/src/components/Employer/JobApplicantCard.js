@@ -9,6 +9,7 @@ import Button from "../common/Button";
 import { getCurrentUser, getJwt } from "../../services/auth";
 import { Link } from "react-router-dom";
 import { useHistory, useParams } from 'react-router-dom'
+import { apiURL } from '../../config'
 const JobApplicantCard = () => {
     const history = useHistory()
     var [jobs, setJobs] = useState([]);
@@ -42,7 +43,7 @@ const JobApplicantCard = () => {
         console.log(applicationStatus);
         axios
             .get(
-                `http://localhost:3900/employer/api/getCompanyJobs/${user.companyId}`,
+                `${apiURL}/employer/api/getCompanyJobs/${user.companyId}`,
             )
             .then((response) => {
                 console.log(response);
@@ -118,7 +119,7 @@ const JobApplicantCard = () => {
         console.log(applicant._id);
         axios
             .put(
-                `http://localhost:3900/employer/api/updateApplicationStatus/${applicant._id}`,
+                `${apiURL}/employer/api/updateApplicationStatus/${applicant._id}`,
                 {
                     status: e.target.value,
                 }
@@ -145,7 +146,7 @@ const JobApplicantCard = () => {
         console.log(applicant);
         axios
             .post(
-                "http://localhost:3900/employer/api/createConversation",
+                `${apiURL}/employer/api/createConversation`,
                 {
                     companyId: user.companyId,
                     userId: applicant._id,
@@ -167,7 +168,7 @@ const JobApplicantCard = () => {
         const jobId = job._id;
         console.log(jobId);
         axios
-            .get(`http://localhost:3900/employer/api/getApplicationDetails/${jobId}`)
+            .get(`${apiURL}/employer/api/getApplicationDetails/${jobId}`)
             .then((response) => {
                 console.log(response);
                 if (response.status != 200) {

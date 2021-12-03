@@ -5,6 +5,7 @@ import { TextField, ListItemText, Grid, MenuItem } from "@material-ui/core"
 import { getCurrentUser, getJwt } from "../../services/auth";;
 import axios from "axios";
 import Button from "../common/Button";
+import {apiURL} from '../../config'
 const RecipientsJobSeekerCard = (props) => {
     const [open, setOpen] = useState(false);
     const [messageText, setMessageText] = useState([]);
@@ -48,7 +49,7 @@ const RecipientsJobSeekerCard = (props) => {
         console.log(message);
         axios
             .put(
-                `http://localhost:3900/employer/api/updateConversation/${recipientData._id}`,
+                `${apiURL}/employer/api/updateConversation/${recipientData._id}`,
                 {
                     message,
                 }
@@ -69,7 +70,7 @@ const RecipientsJobSeekerCard = (props) => {
     const handleOpen = (recipient) => {
         axios
             .get(
-                `http://localhost:3900/employer/api/getConversation/${recipient._id}`,
+                `${apiURL}/employer/api/getConversation/${recipient._id}`,
                 {}
             )
             .then((response) => {

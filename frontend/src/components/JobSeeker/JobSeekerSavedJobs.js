@@ -10,8 +10,7 @@ import {
 import Button from "../common/Button";
 import _ from "lodash";
 import { useHistory } from "react-router";
-import { Modal, Button as BT } from 'react-bootstrap'
-
+import { Modal, Button as BT } from "react-bootstrap";
 
 const JobSeekerSavedJobs = ({
   savedJobs,
@@ -21,8 +20,7 @@ const JobSeekerSavedJobs = ({
 }) => {
   const history = useHistory();
   const user = getCurrentUser();
-  const [show, setShow] = useState(false)
-
+  const [show, setShow] = useState(false);
 
   const handleApplyNow = async (jobId, companyId) => {
     console.log("Applied: ", jobId, companyId);
@@ -34,7 +32,7 @@ const JobSeekerSavedJobs = ({
     console.log("applying job for user with details", userDetails.data);
     console.log("U:", user);
     if (userDetails.data && !userDetails.data.resume) {
-      setShow(true)
+      setShow(true);
       // alert("please add resume");
       // history.push("/jobSeekerProfile");
     } else {
@@ -74,7 +72,11 @@ const JobSeekerSavedJobs = ({
             <div className="my-jobs-card-left">
               <div
                 className="profile-circle"
-                style={{ backgroundColor: "beige", border: "none" }}
+                style={{
+                  backgroundColor: "beige",
+                  border: "none",
+                  width: "100px",
+                }}
               >
                 <img src={logo} alt=""></img>{" "}
               </div>
@@ -95,17 +97,21 @@ const JobSeekerSavedJobs = ({
                 <Modal.Header closeButton>
                   <Modal.Title>Add Resume </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>You do not have an uploaded resume. Please add a resume from the profile page.</Modal.Body>
+                <Modal.Body>
+                  You do not have an uploaded resume. Please add a resume from
+                  the profile page.
+                </Modal.Body>
                 <Modal.Footer>
                   <BT variant="secondary" onClick={() => setShow(false)}>
                     Close
                   </BT>
-                  <BT variant="primary" onClick={() => {
-                    history.push('/jobSeekerProfile')
-                    setShow(false)
-                  }
-
-                  }>
+                  <BT
+                    variant="primary"
+                    onClick={() => {
+                      history.push("/jobSeekerProfile");
+                      setShow(false);
+                    }}
+                  >
                     Add Resume
                   </BT>
                 </Modal.Footer>
@@ -125,29 +131,29 @@ const JobSeekerSavedJobs = ({
               {_.find(appliedJobs, (job) => {
                 return job._id.toString() === item._id.toString();
               }) && (
-                  <Button
-                    text="Applied"
-                    style={{
-                      width: "200px",
-                      backgroundColor: "green",
-                    }}
-                    disabled
+                <Button
+                  text="Applied"
+                  style={{
+                    width: "200px",
+                    backgroundColor: "green",
+                  }}
+                  disabled
                   // onClick={()=>handleApplyNow()}
-                  />
-                )}
+                />
+              )}
               {!_.find(appliedJobs, (job) => {
                 return job._id.toString() === item._id.toString();
               }) && (
-                  <Button
-                    text="Apply Now"
-                    style={{
-                      width: "200px",
-                      // backgroundColor: "green",
-                    }}
-                    // disabled
-                    onClick={() => handleApplyNow(item._id, item.companyId)}
-                  />
-                )}
+                <Button
+                  text="Apply Now"
+                  style={{
+                    width: "200px",
+                    // backgroundColor: "green",
+                  }}
+                  // disabled
+                  onClick={() => handleApplyNow(item._id, item.companyId)}
+                />
+              )}
               <div onClick={() => handleRemoveSavedJob(item._id)}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

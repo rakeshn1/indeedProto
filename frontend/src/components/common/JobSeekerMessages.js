@@ -3,6 +3,9 @@ import RecipientsJobSeekerCard from "./RecipientsJobSeekerCard";
 import { useEffect, useState } from "react";
 import { getCurrentUser, getJwt } from "../../services/auth";
 import axios from "axios";
+import { apiURL } from "../../config";
+
+
 const JobSeekerMessagesLandingPage = () => {
     const user = getCurrentUser();
     const [recipients, setRecipients] = useState([
@@ -14,7 +17,7 @@ const JobSeekerMessagesLandingPage = () => {
         console.log("--*--", user)
         axios
             .get(
-                `http://localhost:3900/employer/api/getAllConversationsJobSeeker/${user._id}`,
+                `${apiURL}/employer/api/getAllConversationsJobSeeker/${user._id}`,
                 {}
             )
             .then((response) => {

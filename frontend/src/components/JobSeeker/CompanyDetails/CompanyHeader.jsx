@@ -1,5 +1,6 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
+
 import StarRating from "react-svg-star-rating";
 import { getCompanyratings } from "../../../services/jobSeeker";
 
@@ -10,12 +11,16 @@ class CompanyHeader extends React.Component {
   componentDidMount = async () => {
     if (this.props.companyDetails) {
       const res = await getCompanyratings(this.props.companyDetails?._id);
+      this.setState({ rating: res.data });
     }
   };
 
   componentDidUpdate = async (prevProps) => {
     if (prevProps.companyDetails != this.props.companyDetails) {
       const res = await getCompanyratings(this.props.companyDetails?._id);
+      console.log(res.data);
+      if (isNaN(res.data)) res.data = 0;
+      this.setState({ rating: res.data });
     }
   };
   render() {
@@ -31,9 +36,15 @@ class CompanyHeader extends React.Component {
               >
                 <div className="d-flex flex-row">
                   <img
-                    src="https://picsum.photos/65/65"
+                    src={
+                      this.props.companyDetails?.logo
+                        ? this.props.companyDetails?.logo
+                        : "https://picsum.photos/65/65"
+                    }
                     alt="company-logo"
                     style={{ borderRadius: "8px" }}
+                    width="65px"
+                    height="100%"
                   />
                   <div className="ps-3" style={{ fontWeight: "700" }}>
                     <span style={{ fontSize: "20px" }}>
@@ -54,8 +65,18 @@ class CompanyHeader extends React.Component {
                   </div>
                 </div>
                 <div>
-                  <button className="primary-rounded-button">
-                    Write a review
+                  <button className="primary-rounded-button link">
+                    <Link
+                      className="link"
+                      style={{ color: "white" }}
+                      params={{ companyDetails: this.props.companyDetails }}
+                      to={{
+                        pathname: `/company/${this.props.companyDetails?._id}/addReview`,
+                        state: { companyDetails: this.props.companyDetails },
+                      }}
+                    >
+                      Write a review
+                    </Link>
                   </button>
                 </div>
               </div>
@@ -89,7 +110,7 @@ class CompanyHeader extends React.Component {
                 </span>
                 <span className="company-page-tab">
                   <NavLink
-                    to="/dummy"
+                    to={`/companydetails/${this.props.companyDetails?._id}/salaries`}
                     className="link"
                     style={{ color: "black" }}
                   >
@@ -98,7 +119,7 @@ class CompanyHeader extends React.Component {
                 </span>
                 <span className="company-page-tab">
                   <NavLink
-                    to="/dummy"
+                    to={`/companydetails/${this.props.companyDetails?._id}/photos`}
                     className="link"
                     style={{ color: "black" }}
                   >
