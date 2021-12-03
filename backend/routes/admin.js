@@ -5,6 +5,7 @@ const mysql = require("mysql");
 const config = require("config");
 const DB = config.get("sqlDB");
 const { Company } = require("../models/mongo/company");
+const _ = require("lodash");
 
 const db = mysql.createPool({
   host: DB.host,
@@ -213,12 +214,35 @@ router.put("/insertViewCount", (req, res) => {
   res.send("done");
 });
 
-router.get("/getViewCount", (req, res) => {
+router.get("/getViewCount", async (req, res) => {
   console.log("View Counts");
-
+  let data = [];
   const sqlSelect =
-    "SELECT * FROM CompanyViewCount (companyId,viewCount,date) VALUES (?,?,?)";
-  db.query(sqlSelect, (err, result) => {
+    "select companyId,(SUM(viewCount)) as totalCount from CompanyViewCount group by 1 ORDER BY 2 DESC LIMIT 10";
+  db.query(sqlSelect, async (err, result) => {
+    console.log(result);
+    data = result;
+    await Promise.all(
+      data.map(async (company) => {
+        console.log("COMPANNNNNY: ", company);
+        const companyData = await Company.findById(company.companyId).select(
+          "name"
+        );
+        company.name = companyData.name;
+        // data.push(company);
+      })
+    );
+    console.log("ViewsCount: ", data);
+    data = _.orderBy(data, ["totalCount"], ["desc"]);
+    res.send(data);
+  });
+  // console.log("ViewsCount: ", data);
+});
+
+router.post("/incrementViewCount", (req, res) => {
+  const sqlSelect =
+    "insert into CompanyViewCount (companyId, date) values(?, ?) on duplicate key update viewCount = viewCount + 1";
+  db.query(sqlSelect, [req.body.companyId, req.body.date], (err, result) => {
     console.log(result);
   });
   res.send("done");

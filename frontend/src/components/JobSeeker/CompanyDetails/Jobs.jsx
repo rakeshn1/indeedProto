@@ -1,7 +1,17 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
+import _ from "lodash";
+
 import Input from "../../common/Input";
 import JobCard from "./JobCard";
-import { getJobPostings } from "../../../services/jobSeeker";
+import { incrementViewCount } from ".././../../services/admin";
+import {
+  getJobPostings,
+  getAppliedJobs,
+  getJobSeekerDetails,
+  applyJob,
+} from "../../../services/jobSeeker";
+import { getCurrentUser } from "../../../services/auth";
 
 class Jobs extends React.Component {
   pageSize = 10;
@@ -12,6 +22,7 @@ class Jobs extends React.Component {
     currentJobId: 0,
     filteredJobs: [],
     currentPage: 1,
+    appliedJobs: [],
   };
 
   componentDidMount = async () => {
@@ -21,6 +32,20 @@ class Jobs extends React.Component {
       filteredJobs: res.data,
       currentJobId: res.data[0]?._id ? res.data[0]?._id : 0,
     });
+    if (this.props.companyDetails) {
+      incrementViewCount({
+        companyId: this.props.companyDetails._id,
+        date: new Date(),
+      });
+    }
+    this.getUserAppliedJobs();
+  };
+  getUserAppliedJobs = async () => {
+    const user = getCurrentUser();
+    if (user) {
+      const { data } = await getAppliedJobs({ userId: user._id });
+      this.setState({ appliedJobs: data });
+    }
   };
 
   getJobsInCurrentPage = () => {
@@ -84,6 +109,33 @@ class Jobs extends React.Component {
       currentJobId: filteredJobs.length > 0 ? filteredJobs[0]._id : undefined,
       currentPage: 1,
     });
+  };
+
+  handleApplyJob = async (jobId) => {
+    const user = getCurrentUser();
+    if (!user) {
+      this.props.history.push("/login");
+      return;
+    }
+    console.log(user._id);
+    const payload = { userId: user._id };
+    const userDetails = await getJobSeekerDetails(payload);
+
+    if (userDetails && !userDetails.data.resume) {
+      alert("please add resume");
+      this.props.history.push("/jobSeekerProfile");
+    } else {
+      const payload = {
+        jobId: jobId,
+        userId: user._id,
+        companyId: this.props.companyDetails._id,
+        resumeURL: userDetails.data.resume,
+        coverLetterURL: userDetails.data.coverLetter,
+      };
+      const result = await applyJob(payload);
+      this.getUserAppliedJobs();
+      console.log("after call", result.data.status);
+    }
   };
 
   render() {
@@ -151,28 +203,43 @@ class Jobs extends React.Component {
                 />
               ))}
             </div>
-            {this.state.currentJobId !== 0 && (
-              <div style={{ width: "100%" }}>
-                <div
-                  className="bg-white p-3"
-                  style={{
-                    borderBottom: "2px solid #f2f2f2",
-                    borderTop: "4px solid #085ff7",
-                    boxShadow: "0 4px 4px rgb(0 0 0 / 8%)",
-                  }}
-                >
-                  <div class="job-desc-title">
-                    <img src="https://picsum.photos/50/50" alt="company-logo" />
-                    <div>
-                      <h6 className="ps-3">
-                        <b>{currentJob?.jobTitle}</b>
-                      </h6>
-                      <span className="p-3">
-                        {currentJob?.location.city},{" "}
-                        {currentJob?.location.state}
-                      </span>
-                    </div>
+            <div style={{ width: "100%" }}>
+              <div
+                className="bg-white p-3"
+                style={{
+                  borderBottom: "2px solid #f2f2f2",
+                  borderTop: "4px solid #085ff7",
+                  boxShadow: "0 4px 4px rgb(0 0 0 / 8%)",
+                }}
+              >
+                <div class="job-desc-title">
+                  <img src="https://picsum.photos/50/50" alt="company-logo" />
+                  <div>
+                    <h6 className="ps-3">
+                      <b>{currentJob?.jobTitle}</b>
+                    </h6>
+                    <span className="p-3">
+                      {currentJob?.location.city}, {currentJob?.location.state}
+                    </span>
                   </div>
+                </div>
+
+                {!this.state.appliedJobs.includes(currentJob?._id) && (
+                  <button
+                    className="submit-btn ms-2"
+                    style={{
+                      background: "#085ff7",
+                      fontSize: "18px",
+                      width: "fit-content",
+                      padding: "0 20px",
+                    }}
+                    onClick={() => this.handleApplyJob(currentJob?._id)}
+                  >
+                    Apply Now
+                  </button>
+                )}
+
+                {this.state.appliedJobs.includes(currentJob?._id) && (
                   <button
                     className="submit-btn ms-2"
                     style={{
@@ -182,43 +249,35 @@ class Jobs extends React.Component {
                       padding: "0 20px",
                     }}
                   >
-                    Apply on company site
+                    Applied
                   </button>
-                </div>
-
-                <div className="job-desc p-4">
-                  <h6 className="mb-3">
-                    <b>Job Overview</b>
-                  </h6>
-                  <p>
-                    <b>Salary:</b> ${currentJob?.salary}
-                  </p>
-
-                  <p>
-                    <b>JobType: </b>
-                    {currentJob?.jobType === 0 && "Full Time"}
-                    {currentJob?.jobType === 1 && "Part Time"}
-                    {currentJob?.jobType === 2 && "Remote"}
-                  </p>
-                  <p>
-                    <b>Location:</b> {currentJob?.location.city},{" "}
-                    {currentJob?.location.state}, {currentJob?.location.zipcode}{" "}
-                  </p>
-                  <h6 className="mb-3">
-                    <b>Duties & Responsibilities</b>
-                  </h6>
-                  <p>{currentJob?.responsibilities}</p>
-                  {/* <ul>
-                  <li>Prepare grocery orders for delivery</li>
-                  <li>Prepare grocery orders for delivery</li>
-                  <li>Prepare grocery orders for delivery</li>
-                  <li>Prepare grocery orders for delivery</li>
-                  <li>Prepare grocery orders for delivery</li>
-                  <li>Prepare grocery orders for delivery</li>
-                </ul> */}
-                </div>
+                )}
               </div>
-            )}
+
+              <div className="job-desc p-4">
+                <h6 className="mb-3">
+                  <b>Job Overview</b>
+                </h6>
+                <p>
+                  <b>Salary:</b> ${currentJob?.salary}
+                </p>
+
+                <p>
+                  <b>JobType: </b>
+                  {currentJob?.jobType === 0 && "Full Time"}
+                  {currentJob?.jobType === 1 && "Part Time"}
+                  {currentJob?.jobType === 2 && "Remote"}
+                </p>
+                <p>
+                  <b>Location:</b> {currentJob?.location.city},{" "}
+                  {currentJob?.location.state}, {currentJob?.location.zipcode}{" "}
+                </p>
+                <h6 className="mb-3">
+                  <b>Duties & Responsibilities</b>
+                </h6>
+                <p>{currentJob?.responsibilities}</p>
+              </div>
+            </div>
           </div>
           <div className="d-flex flex-row justify-content-around">
             <div>
@@ -253,4 +312,5 @@ class Jobs extends React.Component {
     );
   }
 }
-export default Jobs;
+
+export default withRouter(Jobs);

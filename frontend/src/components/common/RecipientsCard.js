@@ -2,16 +2,40 @@ import React, { useState } from "react";
 import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField, ListItemText, Grid, MenuItem } from "@material-ui/core";
+import { getCurrentUser, getJwt } from "../../services/auth";
 import axios from "axios";
 import Button from "../common/Button";
+
 const RecipientsCard = (props) => {
   const [open, setOpen] = useState(false);
   const [messageText, setMessageText] = useState([]);
   const [recipientData, setRecipientData] = useState([]);
   const data = props.data;
-
+  const user = getCurrentUser();
   const handleCompose = (e) => {
     setMessageText(e.target.value);
+  };
+  const stylesIn = {
+    button: {
+      backgroundColor: "#fff",
+      borderColor: "#1D2129",
+      borderStyle: "solid",
+      borderRadius: 20,
+      borderWidth: 2,
+      color: "#1D2129",
+      fontSize: 18,
+      fontWeight: "300",
+      paddingTop: 8,
+      paddingBottom: 8,
+      paddingLeft: 16,
+      paddingRight: 16,
+      outline: "none",
+    },
+    selected: {
+      color: "#fff",
+      backgroundColor: "#0084FF",
+      borderColor: "#0084FF",
+    },
   };
 
   const handleSubmit = (e) => {
@@ -89,62 +113,70 @@ const RecipientsCard = (props) => {
           })}
         </Grid>
         <Grid item lg={8} md={8} xs={12}>
-          <div>
-            <div className="recipient-description-card-wrapper">
-              {open &&
-                recipientData.length != 0 &&
+          <div style={{ height: "600px", overflow: "scroll", scrollTop: 0 }}>
+            <div
+              className="recipient-description-card-wrapper"
+              style={{ padding: 40 }}
+            >
+              {open & (recipientData.length != 0) &&
                 recipientData.messages.map((message) => {
                   return (
                     <div
                       style={{
                         textAlign:
-                          message.from == "619d46a4c6f3fa96b4f6cb5e"
-                            ? "right"
-                            : "left",
+                          message.from == user.companyId ? "right" : "left",
                       }}
                     >
                       <div>
                         <div>
+                          <br />
                           <b>
-                            {message.from == "619d46a4c6f3fa96b4f6cb5e"
-                              ? "You"
+                            {message.from == user.companyId
+                              ? ""
                               : recipientData.firstName +
                                 recipientData.lastName}
                           </b>{" "}
-                          <label size="small">
-                            {new Date(message.timestamp).toDateString()}
+                          <label style={{ fontSize: 12 }}>
+                            {new Date(message.timestamp)
+                              .toTimeString()
+                              .substr(0, 9) + "  "}
+                          </label>
+                          <br />
+                          <label style={stylesIn.button}>
+                            <span>{message.details}</span>
                           </label>
                         </div>
                       </div>
-                      <span>{message.details}</span>
                     </div>
                   );
                 })}
             </div>
           </div>
-          <table>
-            <tr style={{ maxWidth: "100" }}>
-              <td>
-                <div className="chat-composer">
-                  <form onSubmit={handleSubmit}>
-                    <input
-                      className="form-control"
-                      placeholder="Type & hit enter"
-                      onChange={handleCompose}
-                      value={messageText}
-                    />
-                  </form>
-                </div>
-              </td>
-              <td>
-                <Button
-                  type="submit"
-                  text="Send"
-                  onClick={handleSubmit}
-                ></Button>
-              </td>
-            </tr>
-          </table>
+          {open && (
+            <table>
+              <tr style={{ maxWidth: "100" }}>
+                <td>
+                  <div className="chat-composer">
+                    <form onSubmit={handleSubmit}>
+                      <input
+                        className="form-control"
+                        placeholder="Type & hit enter"
+                        onChange={handleCompose}
+                        value={messageText}
+                      />
+                    </form>
+                  </div>
+                </td>
+                <td>
+                  <Button
+                    type="submit"
+                    text="Send"
+                    onClick={handleSubmit}
+                  ></Button>
+                </td>
+              </tr>
+            </table>
+          )}
         </Grid>
       </Grid>
     </div>
