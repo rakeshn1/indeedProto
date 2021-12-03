@@ -61,7 +61,7 @@ class JobSeekerCompanyRow extends React.Component {
                     fontWeight: "700",
                   }}
                 >
-                  {parseInt(rating)}
+                  {parseInt(rating).toFixed(2)}
                 </span>
               </div>
               <div
