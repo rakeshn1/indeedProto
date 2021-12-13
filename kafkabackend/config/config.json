@@ -23,8 +23,8 @@
   "sqlDB": {
     "host": "indeed-proto-1.co8sej36u7tf.us-east-2.rds.amazonaws.com",
     "port": "3306",
-    "username": "admin",
-    "password": "root1234",
+    "username": "",
+    "password": "",
     "database": "IndeedProtoSchema"
   }
 }
