@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 dotenv.config({ path: __dirname + '/./../config/config.env' });
 
 const DB = process.env.DATABASE
-mongoose.connect("mongodb+srv://admin:root@cluster0.uvvol.mongodb.net/indeedClone?retryWrites=true&w=majority", {
+mongoose.connect("", {
     useNewUrlParser: true,
     // useCreateIndex: true,
     // useFindAndModify: false,
